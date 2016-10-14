@@ -62,6 +62,8 @@ $route['dashboard'] = 'Dashboard';
 $route['courses'] = 'Dashboard/courses';
 $route['courses/:num'] = 'Dashboard/courses';
 $route['course/add'] = 'Course/add';
+$route['course/edit'] = 'Course/edit';
+$route['course/delete'] = 'Course/deleteCourse';
 
 //-------------Category-------------//
 $route['categories'] = 'Dashboard/categories';

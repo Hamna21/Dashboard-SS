@@ -22,7 +22,7 @@ if ( ! function_exists('uploadPicture'))
         {
             $status = 1;
             $data = $CI->upload->data();
-            $fileName = $data['full_path'];
+            $fileName = $data['file_name'];
             return array($status, $fileName);
         }
     }

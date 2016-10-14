@@ -172,11 +172,6 @@ class Course extends CI_Controller
             $this->form_validation->set_data($course_data); //Setting Data
             $this->form_validation->set_rules($this->Course_model->getCourseEditRules()); //Setting Rules
 
-            //Setting Image Rule - Required
-            if (empty($_FILES['image_Path']['name'])) {
-                $this->form_validation->set_rules('image_Path', 'Image', 'required');
-            }
-
             //Reloading edit course page if validation fails
             if ($this->form_validation->run() == FALSE) {
                 $error_data = array(
@@ -192,29 +187,6 @@ class Course extends CI_Controller
                 $this->session->set_flashdata($course_data);
                 redirect('/Course/edit?q='.$courseID);
             }
-
-            //Validating image and uploading it
-            $image_attributes = uploadPicture();
-            $imageUploadStatus = $image_attributes[0];
-
-            //If imageValidation fails, then reload add course page
-            if ($imageUploadStatus == 0) {
-                $error_data = array(
-                    'error'  => 'course',
-                    'message'     => 'Error in editing Course',
-                    'courseName_Error' => form_error('course_Name'),
-                    'courseDescription_Error' => form_error('course_Description'),
-                    'courseImage_Error' => $image_attributes[1],
-                    'categoryID_Error' => form_error('category_ID'),
-                    'teacherID_Error' => form_error('teacher_ID'),
-                );
-
-                $this->session->set_flashdata($error_data);
-                $this->session->set_flashdata($course_data);
-                redirect('/Course/edit?q=3');
-            }
-            //Setting image uploaded path
-            $course_data['course_Image'] = $image_attributes[1];
 
             if ($this->Course_model->updateCourse($courseID,$course_data))
             {
@@ -263,6 +235,16 @@ class Course extends CI_Controller
             show_404();
         }
         $courseID = $_REQUEST["q"];
-        echo $courseID;
+        if($this->Course_model->deleteCourse($courseID))
+        {
+            $this->session->set_flashdata('success', 'course');
+            $this->session->set_flashdata('message', "Course Deleted.");
+            redirect('/courses');
+        }
+        else{
+            $this->session->set_flashdata('error', 'course');
+            $this->session->set_flashdata('message', "Course Deleted.");
+            redirect('/courses');
+        }
     }
 }

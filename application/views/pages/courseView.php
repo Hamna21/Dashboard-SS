@@ -1,10 +1,13 @@
 <!---------------Styling of Table--------------->
 <style type="text/css">
-    table {
+    /*table {
         white-space: nowrap;
         overflow: hidden;
         width: 10px;
         height: 25px;
+    }*/
+    th{
+        white-space: nowrap;
     }
 </style>
 <!---------------Page Heading--------------->
@@ -34,13 +37,13 @@
             <table class="table table-bordered table-hover table-striped auto">
                 <thead>
                 <tr>
-                    <th id="styling">Course ID</th>
-                    <th id="styling">Course Name</th>
-                    <th>Course Image</th>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
                     <th>Course Description</th>
                     <th>Category</th>
                     <th>Teacher</th>
-                    <th id="styling">Edit/Delete</th>
+                    <th>Course Image</th>
+                    <th>Edit/Delete</th>
                 </tr>
                 </thead>
 
@@ -49,15 +52,20 @@
                     <tr>
                         <td><?php echo $course['course_ID'];?></td>
                         <td><?php echo $course['course_Name'];?></td>
-                        <td><?php echo $course['course_Image'];?></td>
                         <td><?php echo $course['course_Description'];?></td>
-                        <td id="styling">
+                        <td>
                             <a href="javascript:void(0);" onClick=window.open("http://localhost:8080/Dashboard-SS/","Ratting","width=550,height=170,0,status=0,");><?php echo $course['category_Name'];?></a>
                         </td>
-                        <td id="styling">
+                        <td>
                             <a data-toggle="modal" data-remote="true" href="#deleteProductModal">
                                 <?php echo $course['teacher_Name'];?>
                             </a>
+                        </td>
+                        <td>
+                            <?php
+                            $config['source_image']= "localhost:8080/Dashboard-SS/uploads/".$course['course_Image'];
+                            $this->image_lib->initialize($config);?>
+                            <img src="<?php echo $this->image_lib->resize(); ?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"
@@ -65,47 +73,37 @@
                                Edit
                             </a>
 
-                            <a class="btn btn-danger"
-                               data-toggle="modal" data-remote="true" href="#deleteCourseModal">
+                            <a class="delete-link btn btn-danger"
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $course['course_ID'];?>" href="#deleteCourseModal">
                                 Delete
                             </a>
-                            <!--------------------- Delete Course Modal ----------------->
-                            <div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="deleteCourseModalLabel">Confirm Delete</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure want to delete the course?
-                                            <p id="checking"></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button id ="deleteCourseButton" type="button" class="btn btn-danger">Yes</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                                <!--------------------- Delete Course Modal ----------------->
+                                <div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="deleteCourseModalLabel">Confirm Delete</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure want to delete the course?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a id = "mylink" class="btn btn-danger" href="">Yes </a>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--------------------- Delete Course Modal ----------------->
 
                             <script>
-                                $("#deleteCourseButton").click(function(){
-
-                                    var xmlhttp = new XMLHttpRequest();
-                                    xmlhttp.onreadystatechange = function() {
-                                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                                        {
-                                            document.getElementById("checking").innerHTML = xmlhttp.responseText;
-                                            // $("#deleteCourseModal .close").click();
-                                        }
-                                    };
-                                    xmlhttp.open("GET", "http://localhost:8080/Dashboard-SS/index.php/Course/deleteCourse?q=" + <?php echo $course['course_ID'] ?>, true);
-                                    xmlhttp.send();
+                                $(document).on("click", ".delete-link", function () {
+                                    var courseID = $(this).data('id');
+                                    var link = document.getElementById("mylink");
+                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/course/delete?q=" + courseID);
                                 });
                             </script>
-
+                                <!--------------------- Delete Course Modal ----------------->
                         </td>
                     </tr>
                 <?php }?>

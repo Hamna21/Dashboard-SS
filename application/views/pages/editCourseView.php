@@ -82,7 +82,7 @@
     </div>
     <div class="col-md-12">
         <span style="color:blue;font-weight:bold"><?php echo $this->session->course_Image;?></span>
-        <input type="file"  name="image_Path" id="image_Path" required/>
+        <input type="file"  name="image_Path" id="image_Path"/>
         <br>
     </div>
 </div>

@@ -47,7 +47,7 @@
                 echo ' <strong>Failure....</strong>'. "     " . $this->session->message;
                 echo '</div>';
             }
-            if(isset($_SESSION['success']))
+            else if(isset($_SESSION['success']))
             {
                 echo '<div class="alert alert-success">';
                 echo ' <strong>Success....</strong>'. "     " . $this->session->message;

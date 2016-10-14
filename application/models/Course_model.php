@@ -91,9 +91,8 @@ class Course_model extends CI_Model
     //Delete a course by its ID
     public function deleteCourse($courseID)
     {
-        $this->db
-            ->where('course_ID',$courseID)
-            ->delete('Course');
+        $this->db->where('course_ID', $courseID);
+        $this->db->delete('Course');
         return true;
     }
 
