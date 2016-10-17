@@ -23,7 +23,28 @@ if ( ! function_exists('uploadPicture'))
             $status = 1;
             $data = $CI->upload->data();
             $fileName = $data['file_name'];
-            return array($status, $fileName);
+            $CI.createThumbnail($fileName);
+            $thumbnail = $data['raw_name'].'_thumb'.$data['file_ext'];
+            return array($status, $fileName, $thumbnail);
         }
+    }
+}
+
+
+if ( ! function_exists('createThumbnail'))
+{
+    function createThumbnail($fileName)
+    {
+        $CI =& get_instance();
+        $config['image_library'] = 'gd2';
+        $config['create_thumb'] = TRUE;
+        $config['maintain_ratio'] = FALSE;
+        $config['width']= 75;
+        $config['height']= 50;
+        $config['source_image'] = './uploads/'.$fileName;
+        $CI->load->library('image_lib', $config);
+
+        $CI->image_lib->resize();
+
     }
 }

@@ -8,7 +8,6 @@ class Dashboard extends CI_Controller
         $this->load->helper(array('form', 'url'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->library('pagination');
-        $this->load->library('image_lib');
         $this->load->model('Course_model');
         $this->load->model('Category_model');
         $this->load->model('Teacher_model');

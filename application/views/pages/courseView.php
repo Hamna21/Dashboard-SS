@@ -6,9 +6,27 @@
         width: 10px;
         height: 25px;
     }*/
+
     th{
         white-space: nowrap;
     }
+    #course_desc {
+        width: 500px;
+    }
+    #edit-delete {
+        width: 170px;
+    }
+    #course_teach {
+        width: 150px;
+    }
+    #course_teach {
+        width: 150px;
+    }
+    #course_thumb {
+        width: 75px;
+    }
+
+
 </style>
 <!---------------Page Heading--------------->
 <div class="row">
@@ -51,23 +69,20 @@
                 <?php foreach($courses as $course){?>
                     <tr>
                         <td><?php echo $course['course_ID'];?></td>
-                        <td><?php echo $course['course_Name'];?></td>
-                        <td><?php echo $course['course_Description'];?></td>
+                        <td id="course_name"><?php echo $course['course_Name'];?></td>
+                        <td id="course_desc"><?php echo $course['course_Description'];?></td>
                         <td>
                             <a href="javascript:void(0);" onClick=window.open("http://localhost:8080/Dashboard-SS/","Ratting","width=550,height=170,0,status=0,");><?php echo $course['category_Name'];?></a>
                         </td>
-                        <td>
+                        <td id ="course_teach">
                             <a data-toggle="modal" data-remote="true" href="#deleteProductModal">
                                 <?php echo $course['teacher_Name'];?>
                             </a>
                         </td>
-                        <td>
-                            <?php
-                            $config['source_image']= "localhost:8080/Dashboard-SS/uploads/".$course['course_Image'];
-                            $this->image_lib->initialize($config);?>
-                            <img src="<?php echo $this->image_lib->resize(); ?>">
+                        <td id="course_thumb">
+                            <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $course['course_ThumbImage'];?>">
                         </td>
-                        <td>
+                        <td id="edit-delete">
                             <a class="btn btn-warning"
                                href="<?php echo base_url();?>index.php/Course/edit?q=<?php echo $course['course_ID'];?>">
                                Edit

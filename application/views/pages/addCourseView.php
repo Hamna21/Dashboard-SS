@@ -18,20 +18,10 @@
 
     <div class="form-group">
         <div class="col-md-12">
-            <label for="course_ID">Course ID</label>
-        </div>
-        <div class="col-md-12">
-            <input class="form-control" type="text" value="<?php if(isset($_SESSION['course_ID'])) {echo  $this->session->course_ID;} ?>" name="course_ID" id="course_ID" required autofocus/>
-            <span class="error"><p id ="courseID_Error"></span></p> <?php if(isset($_SESSION['courseID_Error'])) {echo  $this->session->courseID_Error;} ?>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-12">
             <label for="course_Name">Course Name</label>
         </div>
         <div class="col-md-12">
-            <input class="form-control" type="text" value="<?php if(isset($_SESSION['course_Name'])) {echo  $this->session->course_Name;} ?>" name="course_Name" id="course_Name" required />
+            <input class="form-control" type="text"  name="course_Name" id="course_Name" maxlength="30" required value="<?php if(isset($_SESSION['course_Name'])) {echo  $this->session->course_Name;} ?>" />
             <span class="error"><p id ="courseName_Error"></span></p>  <?php if(isset($_SESSION['courseName_Error'])) {echo  $this->session->courseName_Error;} ?>
         </div>
     </div>
@@ -41,11 +31,10 @@
             <label for="course_Description">Course Description</label>
         </div>
         <div class="col-md-12">
-            <input class="form-control" type="text" value="<?php if(isset($_SESSION['course_Description'])) {echo  $this->session->course_Description;} ?>" name="course_Description" id="course_Description" required />
+            <textarea class="form-control" type="text" name="course_Description" id="course_Description" maxlength="100" rows="3" required><?php if(isset($_SESSION['course_Description'])) {echo  $this->session->course_Description;} ?></textarea>
             <span class="error"></span> <?php if(isset($_SESSION['courseDescription_Error'])) {echo  $this->session->courseDescription_Error;} ?>
         </div>
     </div>
-
 
     <div class="form-group">
         <div class="col-md-12">
@@ -53,9 +42,8 @@
         </div>
         <div class="col-md-12">
             <select class="form-control" required id="category" name="category"><option value="">Please select</option>
-                <?php $increment = 1 ?>
                 <?php foreach($categories as $category){?>
-                    <option value="<?php echo $increment++;?>"><?php echo $category['category_Name'];?></option>
+                    <option value="<?php echo $category['category_ID'];?>"><?php echo $category['category_Name'];?></option>
                 <?php }?>
             </select>
             <span class="error"></span> <?php if(isset($_SESSION['categoryID_Error'])) {echo  $this->session->categoryID_Error;} ?>
@@ -70,9 +58,8 @@
         </div>
         <div class="col-md-12">
             <select class="form-control" required id="teacher" name="teacher"><option value="">Please select</option>
-                <?php $increment = 1 ?>
                 <?php foreach($teachers as $teacher){?>
-                    <option value="<?php echo $increment++;?>"><?php echo $teacher['teacher_Name'];?></option>
+                    <option value="<?php echo $teacher['teacher_ID'];?>"><?php echo $teacher['teacher_Name'];?></option>
                 <?php }?>
             </select>
             <span class="error"></span> <?php if(isset($_SESSION['teacherID_Error'])) {echo  $this->session->teacherID_Error;} ?>

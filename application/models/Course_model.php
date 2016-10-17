@@ -101,12 +101,6 @@ class Course_model extends CI_Model
     {
         $config = array(
             array(
-                'field' => 'course_ID',
-                'label' => 'Course ID',
-                'rules' => 'required|regex_match[/^[0-9]+$/]|is_unique[Course.course_ID]'
-            ),
-
-            array(
                 'field' => 'course_Name',
                 'label' => 'Course Name',
                 'rules' => 'required|regex_match[/^[A-Za-z0-9_ -]+$/]|is_unique[Course.course_Name]'

@@ -45,7 +45,6 @@ class Course extends CI_Controller
     {
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $course_data = array(
-                'course_ID' => $this->input->post('course_ID'),
                 'course_Name' => $this->input->post('course_Name'),
                 'course_Description' => $this->input->post('course_Description'),
                 'category_ID' => $this->input->post('category'),
@@ -65,7 +64,6 @@ class Course extends CI_Controller
                 $error_data = array(
                     'error'  => 'course',
                     'message'     => 'Error in registering new Course',
-                    'courseID_Error' => form_error('course_ID'),
                     'courseName_Error' => form_error('course_Name'),
                     'courseDescription_Error' => form_error('course_Description'),
                     'categoryID_Error' => form_error('category_ID'),
@@ -86,7 +84,6 @@ class Course extends CI_Controller
                 $error_data = array(
                     'error'  => 'course',
                     'message'     => 'Error in registering new Course',
-                    'courseID_Error' => form_error('course_ID'),
                     'courseName_Error' => form_error('course_Name'),
                     'courseDescription_Error' => form_error('course_Description'),
                     'courseImage_Error' => $image_attributes[1],
@@ -100,6 +97,8 @@ class Course extends CI_Controller
             }
             //Setting image uploaded path
             $course_data['course_Image'] = $image_attributes[1];
+            $course_data['course_ThumbImage'] = $image_attributes[2];
+           // createThumbnail($image_attributes[1]);
 
             if ($this->Course_model->insertCourse($course_data))
             {
@@ -114,7 +113,6 @@ class Course extends CI_Controller
                 redirect('/courses');
             }
         }
-
     }
 
     //Edit course form view
@@ -139,12 +137,13 @@ class Course extends CI_Controller
             'category_Name' => $course['category_Name'],
             'teacher_Name' => $course['teacher_Name'],
             'category_ID' => $course['category_ID'],
-            'teacher_ID' => $course['teacher_ID'],
-            'course_Image' => $course['course_Image']
+            'teacher_ID' => $course['teacher_ID']
         );
 
         //Setting course data - Information will be displayed on form
         $this->session->set_flashdata($course_data);
+        $this->session->set_userdata('course_ThumbImage', $course['course_ThumbImage']);
+        $this->session->set_userdata('course_Image', $course['course_Image']);
 
         $data['title'] = ('Course');
         $data['subtitle'] = ('Edit Course');
@@ -162,7 +161,7 @@ class Course extends CI_Controller
     public function editCourse()
     {
         if($this->input->server('REQUEST_METHOD') == "POST") {
-            $courseID = $this->input->post('course_ID');
+            $courseID = $this->session->course_ID;
             $course_data = array(
                 'course_Description' => $this->input->post('course_Description'),
                 'category_ID' => $this->input->post('category'),
@@ -186,6 +185,36 @@ class Course extends CI_Controller
                 $this->session->set_flashdata($error_data);
                 $this->session->set_flashdata($course_data);
                 redirect('/Course/edit?q='.$courseID);
+            }
+
+            if(!empty($_FILES['image_Path']['name']))
+            {
+                unlink("uploads/".$this->session->course_ThumbImage);
+                unlink("uploads/".$this->session->course_Image);
+                //Validating image and uploading it
+                $image_attributes = uploadPicture();
+                $imageUploadStatus = $image_attributes[0];
+
+                //If imageValidation fails, then reload add course page
+                if ($imageUploadStatus == 0) {
+                    $error_data = array(
+                        'error'  => 'course',
+                        'message'     => 'Error in registering new Course',
+                        'courseName_Error' => form_error('course_Name'),
+                        'courseDescription_Error' => form_error('course_Description'),
+                        'courseImage_Error' => $image_attributes[1],
+                        'categoryID_Error' => form_error('category_ID'),
+                        'teacherID_Error' => form_error('teacher_ID'),
+                    );
+
+                    $this->session->set_flashdata($error_data);
+                    $this->session->set_flashdata($course_data);
+                    redirect('/Course/add');
+                }
+                //Setting image uploaded path
+                $course_data['course_Image'] = $image_attributes[1];
+                $course_data['course_ThumbImage'] = $image_attributes[2];
+                // createThumbnail($image_attributes[1]);
             }
 
             if ($this->Course_model->updateCourse($courseID,$course_data))
