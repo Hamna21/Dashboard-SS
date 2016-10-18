@@ -15,14 +15,14 @@
     </div>
 </div>
 
-<?php echo form_open_multipart('Teacher/addTeacher', 'class="form" id="myform"');?>
+<?php echo form_open_multipart('Teacher/editTeacher', 'class="form" id="myform"');?>
 
 <div class="form-group">
     <div class="col-md-12">
         <label for="teacher_Name">Teacher Name</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" value=" <?php if(isset($_SESSION['teacher_Name'])) {echo  $this->session->teacher_Name;} ?>" name="teacher_Name" id="teacher_Name" required />
+        <input class="form-control" type="text"  name="teacher_Name" id="teacher_Name" required value="<?php echo $this->session->teacher_Name; ?> " />
         <span class="error"><p id ="teacherName_Error"></span></p><?php if(isset($_SESSION['teacherName_Error'])) {echo  $this->session->teacherName_Error;} ?>
     </div>
 </div>
@@ -32,7 +32,7 @@
         <label for="teacher_Designation">Teacher Designation</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" value=" <?php if(isset($_SESSION['teacher_Designation'])) {echo  $this->session->teacher_Designation;} ?>" name="teacher_Designation" id="teacher_Designation" required />
+        <input class="form-control" type="text" name="teacher_Designation" id="teacher_Designation" required value="<?php echo $this->session->teacher_Designation; ?>"  />
         <span class="error"><p id ="teacherDesignation_Error"></span></p><?php if(isset($_SESSION['teacherDesignation_Error'])) {echo  $this->session->teacherDesignation_Error;} ?>
     </div>
 </div>
@@ -43,8 +43,7 @@
         <label for="teacher_Domain">Teacher Domain</label>
     </div>
     <div class="col-md-12">
-        <select class="form-control" required id="teacher_Domain" name="teacher_Domain"><option value="">Please select</option>
-            <?php $increment = 1 ?>
+        <select class="form-control" required id="teacher_Domain" name="teacher_Domain"><option value="<?php echo $this->session->teacher_Domain;?>"><?php echo $this->session->teacher_Domain;?></option>
             <?php foreach($categories as $category){?>
                 <option value="<?php echo $category['category_Name'];?>"><?php echo $category['category_Name'];?></option>
             <?php }?>
@@ -54,15 +53,21 @@
 </div>
 
 
-
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="imageUploaded">Image Uploaded:</label>
+    </div>
+    <div class="col-md-12">
+        <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $this->session->teacher_ThumbImage;?>">
+    </div>
+</div>
 
 <div class="form-group">
     <div class="col-md-12">
-        <label for="fileToUpload">Select image to upload:</label>
+        <label for="fileToUpload">Select new image to upload (if required):</label>
     </div>
     <div class="col-md-12">
-        <input type="file"  name="image_Path" id="image_Path" required />
-        <span class="error"></span><?php if(isset($_SESSION['teacherImage_Error'])) {echo  $this->session->teacherImage_Error;} ?>
+        <input type="file"  name="image_Path" id="image_Path"/>
         <br>
     </div>
 </div>

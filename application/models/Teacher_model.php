@@ -16,6 +16,31 @@ class Teacher_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_teacher($teacher_id)
+    {
+        $query = $this->db
+            ->where('teacher_ID', $teacher_id)
+            ->get('Teacher');
+
+        return $query->row_array();
+    }
+
+    //Update a teacher by its ID
+    public function updateTeacher($teacherID, $teacherData)
+    {
+        $this->db->where("teacher_ID", $teacherID);
+        $this->db->update("Teacher", $teacherData);
+        return true;
+    }
+
+    //Delete a teacher by its ID
+    public function deleteTeacher($teacherID)
+    {
+        $this->db->where('teacher_ID', $teacherID);
+        $this->db->delete('Teacher');
+        return true;
+    }
+
     public function get_teachers_limit($limit, $start)
     {
         $query = $this->db
@@ -44,7 +69,6 @@ class Teacher_model extends CI_Model
         }
     }
 
-
     //Insert new Teacher
     public function insertTeacher($teacherData)
     {
@@ -59,15 +83,33 @@ class Teacher_model extends CI_Model
     {
         $config = array(
             array(
-                'field' => 'teacher_ID',
-                'label' => 'Teacher ID',
-                'rules' => 'required|regex_match[/^[0-9]+$/]|is_unique[Teacher.teacher_ID]'
+                'field' => 'teacher_Name',
+                'label' => 'Teacher Name',
+                'rules' => 'required'
             ),
+            array(
+                'field' => 'teacher_Designation',
+                'label' => 'Teacher Designation',
+                'rules' => 'required|regex_match[/^[A-Za-z_ -]+$/]'
+            ),
+            array(
+                'field' => 'teacher_Domain',
+                'label' => 'Teacher Domain',
+                'rules' => 'required'
+            )
+        );
 
+        return $config;
+    }
+
+    //Teacher Edit Validation rules!
+    public function getTeacherEditRules()
+    {
+        $config = array(
             array(
                 'field' => 'teacher_Name',
                 'label' => 'Teacher Name',
-                'rules' => 'required|regex_match[/^[A-Za-z_ -]+$/]'
+                'rules' => 'required'
             ),
             array(
                 'field' => 'teacher_Designation',

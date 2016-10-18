@@ -28,19 +28,57 @@
             <table class="table table-bordered table-hover table-striped auto">
                 <thead>
                 <tr>
-                    <th>Category ID</th>
                     <th>Category Name</th>
                     <th>Category Image</th>
+                    <th>Edit/Delete</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <?php foreach($categories as $category){?>
                     <tr>
-
-                        <td><?php echo $category['category_ID'];?></td>
                         <td><?php echo $category['category_Name'];?></td>
-                        <td><?php echo $category['category_Image'];?></td>
+                        <td>
+                            <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $category['category_ThumbImage'];?>">
+                        </td>
+                        <td>
+                            <a class="btn btn-warning"
+                               href="<?php echo base_url();?>index.php/Category/edit?q=<?php echo $category['category_ID'];?>">
+                                Edit
+                            </a>
+
+                            <a class="delete-link btn btn-danger"
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $category['category_ID'];?>" href="#deleteCategoryModal">
+                                Delete
+                            </a>
+                            <!--------------------- Delete Category Modal ----------------->
+                            <div class="modal fade" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-labelledby="deleteCategoryModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="deleteCategoryModalLabel">Confirm Delete</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure want to delete the category?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a id = "mylink" class="btn btn-danger" href="">Yes </a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).on("click", ".delete-link", function () {
+                                    var categoryID = $(this).data('id');
+                                    var link = document.getElementById("mylink");
+                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/category/delete?q=" + categoryID);
+                                });
+                            </script>
+                            <!--------------------- Delete Category Modal ----------------->
+                        </td>
                     </tr>
                 <?php }?>
                 </tbody>

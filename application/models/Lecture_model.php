@@ -16,6 +16,36 @@ class Lecture_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_lecture($lecture_id)
+    {
+        $query = $this->db
+            ->where('lecture_ID', $lecture_id)
+            ->get('Lecture');
+
+        return $query->row_array();
+    }
+
+
+    //Update a lecture by its ID
+    public function updateLecture($lectureID, $lectureData)
+    {
+        $this->db->where("lecture_ID", $lectureID);
+        $this->db->update("Lecture", $lectureData);
+        return true;
+    }
+
+    //Delete a course by its ID
+    public function deleteLecture($lectureID)
+    {
+        //$lecture_Image = $this->db->select('lecture_Image');
+        //$lecture_ThumbImage = $this->db->select('lecture_ThumbImage');
+        $this->db->where('lecture_ID', $lectureID);
+        // unlink("uploads/".$lecture_Image);
+        //unlink("uploads/".$lecture_ThumbImage);
+        $this->db->delete('Lecture');
+        return true;
+    }
+
     //Getting lectures in limit
     public function get_lectures_limit($limit, $start)
     {
@@ -68,20 +98,44 @@ class Lecture_model extends CI_Model
         }
     }
 
-    //LectureRegistration Validation rules!
+    //Lecture Registration Validation rules!
     public function getLectureRegistrationRules()
     {
         $config = array(
             array(
-                'field' => 'lecture_ID',
-                'label' => 'Lecture ID',
-                'rules' => 'required|regex_match[/^[0-9]+$/]|is_unique[Lecture.lecture_ID]'
-            ),
-
-            array(
                 'field' => 'lecture_Name',
                 'label' => 'Lecture Name',
                 'rules' => 'required|is_unique[Lecture.lecture_Name]'
+            ),
+
+            array(
+                'field' => 'lecture_Description',
+                'label' => 'Lecture Description',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'lecture_Time',
+                'label' => 'Lecture Time',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'course_ID',
+                'label' => 'Course',
+                'rules' => 'required'
+            )
+        );
+
+        return $config;
+    }
+
+    //Lecture Edit Validation rules!
+    public function getLectureEditRules()
+    {
+        $config = array(
+            array(
+                'field' => 'lecture_Name',
+                'label' => 'Lecture Name',
+                'rules' => 'required'
             ),
 
             array(

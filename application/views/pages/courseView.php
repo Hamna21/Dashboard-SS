@@ -55,7 +55,6 @@
             <table class="table table-bordered table-hover table-striped auto">
                 <thead>
                 <tr>
-                    <th>Course ID</th>
                     <th>Course Name</th>
                     <th>Course Description</th>
                     <th>Category</th>
@@ -68,14 +67,13 @@
                 <tbody>
                 <?php foreach($courses as $course){?>
                     <tr>
-                        <td><?php echo $course['course_ID'];?></td>
                         <td id="course_name"><?php echo $course['course_Name'];?></td>
                         <td id="course_desc"><?php echo $course['course_Description'];?></td>
                         <td>
-                            <a href="javascript:void(0);" onClick=window.open("http://localhost:8080/Dashboard-SS/","Ratting","width=550,height=170,0,status=0,");><?php echo $course['category_Name'];?></a>
+                           <?php echo $course['category_Name'];?>
                         </td>
                         <td id ="course_teach">
-                            <a data-toggle="modal" data-remote="true" href="#deleteProductModal">
+                            <a data-toggle="modal"  data-remote="true" href="#teacherModal">
                                 <?php echo $course['teacher_Name'];?>
                             </a>
                         </td>

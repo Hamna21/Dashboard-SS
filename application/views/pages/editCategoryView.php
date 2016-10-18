@@ -14,28 +14,38 @@
         </ol>
     </div>
 </div>
+<?php echo form_open_multipart('Category/editCategory', 'class="form" id="myform"');?>
 
-<?php echo form_open_multipart('Category/addCategory', 'class="form" id="myform"');?>
 <div class="form-group">
     <div class="col-md-12">
         <label for="category_Name">Category Name</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text"  name="category_Name" id="category_Name" required value="<?php if(isset($_SESSION['category_Name'])) {echo  $this->session->category_Name;} ?>" />
-        <span class="error"><p id ="categoryName_Error"></span></p> <?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
+        <input class="form-control" type="text" name="category_Name" id="category_Name" required readonly  value="<?php echo $this->session->category_Name; ?>" />
+        <span class="error"><p id ="categoryName_Error"></span></p>  <?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="imageUploaded">Image Uploaded:</label>
+    </div>
+    <div class="col-md-12">
+        <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $this->session->category_ThumbImage;?>">
     </div>
 </div>
 
 <div class="form-group">
     <div class="col-md-12">
-        <label for="fileToUpload">Select image to upload:</label>
+        <label for="fileToUpload">Select new image to upload (if required):</label>
     </div>
     <div class="col-md-12">
-        <input type="file"  name="image_Path" id="image_Path" required />
-        <span class="error"></span><?php if(isset($_SESSION['categoryImage_Error'])) {echo  $this->session->categoryImage_Error;} ?>
+        <input type="file"  name="image_Path" id="image_Path"/>
         <br>
     </div>
 </div>
+
 
 <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
 

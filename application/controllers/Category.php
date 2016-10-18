@@ -38,10 +38,8 @@ class Category extends CI_Controller
     {
         if($this->input->server('REQUEST_METHOD') == 'POST') {
             $category_data = array(
-                'category_ID' => $this->input->post('category_ID'),
                 'category_Name' => $this->input->post('category_Name')
             );
-
             $this->form_validation->set_data($category_data); //Setting Data
             $this->form_validation->set_rules($this->Category_model->getCategoryRegistrationRules()); //Setting Rules
 
@@ -55,7 +53,6 @@ class Category extends CI_Controller
                 $error_data = array(
                     'error'  => 'category',
                     'message'     => 'Error in registering new Category',
-                    'categoryID_Error' => form_error('category_ID'),
                     'categoryName_Error' => form_error('category_Name'),
                     'categoryImageError' => form_error('image_Path')
                 );
@@ -74,7 +71,6 @@ class Category extends CI_Controller
                 $error_data = array(
                     'error'  => 'category',
                     'message'     => 'Error in registering new Category',
-                    'categoryID_Error' => form_error('category_ID'),
                     'categoryName_Error' => form_error('category_Name'),
                     'categoryImage_Error' => $image_attributes[1]
                 );
@@ -85,6 +81,7 @@ class Category extends CI_Controller
             }
             //Setting image uploaded path
             $category_data['category_Image'] = $image_attributes[1];
+            $category_data['category_ThumbImage'] = $image_attributes[2];
 
             if ($this->Category_model->insertCategory($category_data))
             {
@@ -125,6 +122,131 @@ class Category extends CI_Controller
         $categoryName = $_REQUEST["q"];
         $result = $this->Category_model->getCategory_Name($categoryName);
         echo $result;
+    }
+
+
+    //Edit category form view
+    public function edit()
+    {
+        //Redirect to Login page if user is not logged in
+        if(!isset($_SESSION['user']))
+        {
+            redirect('/Login');
+        }
+        if(!file_exists(APPPATH. 'views/pages/editCategoryView.php'))
+        {
+            show_404();
+        }
+        //Getting category information by ID
+        $categoryID = $_REQUEST["q"];
+        $category = $this->Category_model->get_category($categoryID);
+        $category_data = array(
+            'category_ID' => $category['category_ID'],
+            'category_Name' =>  $category['category_Name']
+        );
+
+        //Setting category data - Information will be displayed on form
+        $this->session->set_flashdata($category_data);
+        $this->session->set_userdata('category_ThumbImage', $category['category_ThumbImage']);
+        $this->session->set_userdata('category_Image', $category['category_Image']);
+
+        $data['title'] = ('Category');
+        $data['subtitle'] = ('Edit Category');
+
+        $this->load->view('templates/header.php', $data);
+        $this->load->view('templates/navbar.php', $data);
+        $this->load->view('pages/editCategoryView.php', $data);
+        $this->load->view('templates/footer.php', $data);
+    }
+
+    //POST request on Edit Category redirects here
+    public function editCategory()
+    {
+        if($this->input->server('REQUEST_METHOD') == "POST") {
+            $categoryID = $this->session->category_ID;
+            $category_data = array(
+                'category_Name' => $this->input->post('category_Name'),
+            );
+
+           /* $this->form_validation->set_data($category_data); //Setting Data
+            $this->form_validation->set_rules($this->Category_model->getCategoryEditRules()); //Setting Rules
+
+            //Reloading edit category page if validation fails
+            if ($this->form_validation->run() == FALSE) {
+                $error_data = array(
+                    'error'  => 'category',
+                    'message'     => 'Error in editing category',
+                    'categoryName_Error' => form_error('category_Name'),
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($category_data);
+                redirect('/category/edit?q='.$categoryID);
+            }*/
+
+            if(!empty($_FILES['image_Path']['name']))
+            {
+                unlink("uploads/".$this->session->category_ThumbImage);
+                unlink("uploads/".$this->session->category_Image);
+                //Validating image and uploading it
+                $image_attributes = uploadPicture();
+                $imageUploadStatus = $image_attributes[0];
+
+                //If imageValidation fails, then reload add category page
+                if ($imageUploadStatus == 0) {
+                    $error_data = array(
+                        'error'  => 'category',
+                        'message'     => 'Error in registering new category',
+                        'categoryName_Error' => form_error('category_Name'),
+                        'categoryImage_Error' => $image_attributes[1]
+                    );
+
+                    $this->session->set_flashdata($error_data);
+                    $this->session->set_flashdata($category_data);
+                    redirect('/category/add');
+                }
+                //Setting image uploaded path
+                $category_data['category_Image'] = $image_attributes[1];
+                $category_data['category_ThumbImage'] = $image_attributes[2];
+                // createThumbnail($image_attributes[1]);
+            }
+
+            if ($this->Category_model->updateCategory($categoryID,$category_data))
+            {
+                $this->session->set_flashdata('success', 'category');
+                $this->session->set_flashdata('message', "Category successfully edited.");
+                redirect('/categories');
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'category');
+                $this->session->set_flashdata('message', "Error in editing category");
+                redirect('/categories');
+            }
+        }
+
+    }
+    
+    
+    public function deleteCategory()
+    {
+        if(!$_REQUEST)
+        {
+            show_404();
+        }
+        $categoryID = $_REQUEST["q"];
+        if($this->Category_model->deleteCategory($categoryID))
+        {
+            $this->session->set_flashdata('success', 'category');
+            $this->session->set_flashdata('message', "Category successfully Deleted.");
+            redirect('/categories');
+        }
+        else{
+            $this->session->set_flashdata('error', 'course');
+            $this->session->set_flashdata('message', "Error in deleting Category");
+            redirect('/categories');
+        }
+
     }
 
     //Save table Data in excel file

@@ -69,13 +69,19 @@ $route['course/delete'] = 'Course/deleteCourse';
 $route['categories'] = 'Dashboard/categories';
 $route['categories/:num'] = 'Dashboard/categories';
 $route['category/add'] = 'Category/add';
+$route['category/edit'] = 'Category/edit';
+$route['category/delete'] = 'Category/deleteCategory';
 
 //---------------Teacher------------//
 $route['teachers'] = 'Dashboard/teachers';
 $route['teachers/:num'] = 'Dashboard/teachers';
 $route['teacher/add'] = 'Teacher/add';
+$route['teacher/edit'] = 'Teacher/edit';
+$route['teacher/delete'] = 'Teacher/deleteTeacher';
 
 //---------------Lecture------------//
 $route['lectures'] = 'Dashboard/lectures';
 $route['lectures/:num'] = 'Dashboard/lectures';
 $route['lecture/add'] = 'Lecture/add';
+$route['lecture/edit'] = 'Lecture/edit';
+$route['lecture/delete'] = 'Lecture/deleteLecture';
