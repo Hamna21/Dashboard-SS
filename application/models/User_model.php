@@ -18,26 +18,12 @@ class User_model extends CI_Model
         if ( $query->num_rows() > 0 )
         {
             $row = $query->row_array();
-            $this->session->set_userdata('user',$row["user_Name"]);
+            $this->session->set_userdata('user',$row["user_Name"]);    //Setting login user name in session
             return true;
         }
         else
         {
             return false;
-        }
-    }
-
-    //Check if user email exists in DB or not
-    public function getUser($email)
-    {
-        $result = "Email doest not exist in DB - Try Again";
-        $query = $this->db
-            ->where('email', $email)
-            ->get('Admin');
-
-        if(!($query->num_rows() > 0))
-        {
-            return $result;
         }
     }
 

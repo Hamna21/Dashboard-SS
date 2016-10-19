@@ -55,11 +55,18 @@
 
 <div class="form-group">
     <div class="col-md-12">
-        <label for="lecture_Time">Lecture Time</label>
+        <label for="course">Lecture Starting Time</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" name="lecture_Time" id="lecture_Time" required value="<?php if(isset($_SESSION['lecture_Time'])) {echo  $this->session->lecture_Time;} ?>"  />
-        <span class="error"></span><p id ="lectureTime_Error"></span></p><?php if(isset($_SESSION['lectureTime_Error'])) {echo  $this->session->lectureTime_Error;} ?>
+        <select class="form-control" required id="lecture_start" name="lecture_start"><option value="">Please select start time:</option>
+            <?php
+            for ($x = 0; $x <= 23; $x++) {?>
+                <option value="<?php $x;?>"><?php echo $x.":00:00";?></option>
+                }
+            <?php }?>
+        </select>
+        <?php if(isset($_SESSION['courseID_Error'])) {echo  $this->session->courseID_Error;} ?>
+        <br>
     </div>
 </div>
 

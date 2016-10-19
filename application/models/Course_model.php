@@ -7,6 +7,8 @@ class Course_model extends CI_Model
         $this->load->database();
     }
 
+    //-------------SELECT-------------------//
+
    //Getting all courses
     public function get_courses()
     {
@@ -16,6 +18,7 @@ class Course_model extends CI_Model
         return $query->result_array();
     }
 
+    //Get all courses limit by limit for pagination
     public function get_courses_limit($limit, $start)
     {
         //$this->db->select('comment_text,  comment.user_ID,user_Name, image_Path');
@@ -27,7 +30,7 @@ class Course_model extends CI_Model
         return $query->result_array();
     }
 
-    //Get a course by ID
+    //Get a single course by ID
     public function get_course($courseID)
     {
         $this->db->from('Course');
@@ -38,7 +41,16 @@ class Course_model extends CI_Model
         return $query->row_array();
     }
 
-    //Inserting new Course
+    //Getting total count of Courses
+    public function getCourseTotal()
+    {
+        $this->db->from('Course');
+        return $this->db->count_all_results();
+    }
+
+    //-------------INSERT------------------//
+
+    //Inserting new Course in table
     public function insertCourse($courseData)
     {
         if($this->db->insert('Course', $courseData))
@@ -47,14 +59,29 @@ class Course_model extends CI_Model
         }
     }
 
-    //Getting total count of Courses
-    public function getCourseTotal()
+    //-------------UPDATE-------------------//
+
+    //Update a course by its ID
+    public function updateCourse($courseID, $courseData)
     {
-        $this->db->from('Course');
-        return $this->db->count_all_results();
+        $this->db->where("course_ID", $courseID);
+        $this->db->update("Course", $courseData);
+        return true;
     }
 
-    //Finding a course by its Name
+    //-------------DELETE-------------------//
+
+    //Delete a course by its ID
+    public function deleteCourse($courseID)
+    {
+        $this->db->where('course_ID', $courseID);
+        $this->db->delete('Course');
+        return true;
+    }
+
+    //-----------AJAX HELPER FUNCTIONS-------//
+
+    //Finding a course by its Name - checking if exists in DB
     public function getCourse_Name($q)
     {
         $exist = "Course Name already exists - Try Again!";
@@ -67,7 +94,7 @@ class Course_model extends CI_Model
         }
     }
 
-    //Finding a course by its ID
+    //Finding a course by its ID - checking if exists in DB
     public function getCourse_ID($q)
     {
         $exit = "Course ID already exists - Try Again!";
@@ -80,21 +107,8 @@ class Course_model extends CI_Model
         }
     }
 
-    //Update a course by its ID
-    public function updateCourse($courseID, $courseData)
-    {
-        $this->db->where("course_ID", $courseID);
-        $this->db->update("Course", $courseData);
-        return true;
-    }
 
-    //Delete a course by its ID
-    public function deleteCourse($courseID)
-    {
-        $this->db->where('course_ID', $courseID);
-        $this->db->delete('Course');
-        return true;
-    }
+    //-------------Validation Rules------------------//
 
     //Course Registration Validation rules!
     public function getCourseRegistrationRules()

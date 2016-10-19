@@ -6,7 +6,6 @@
         width: 10px;
         height: 25px;
     }*/
-
     th{
         white-space: nowrap;
     }
@@ -19,15 +18,12 @@
     #course_teach {
         width: 150px;
     }
-    #course_teach {
-        width: 150px;
-    }
     #course_thumb {
         width: 75px;
     }
-
-
 </style>
+
+
 <!---------------Page Heading--------------->
 <div class="row">
     <div class="col-lg-12">
@@ -69,9 +65,8 @@
                     <tr>
                         <td id="course_name"><?php echo $course['course_Name'];?></td>
                         <td id="course_desc"><?php echo $course['course_Description'];?></td>
-                        <td>
-                           <?php echo $course['category_Name'];?>
-                        </td>
+                        <td><?php echo $course['category_Name'];?></td>
+
                         <td id ="course_teach">
                             <a data-toggle="modal"  data-remote="true" href="#teacherModal">
                                 <?php echo $course['teacher_Name'];?>

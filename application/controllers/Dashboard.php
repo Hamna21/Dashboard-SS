@@ -51,7 +51,7 @@ class Dashboard extends CI_Controller
             redirect('/Login');
 
         }
-        if(!file_exists(APPPATH. 'views/pages/courseView.php'))
+        if(!file_exists(APPPATH. 'views/pages/course/courseView.php'))
         {
             show_404();
         }
@@ -73,7 +73,7 @@ class Dashboard extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/courseView.php', $data);
+        $this->load->view('pages/course/courseView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -184,4 +184,5 @@ class Dashboard extends CI_Controller
         $this->load->view('templates/footer.php', $data);
 
     }
+
 }

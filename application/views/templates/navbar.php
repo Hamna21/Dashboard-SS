@@ -39,7 +39,7 @@
 <div id="wrapper">
     <div id="page-wrapper">
         <div class="container-fluid">
-            <!---Displaying alert/success in case of Form Submission--->
+            <!---Displaying alert/success--->
             <?php
             if(isset($_SESSION['error']))
             {

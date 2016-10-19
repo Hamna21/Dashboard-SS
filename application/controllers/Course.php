@@ -13,7 +13,7 @@ class Course extends CI_Controller
         $this->load->model('Teacher_model');
     }
 
-    //Add new Course form view
+    //Add Course form view
     public function add()
     {
         //Redirect to Login page if user is not logged in
@@ -21,7 +21,7 @@ class Course extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/addCourseView.php'))
+        if(!file_exists(APPPATH. 'views/pages/course/addCourseView.php'))
         {
             show_404();
         }
@@ -35,7 +35,7 @@ class Course extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/addCourseView.php', $data);
+        $this->load->view('pages/course/addCourseView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -59,7 +59,7 @@ class Course extends CI_Controller
                 $this->form_validation->set_rules('image_Path', 'Image', 'required');
             }
 
-            //Reloading add course page if validation fails
+            //Reloading add course page with same fields if validation fails
             if ($this->form_validation->run() == FALSE) {
                 $error_data = array(
                     'error'  => 'course',
@@ -67,7 +67,7 @@ class Course extends CI_Controller
                     'courseName_Error' => form_error('course_Name'),
                     'courseDescription_Error' => form_error('course_Description'),
                     'categoryID_Error' => form_error('category_ID'),
-                    'teacherID_Error' => form_error('teacher_ID'),
+                    'teacherID_Error' => form_error('teacher_ID')
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -79,7 +79,7 @@ class Course extends CI_Controller
             $image_attributes = uploadPicture();
             $imageUploadStatus = $image_attributes[0];
 
-            //If imageValidation fails, then reload add course page
+            //If imageValidation fails, then reload add course page with same fields
             if ($imageUploadStatus == 0) {
                 $error_data = array(
                     'error'  => 'course',
@@ -95,7 +95,7 @@ class Course extends CI_Controller
                 $this->session->set_flashdata($course_data);
                 redirect('/Course/add');
             }
-            //Setting image uploaded path
+            //Setting image and thumbnail name
             $course_data['course_Image'] = $image_attributes[1];
             $course_data['course_ThumbImage'] = $image_attributes[2];
            // createThumbnail($image_attributes[1]);
@@ -123,7 +123,7 @@ class Course extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/editCourseView.php'))
+        if(!file_exists(APPPATH. 'views/pages/course/editCourseView.php'))
         {
             show_404();
         }
@@ -142,6 +142,8 @@ class Course extends CI_Controller
 
         //Setting course data - Information will be displayed on form
         $this->session->set_flashdata($course_data);
+
+        //Setting image in userdata because required more then once
         $this->session->set_userdata('course_ThumbImage', $course['course_ThumbImage']);
         $this->session->set_userdata('course_Image', $course['course_Image']);
 
@@ -153,7 +155,7 @@ class Course extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/editCourseView.php', $data);
+        $this->load->view('pages/course/editCourseView.php', $data);
         $this->load->view('templates/footer.php', $data);
     }
 
@@ -179,7 +181,7 @@ class Course extends CI_Controller
                     'courseName_Error' => form_error('course_Name'),
                     'courseDescription_Error' => form_error('course_Description'),
                     'categoryID_Error' => form_error('category_ID'),
-                    'teacherID_Error' => form_error('teacher_ID'),
+                    'teacherID_Error' => form_error('teacher_ID')
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -187,10 +189,13 @@ class Course extends CI_Controller
                 redirect('/Course/edit?q='.$courseID);
             }
 
+            //If user uploaded new Image
             if(!empty($_FILES['image_Path']['name']))
             {
+                //Delete previous pictures from server
                 unlink("uploads/".$this->session->course_ThumbImage);
                 unlink("uploads/".$this->session->course_Image);
+
                 //Validating image and uploading it
                 $image_attributes = uploadPicture();
                 $imageUploadStatus = $image_attributes[0];
@@ -204,14 +209,14 @@ class Course extends CI_Controller
                         'courseDescription_Error' => form_error('course_Description'),
                         'courseImage_Error' => $image_attributes[1],
                         'categoryID_Error' => form_error('category_ID'),
-                        'teacherID_Error' => form_error('teacher_ID'),
+                        'teacherID_Error' => form_error('teacher_ID')
                     );
 
                     $this->session->set_flashdata($error_data);
                     $this->session->set_flashdata($course_data);
                     redirect('/Course/add');
                 }
-                //Setting image uploaded path
+                //Setting image and thumbnail uploaded path
                 $course_data['course_Image'] = $image_attributes[1];
                 $course_data['course_ThumbImage'] = $image_attributes[2];
                 // createThumbnail($image_attributes[1]);
@@ -226,11 +231,32 @@ class Course extends CI_Controller
             else
             {
                 $this->session->set_flashdata('error', 'course');
-                $this->session->set_flashdata('message', "Error in editing course");
+                $this->session->set_flashdata('message', "Error in editing course.");
                 redirect('/courses');
             }
         }
 
+    }
+
+    //Delete course
+    public function deleteCourse()
+    {
+        if(!$_REQUEST)
+        {
+            show_404();
+        }
+        $courseID = $_REQUEST["q"];
+        if($this->Course_model->deleteCourse($courseID))
+        {
+            $this->session->set_flashdata('success', 'course');
+            $this->session->set_flashdata('message', "Course Deleted.");
+            redirect('/courses');
+        }
+        else{
+            $this->session->set_flashdata('error', 'course');
+            $this->session->set_flashdata('message', "Course Deleted.");
+            redirect('/courses');
+        }
     }
 
     //Checking if ID is already in DB
@@ -257,23 +283,5 @@ class Course extends CI_Controller
         echo $result;
     }
 
-    public function deleteCourse()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $courseID = $_REQUEST["q"];
-        if($this->Course_model->deleteCourse($courseID))
-        {
-            $this->session->set_flashdata('success', 'course');
-            $this->session->set_flashdata('message', "Course Deleted.");
-            redirect('/courses');
-        }
-        else{
-            $this->session->set_flashdata('error', 'course');
-            $this->session->set_flashdata('message', "Course Deleted.");
-            redirect('/courses');
-        }
-    }
+
 }

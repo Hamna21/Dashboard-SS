@@ -19,7 +19,7 @@ class Login extends CI_Controller
             redirect('/Dashboard');
 
         }
-        if ( ! file_exists(APPPATH.'views/pages/loginView.php'))
+        if (!file_exists(APPPATH.'views/pages/loginView.php'))
         {
             show_404(); // Whoops, we don't have a page for that!
         }
@@ -45,9 +45,16 @@ class Login extends CI_Controller
 
             //Reload page if validation fails
             if ($this->form_validation->run() == FALSE) {
-                $data['title'] = 'Login';
-                $this->load->view('pages/loginView', $data);
-                return;
+                $error_data = array(
+                    'error'  => 'login',
+                    'message'     => 'Invalid Email/Password',
+                    'email_Error' => form_error('email'),
+                    'email' => $this->input->post('email'),
+                    'password_Error' => form_error('password')
+                );
+
+                $this->session->set_flashdata($error_data);
+                redirect('/Login');
             }
 
             //Redirect to Dashboard on successful login
@@ -59,10 +66,16 @@ class Login extends CI_Controller
             //Redirect to login page if user not found in DB
             else
             {
-                $data['title'] = 'Login';
-                $data['error'] = 'Invalid Email/Password';
-                $this->load->view('pages/loginView', $data);
-                return;
+                $error_data = array(
+                    'error'  => 'login',
+                    'message'     => 'Invalid Email/Password',
+                    'email' => $this->input->post('email'),
+                    'email_Error' => form_error('email'),
+                    'password_Error' => form_error('password')
+                );
+
+                $this->session->set_flashdata($error_data);
+                redirect('/Login');
             }
         }
 
@@ -70,6 +83,7 @@ class Login extends CI_Controller
         show_404();
     }
 
+    //Logging out user and destroying session
     public function logoutUser()
     {
         if(!isset($_SESSION['user']))
@@ -79,17 +93,4 @@ class Login extends CI_Controller
         $this->session->sess_destroy();
         redirect('/Login');
     }
-
-    //Check if user's email exists in DB or not - AJAX request redirects here
-    public function userExist()
-    {
-        if(!$_REQUEST)
-        {
-           show_404();
-        }
-        $email = $_REQUEST["q"];
-        $result = $this->User_model->getUser($email);
-        echo $result;
-    }
-
 }

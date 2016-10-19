@@ -85,3 +85,6 @@ $route['lectures/:num'] = 'Dashboard/lectures';
 $route['lecture/add'] = 'Lecture/add';
 $route['lecture/edit'] = 'Lecture/edit';
 $route['lecture/delete'] = 'Lecture/deleteLecture';
+
+//--------------QUIZ-----------------//
+$route['lecture/add/quiz'] = 'Quiz/add';

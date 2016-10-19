@@ -12,26 +12,29 @@
 <body>
 
 <div class="container">
-
-    <?php if (isset($error) && !empty($error))
+    <!---Displaying alert--->
+    <?php
+    if(isset($_SESSION['error']))
     {
-        echo '<div class="alert alert-warning">';
-        echo '<strong>Warning! Invalid Email/Password</strong>';
-        echo '</div> ';
-    } ?>
+        echo '<div class="alert alert-danger">';
+        echo ' <strong>Failure....</strong>'. "     " . $this->session->message;
+        echo '</div>';
+    }
+    ?>
 
     <?php echo form_open('Login/loginUser', 'class="form-signin" id="myform"');?>
 
     <h2 class="form-signin-heading">Log In</h2>
 
     <label for="email" class="sr-only">Email address</label>
-    <input type="email" id="email" name ="email" class="form-control" placeholder="Email address" value="<?php echo set_value('email'); ?>"  autofocus/>
-    <span class="error"><p id ="emailError"></span></p> <?php echo form_error('email'); ?>
+    <input type="email" id="email" name ="email" class="form-control" placeholder="Email address"  autofocus required value="<?php if(isset($_SESSION['email'])) {echo  $this->session->email;} ?>" />
+    <span class="error"><p id ="emailError"><?php if(isset($_SESSION['email_Error'])) {echo  $this->session->email_Error;} ?></p> </span>
 
 
     <label for="password" class="sr-only">Password</label>
-    <input type="password" id="password" name = "password" class="form-control" value="<?php echo set_value('password');?>" placeholder="Password"/>
-    <strong><?php echo form_error('password'); ?><p id="passwordError"></p></strong>
+    <input type="password" id="password" name = "password" class="form-control" placeholder="Password" required />
+    <span class="error"><p id ="passwordError"></span></p> <?php if(isset($_SESSION['password_Error'])) {echo  $this->session->password_Error;} ?>
+
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
     </form>

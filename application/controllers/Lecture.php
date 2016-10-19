@@ -46,7 +46,8 @@ class Lecture extends CI_Controller
             $lecture_data = array(
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
-                'lecture_Time' => $this->input->post('lecture_Time'),
+                'lecture_start' => $this->input->post('lecture_Time'),
+                'lecture_end' => $this->input->post('lecture_Time'),
                 'course_ID' => $this->input->post('course'),
             );
 

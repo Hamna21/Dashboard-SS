@@ -16,9 +16,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom CSS and JS -->
-    <link rel = "stylesheet"
-          href = "<?php echo base_url(); ?>css/custom.css">
-
+    <link rel = "stylesheet" href = "<?php echo base_url(); ?>css/custom.css">
     <script type = 'text/javascript' src = "<?php echo base_url(); ?>js/jquery.js"></script>
 
     <?php
@@ -26,15 +24,15 @@
     {
         echo '<script type = "text/javascript" src = " '. base_url() .'js/courseRegister.js"></script>';
     }
-    else if($subtitle == "Add Category")
+    else if($subtitle == "Add Category" || $subtitle == "Edit Category")
     {
         echo '<script type = "text/javascript" src = " '. base_url() .'js/categoryRegister.js"></script>';
     }
-    else if($subtitle == "Add Teacher")
+    else if($subtitle == "Add Teacher" || $subtitle == "Edit Teacher")
     {
         echo '<script type = "text/javascript" src = " '. base_url() .'js/teacherRegister.js"></script>';
     }
-    else if($subtitle == "Add Lecture")
+    else if($subtitle == "Add Lecture" || $subtitle == "Edit Lecture")
     {
         echo '<script type = "text/javascript" src = " '. base_url() .'js/lectureRegister.js"></script>';
     }
@@ -42,5 +40,5 @@
     ?>
 
 </head>
-<body onunload="">
+<body>
 

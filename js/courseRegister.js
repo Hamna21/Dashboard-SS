@@ -2,39 +2,11 @@ $(document).ready(function(){
 
     //------------SETTING ERRORS TO EMPTY----------//
 
-    //Setting Errors to empty when user types in again
-
-    $("#course_ID").focus(function(){
-        document.getElementById("courseID_Error").innerHTML = "";
-    });
-
     $("#course_Name").focus(function(){
         document.getElementById("courseName_Error").innerHTML = "";
     });
 
     //--------------- VALIDATION  ----------------//
-
-    //Call this as soon as user finishes typing COURSE_ID
-    $("#course_ID").focusout(function(){
-        var courseID = $("#course_ID").val();
-        if(courseID)
-        {
-            if(!validateDigit(courseID)) //Validating First Name
-            {
-                document.getElementById("courseID_Error").innerHTML = "Not a valid Course ID";
-                return;
-            }
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                {
-                    document.getElementById("courseID_Error").innerHTML = xmlhttp.responseText;
-                }
-            };
-            xmlhttp.open("GET", "http://localhost:8080/Dashboard-SS/index.php/Course/courseIDExist?q=" + courseID, true);
-            xmlhttp.send();
-        }
-    });
 
     //Call this as soon as user finishes typing Course_Name
     $("#course_Name").focusout(function(){
@@ -74,11 +46,5 @@ $(document).ready(function(){
     var regex = /^[a-zA-Z0-9 ]*$/;
     return regex.test(text);
     }
-
-    function validateDigit(text){
-        var regex = /^[0-9 ]*$/;
-        return regex.test(text);
-    }
-
 
 });
