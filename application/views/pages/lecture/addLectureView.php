@@ -1,5 +1,5 @@
 <!---------------Page Heading--------------->
-<div class="row" xmlns="http://www.w3.org/1999/html">
+<div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
             <?php echo $title; ?>
@@ -43,32 +43,40 @@
     </div>
 </div>
 
+
 <div class="form-group">
     <div class="col-md-12">
         <label for="lecture_Description">Lecture Description</label>
     </div>
     <div class="col-md-12">
-        <textarea class="form-control" type="text" name="lecture_Description" id="lecture_Description" required rows="3" maxlength="100" value="<?php if(isset($_SESSION['lecture_Description'])) {echo  $this->session->lecture_Description;} ?>"> </textarea>
+        <textarea class="form-control" type="text" name="lecture_Description" id="lecture_Description" required rows="3" maxlength="100"><?php if(isset($_SESSION['lecture_Description'])) {echo  $this->session->lecture_Description;} ?> </textarea>
         <span class="error"></span><p id ="lectureDescription_Error"></span></p><?php if(isset($_SESSION['lectureDescription_Error'])) {echo  $this->session->lectureDescription_Error;} ?>
     </div>
 </div>
 
+
 <div class="form-group">
     <div class="col-md-12">
-        <label for="course">Lecture Starting Time</label>
+        <label for="lecture_start">Lecture Starting Time</label>
     </div>
     <div class="col-md-12">
-        <select class="form-control" required id="lecture_start" name="lecture_start"><option value="">Please select start time:</option>
-            <?php
-            for ($x = 0; $x <= 23; $x++) {?>
-                <option value="<?php $x;?>"><?php echo $x.":00:00";?></option>
-                }
-            <?php }?>
-        </select>
-        <?php if(isset($_SESSION['courseID_Error'])) {echo  $this->session->courseID_Error;} ?>
-        <br>
+        <input class="form-control" type="text" name="lecture_start" id="lecture_start" required  value="<?php if(isset($_SESSION['lecture_start'])) {echo  $this->session->lecture_start;} ?>"> </input>
+        <span class="error"></span><p id ="lectureStart_Error"></span></p><?php if(isset($_SESSION['lectureStart_Error'])) {echo  $this->session->lectureStart_Error;} ?>
     </div>
 </div>
+
+
+
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="lecture_end">Lecture Ending Time</label>
+    </div>
+    <div class="col-md-12">
+        <input class="form-control" type="text" name="lecture_end" id="lecture_end" required  value="<?php if(isset($_SESSION['lecture_end'])) {echo  $this->session->lecture_end;} ?>"> </input>
+        <span class="error"></span><p id ="lectureStart_Error"></span></p><?php if(isset($_SESSION['lectureEnd_Error'])) {echo  $this->session->lectureEnd_Error;} ?>
+    </div>
+</div>
+
 
 <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
 

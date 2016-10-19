@@ -10,7 +10,7 @@ class Category extends CI_Controller
         $this->load->model('Category_model');
     }
 
-    //Add New Category Form
+    //Add Category Form
     public function add()
     {
         //Redirect to Login page if user is not logged in
@@ -18,7 +18,7 @@ class Category extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/addCategoryView.php'))
+        if(!file_exists(APPPATH. 'views/pages/category/addCategoryView.php'))
         {
             show_404();
         }
@@ -28,12 +28,12 @@ class Category extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/addCategoryView.php', $data);
+        $this->load->view('pages/category/addCategoryView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
 
-    //POST request on New Category form submission redirects here
+    //POST request on Add Category form submission redirects here
     public function addCategory()
     {
         if($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -100,31 +100,6 @@ class Category extends CI_Controller
         show_404();
     }
 
-    //Checking if ID is already in DB
-    public function categoryIDExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $categoryID = $_REQUEST["q"];
-        $result = $this->Category_model->getCategory_ID($categoryID);
-        echo $result;
-    }
-
-    //Checking if Name is already in DB
-    public function categoryNameExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $categoryName = $_REQUEST["q"];
-        $result = $this->Category_model->getCategory_Name($categoryName);
-        echo $result;
-    }
-
-
     //Edit category form view
     public function edit()
     {
@@ -133,7 +108,7 @@ class Category extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/editCategoryView.php'))
+        if(!file_exists(APPPATH. 'views/pages/category/editCategoryView.php'))
         {
             show_404();
         }
@@ -147,6 +122,8 @@ class Category extends CI_Controller
 
         //Setting category data - Information will be displayed on form
         $this->session->set_flashdata($category_data);
+
+        //Setting Image in user-data because needed more then once!
         $this->session->set_userdata('category_ThumbImage', $category['category_ThumbImage']);
         $this->session->set_userdata('category_Image', $category['category_Image']);
 
@@ -155,7 +132,7 @@ class Category extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/editCategoryView.php', $data);
+        $this->load->view('pages/category/editCategoryView.php', $data);
         $this->load->view('templates/footer.php', $data);
     }
 
@@ -165,7 +142,7 @@ class Category extends CI_Controller
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $categoryID = $this->session->category_ID;
             $category_data = array(
-                'category_Name' => $this->input->post('category_Name'),
+                'category_Name' => $this->input->post('category_Name')
             );
 
            /* $this->form_validation->set_data($category_data); //Setting Data
@@ -184,8 +161,10 @@ class Category extends CI_Controller
                 redirect('/category/edit?q='.$categoryID);
             }*/
 
+           //If new image is uploaded
             if(!empty($_FILES['image_Path']['name']))
             {
+                //Delete images from server
                 unlink("uploads/".$this->session->category_ThumbImage);
                 unlink("uploads/".$this->session->category_Image);
                 //Validating image and uploading it
@@ -227,7 +206,7 @@ class Category extends CI_Controller
 
     }
     
-    
+    //Delete Category
     public function deleteCategory()
     {
         if(!$_REQUEST)
@@ -247,6 +226,18 @@ class Category extends CI_Controller
             redirect('/categories');
         }
 
+    }
+
+    //Checking if Name is already in DB - AJAX Helper function
+    public function categoryNameExist()
+    {
+        if(!$_REQUEST)
+        {
+            show_404();
+        }
+        $categoryName = $_REQUEST["q"];
+        $result = $this->Category_model->getCategory_Name($categoryName);
+        echo $result;
     }
 
     //Save table Data in excel file

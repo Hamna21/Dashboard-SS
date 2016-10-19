@@ -7,6 +7,8 @@ class Lecture_model extends CI_Model
         $this->load->database();
     }
 
+    //-----SELECT------//
+
     //Getting all lectures
     public function get_lectures()
     {
@@ -16,6 +18,7 @@ class Lecture_model extends CI_Model
         return $query->result_array();
     }
 
+    //Get a single lecture by it's id
     public function get_lecture($lecture_id)
     {
         $query = $this->db
@@ -25,28 +28,7 @@ class Lecture_model extends CI_Model
         return $query->row_array();
     }
 
-
-    //Update a lecture by its ID
-    public function updateLecture($lectureID, $lectureData)
-    {
-        $this->db->where("lecture_ID", $lectureID);
-        $this->db->update("Lecture", $lectureData);
-        return true;
-    }
-
-    //Delete a course by its ID
-    public function deleteLecture($lectureID)
-    {
-        //$lecture_Image = $this->db->select('lecture_Image');
-        //$lecture_ThumbImage = $this->db->select('lecture_ThumbImage');
-        $this->db->where('lecture_ID', $lectureID);
-        // unlink("uploads/".$lecture_Image);
-        //unlink("uploads/".$lecture_ThumbImage);
-        $this->db->delete('Lecture');
-        return true;
-    }
-
-    //Getting lectures in limit
+    //Getting lectures in limit - for pagination purposes
     public function get_lectures_limit($limit, $start)
     {
         $this->db->limit($limit, $start);
@@ -63,19 +45,42 @@ class Lecture_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    //Finding a lecture by its ID
-    public function getLecture_ID($q)
+
+    //-----UPDATE------//
+    //Update a lecture by its ID
+    public function updateLecture($lectureID, $lectureData)
     {
-        $exist = "Lecture ID already exists - Try Again!";
-        $query = $this->db
-            ->where('lecture_ID',$q)
-            ->get('Lecture');
-        if($query->num_rows() > 0)
+        $this->db->where("lecture_ID", $lectureID);
+        $this->db->update("Lecture", $lectureData);
+        return true;
+    }
+
+    //-----DELETE-----//
+    //Delete a course by its ID
+    public function deleteLecture($lectureID)
+    {
+        //$lecture_Image = $this->db->select('lecture_Image');
+        //$lecture_ThumbImage = $this->db->select('lecture_ThumbImage');
+        $this->db->where('lecture_ID', $lectureID);
+        // unlink("uploads/".$lecture_Image);
+        //unlink("uploads/".$lecture_ThumbImage);
+        $this->db->delete('Lecture');
+        return true;
+    }
+
+    //-----INSERT------//
+
+    //Inserting new Lecture
+    public function insertLecture($lectureData)
+    {
+        if($this->db->insert('Lecture', $lectureData))
         {
-            return $exist;
+            return true;
         }
     }
 
+
+    //-----AJAX HELPER FUNCTIONS-----//
     //Finding a lecture by its Name
     public function getLecture_Name($q)
     {
@@ -89,14 +94,8 @@ class Lecture_model extends CI_Model
         }
     }
 
-    //Inserting new Lecture
-    public function insertLecture($lectureData)
-    {
-        if($this->db->insert('Lecture', $lectureData))
-        {
-            return true;
-        }
-    }
+
+    //-----Validation rules-----//
 
     //Lecture Registration Validation rules!
     public function getLectureRegistrationRules()
@@ -114,8 +113,13 @@ class Lecture_model extends CI_Model
                 'rules' => 'required'
             ),
             array(
-                'field' => 'lecture_Time',
-                'label' => 'Lecture Time',
+                'field' => 'lecture_start',
+                'label' => 'Lecture Starting Time',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'lecture_end',
+                'label' => 'Lecture Ending Time',
                 'rules' => 'required'
             ),
             array(
@@ -144,8 +148,13 @@ class Lecture_model extends CI_Model
                 'rules' => 'required'
             ),
             array(
-                'field' => 'lecture_Time',
-                'label' => 'Lecture Time',
+                'field' => 'lecture_start',
+                'label' => 'Lecture Starting Time',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'lecture_end',
+                'label' => 'Lecture Ending Time',
                 'rules' => 'required'
             ),
             array(

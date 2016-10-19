@@ -7,6 +7,8 @@ class Category_model extends CI_Model
         $this->load->database();
     }
 
+    //------------SELECT------------//
+
     //Getting all categories
     public function get_categories()
     {
@@ -16,6 +18,7 @@ class Category_model extends CI_Model
         return $query->result_array();
     }
 
+    //Getting a single category by it's ID
     public function get_category($category_id)
     {
         $query = $this->db
@@ -25,7 +28,7 @@ class Category_model extends CI_Model
         return $query->row_array();
     }
 
-    //Getting all categories within limit
+    //Getting all categories within limit - for pagination purposes
     public function get_categories_limit($limit, $start)
     {
         $query = $this->db
@@ -35,6 +38,16 @@ class Category_model extends CI_Model
         return $query->result_array();
     }
 
+    //Category Total Count
+    public function getCategoryTotal()
+    {
+        $this->db->from('Category');
+        return $this->db->count_all_results();
+    }
+
+
+    //------------UPDATE------------//
+
     //Update a category by its ID
     public function updateCategory($categoryID, $categoryData)
     {
@@ -43,25 +56,17 @@ class Category_model extends CI_Model
         return true;
     }
 
+    //------------DELETE------------//
+
     //Delete a course by its ID
     public function deleteCategory($categoryID)
     {
-        //$category_Image = $this->db->select('category_Image');
-        //$category_ThumbImage = $this->db->select('category_ThumbImage');
         $this->db->where('category_ID', $categoryID);
-       // unlink("uploads/".$category_Image);
-        //unlink("uploads/".$category_ThumbImage);
         $this->db->delete('Category');
         return true;
     }
 
-
-    //Category Total Count
-    public function getCategoryTotal()
-    {
-        $this->db->from('Category');
-        return $this->db->count_all_results();
-    }
+    //------------INSERT------------//
 
     //Insert new Category
     public function insertCategory($categoryData)
@@ -72,22 +77,9 @@ class Category_model extends CI_Model
         }
     }
 
-    //Finding a category by its ID
-    public function getCategory_ID($categoryID)
-    {
-        $exist = "Category ID already in database - Try Again!";
-        $query = $this->db
-            ->where('category_ID',$categoryID )
-            ->get('Category');
+    //------------AJAX HELPER FUNCTIONS-----------//
 
-        if($query->num_rows() > 0)
-        {
-            return $exist;
-        }
-
-    }
-
-    //Finding a category by its Name
+    //Finding a category by its Name - exist in DB or not
     public function getCategory_Name($categoryName)
     {
         $exist = "Category Name already in database - Try Again!";
@@ -100,6 +92,8 @@ class Category_model extends CI_Model
             return $exist;
         }
     }
+
+    //------------Validation Functions-----------//
 
     //Category Registration Validation rules!
     public function getCategoryRegistrationRules()

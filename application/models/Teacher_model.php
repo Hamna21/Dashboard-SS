@@ -7,6 +7,8 @@ class Teacher_model extends CI_Model
         $this->load->database();
     }
 
+    //-------SELECT-------//
+
     //Getting all teachers
     public function get_teachers()
     {
@@ -16,6 +18,7 @@ class Teacher_model extends CI_Model
         return $query->result_array();
     }
 
+    //Get a single teacher by it's ID
     public function get_teacher($teacher_id)
     {
         $query = $this->db
@@ -25,6 +28,25 @@ class Teacher_model extends CI_Model
         return $query->row_array();
     }
 
+    //Get all teachers within limit - for pagination purposes
+    public function get_teachers_limit($limit, $start)
+    {
+        $query = $this->db
+            ->limit($limit, $start)
+            ->get('Teacher');
+
+        return $query->result_array();
+    }
+
+    //Getting total count of Teachers
+    public function getTeacherTotal()
+    {
+        $this->db->from('Teacher');
+        return $this->db->count_all_results();
+    }
+
+    //-------UPDATE------//
+
     //Update a teacher by its ID
     public function updateTeacher($teacherID, $teacherData)
     {
@@ -32,6 +54,8 @@ class Teacher_model extends CI_Model
         $this->db->update("Teacher", $teacherData);
         return true;
     }
+
+    //-------DELETE-------//
 
     //Delete a teacher by its ID
     public function deleteTeacher($teacherID)
@@ -41,33 +65,7 @@ class Teacher_model extends CI_Model
         return true;
     }
 
-    public function get_teachers_limit($limit, $start)
-    {
-        $query = $this->db
-            ->limit($limit, $start)
-            ->get('Teacher');
-
-        return $query->result_array();
-    }
-    //Getting total count of Teachers
-    public function getTeacherTotal()
-    {
-        $this->db->from('Teacher');
-        return $this->db->count_all_results();
-    }
-
-    //Finding a teacher by its ID
-    public function getTeacher_ID($teacherID)
-    {
-        $exist = "Teacher ID already exists - Try Again!";
-        $query = $this->db
-            ->where('teacher_ID',$teacherID)
-            ->get('Teacher');
-        if($query->num_rows() > 0)
-        {
-            return $exist;
-        }
-    }
+    //-------INSERT-------//
 
     //Insert new Teacher
     public function insertTeacher($teacherData)
@@ -77,6 +75,8 @@ class Teacher_model extends CI_Model
             return true;
         }
     }
+
+    //-------Validation Rules-------//
 
     //Teacher Registration Validation rules!
     public function getTeacherRegistrationRules()

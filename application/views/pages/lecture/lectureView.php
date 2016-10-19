@@ -1,5 +1,20 @@
 <!---------------Page Heading--------------->
 
+<style type="text/css">
+    th{
+        white-space: nowrap;
+    }
+    #lec_desc {
+        width: 300px;
+    }
+    #edit-delete {
+        width: 170px;
+    }
+    #quiz {
+        width: 200px;
+    }
+
+</style>
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
@@ -28,11 +43,10 @@
                     <th>Lecture Name</th>
                     <th>Course</th>
                     <th>Lecture Description</th>
-                    <th>Lecture Start-Time</th>
-                    <th>Lecture End-Time</th>
+                    <th>Start-Time</th>
+                    <th>End-Time</th>
                     <th>Quiz</th>
                     <th>Edit/Delete</th>
-
                 </tr>
                 </thead>
 
@@ -41,10 +55,10 @@
                     <tr>
                         <td><?php echo $lecture['lecture_Name'];?></td>
                         <td><?php echo $lecture['course_Name'];?></td>
-                        <td><?php echo $lecture['lecture_Description'];?></td>
-                        <td><?php echo $lecture['lecture_start'];?></td>
-                        <td><?php echo $lecture['lecture_end'];?></td>
-                        <td>
+                        <td id="lec_desc"><?php echo $lecture['lecture_Description'];?></td>
+                        <td id="time"><?php echo $lecture['lecture_start'];?></td>
+                        <td id="time"><?php echo $lecture['lecture_end'];?></td>
+                        <td id="quiz">
                             <a class="btn btn-primary"
                                href="<?php echo base_url();?>index.php/lecture/add/quiz?q=<?php echo $lecture['lecture_ID'];?>">
                                 Add Quiz
@@ -54,36 +68,8 @@
                                data-toggle="modal" data-remote="true" data-id="<?php echo $lecture['lecture_ID'];?>" href="#quizModal">
                                 View Quiz
                             </a>
-                            <!--------------------- View Quiz Modal ----------------->
-                            <div class="modal fade" id="quizModal" tabindex="-1" role="dialog" aria-labelledby="quizModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="quizLabel">Quizzes</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            Quiz
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a id = "mylink" class="btn btn-danger" href="">Yes </a>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <script>
-                                $(document).on("click", ".delete-link", function () {
-                                    var lectureID = $(this).data('id');
-                                    var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/lecture/delete?q=" + lectureID);
-                                });
-                            </script>
-                            <!--------------------- View Quiz Modal ----------------->
-
                         </td>
-                        <td>
+                        <td id="edit-delete">
                             <a class="btn btn-warning"
                                href="<?php echo base_url();?>index.php/lecture/edit?q=<?php echo $lecture['lecture_ID'];?>">
                                 Edit

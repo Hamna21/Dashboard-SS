@@ -12,7 +12,7 @@ class Lecture extends CI_Controller
         $this->load->model('Course_model');
     }
 
-    //New Lecture add form
+    //Add Lecture form
     public function add()
     {
         //Redirect to Login page if user is not logged in
@@ -20,7 +20,7 @@ class Lecture extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/addLectureView.php'))
+        if(!file_exists(APPPATH. 'views/pages/lecture/addLectureView.php'))
         {
             show_404();
         }
@@ -33,7 +33,7 @@ class Lecture extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/addLectureView.php', $data);
+        $this->load->view('pages/lecture/addLectureView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -46,9 +46,9 @@ class Lecture extends CI_Controller
             $lecture_data = array(
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
-                'lecture_start' => $this->input->post('lecture_Time'),
-                'lecture_end' => $this->input->post('lecture_Time'),
-                'course_ID' => $this->input->post('course'),
+                'lecture_start' => $this->input->post('lecture_start'),
+                'lecture_end' => $this->input->post('lecture_end'),
+                'course_ID' => $this->input->post('course')
             );
 
             $this->form_validation->set_data($lecture_data); //Setting Data
@@ -61,7 +61,8 @@ class Lecture extends CI_Controller
                     'message'     => 'Error in registering new Lecture',
                     'lectureName_Error' => form_error('lecture_Name'),
                     'lectureDescription_Error' => form_error('lecture_Description'),
-                    'lectureTime_Error' => form_error('lecture_Time'),
+                    'lectureStart_Error' => form_error('lecture_start'),
+                    'lectureEnd_Error' => form_error('lecture_end'),
                     'courseID_Error' => form_error('course_ID')
                 );
 
@@ -72,7 +73,7 @@ class Lecture extends CI_Controller
 
             if ($this->Lecture_model->insertLecture($lecture_data))
             {
-                $this->session->set_flashdata('success', 'course');
+                $this->session->set_flashdata('success', 'lecture');
                 $this->session->set_flashdata('message', "New Lectures successfully added.");
                 redirect('/lectures');
             }
@@ -97,7 +98,7 @@ class Lecture extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/editLectureView.php'))
+        if(!file_exists(APPPATH. 'views/pages/lecture/editLectureView.php'))
         {
             show_404();
         }
@@ -108,8 +109,9 @@ class Lecture extends CI_Controller
             'lecture_ID' => $lecture['lecture_ID'],
             'lecture_Name' =>  $lecture['lecture_Name'],
             'lecture_Description' =>  $lecture['lecture_Description'],
-            'lecture_Time' =>  $lecture['lecture_Time'],
-            'lecture_Domain' =>  $lecture['course_ID'],
+            'lecture_start' =>  $lecture['lecture_start'],
+            'lecture_end' =>  $lecture['lecture_end'],
+            'lecture_Domain' =>  $lecture['course_ID']
         );
 
         //Setting lecture data - Information will be displayed on form
@@ -121,19 +123,20 @@ class Lecture extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/editLectureView.php', $data);
+        $this->load->view('pages/lecture/editLectureView.php', $data);
         $this->load->view('templates/footer.php', $data);
     }
 
     //POST request on Edit lecture redirects here
-    public function editlecture()
+    public function editLecture()
     {
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $lectureID = $this->session->lecture_ID;
             $lecture_data = array(
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
-                'lecture_Time' => $this->input->post('lecture_Time'),
+                'lecture_start' => $this->input->post('lecture_start'),
+                'lecture_end' => $this->input->post('lecture_end'),
                 'course_ID' => $this->input->post('course'),
             );
 
@@ -144,10 +147,11 @@ class Lecture extends CI_Controller
              if ($this->form_validation->run() == FALSE) {
                  $error_data = array(
                      'error'  => 'lecture',
-                     'message'     => 'Error in registering new Lecture',
+                     'message'     => 'Error in editing Lecture',
                      'lectureName_Error' => form_error('lecture_Name'),
                      'lectureDescription_Error' => form_error('lecture_Description'),
-                     'lectureTime_Error' => form_error('lecture_Time'),
+                     'lectureStart_Error' => form_error('lecture_start'),
+                     'lectureEnd_Error' => form_error('lecture_end'),
                      'courseID_Error' => form_error('course_ID')
                  );
  
@@ -165,7 +169,7 @@ class Lecture extends CI_Controller
             }
             else
             {
-                $this->session->set_flashdata('error', 'L');
+                $this->session->set_flashdata('error', 'Lecture');
                 $this->session->set_flashdata('message', "Error in editing Lecture");
                 redirect('/lectures');
             }

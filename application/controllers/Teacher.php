@@ -12,7 +12,7 @@ class Teacher extends CI_Controller
         $this->load->model('Category_model');
     }
 
-    //New Teacher add form
+    //Add Teacher form
     public function add()
     {
         //Redirect to Login page if user is not logged in
@@ -20,7 +20,7 @@ class Teacher extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/addTeacherView.php'))
+        if(!file_exists(APPPATH. 'views/pages/teacher/addTeacherView.php'))
         {
             show_404();
         }
@@ -31,7 +31,7 @@ class Teacher extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/addTeacherView.php', $data);
+        $this->load->view('pages/teacher/addTeacherView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -120,7 +120,7 @@ class Teacher extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/editTeacherView.php'))
+        if(!file_exists(APPPATH. 'views/pages/teacher/editTeacherView.php'))
         {
             show_404();
         }
@@ -136,6 +136,8 @@ class Teacher extends CI_Controller
 
         //Setting teacher data - Information will be displayed on form
         $this->session->set_flashdata($teacher_data);
+
+        //Setting Image in user-data because required more then once!
         $this->session->set_userdata('teacher_ThumbImage', $teacher['teacher_ThumbImage']);
         $this->session->set_userdata('teacher_Image', $teacher['teacher_Image']);
 
@@ -145,7 +147,7 @@ class Teacher extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/editTeacherView.php', $data);
+        $this->load->view('pages/teacher/editTeacherView.php', $data);
         $this->load->view('templates/footer.php', $data);
     }
 
@@ -170,7 +172,7 @@ class Teacher extends CI_Controller
                      'message'     => 'Error in editing Teacher',
                      'teacherName_Error' => form_error('teacher_Name'),
                      'teacherDesignation_Error' => form_error('teacher_Designation'),
-                     'teacherDomain_Error' => form_error('teacher_Domain'),
+                     'teacherDomain_Error' => form_error('teacher_Domain')
                  );
  
                  $this->session->set_flashdata($error_data);
@@ -178,10 +180,13 @@ class Teacher extends CI_Controller
                  redirect('/Teacher/edit?q='.$teacherID);
              }
 
+             //If new Image uploaded
             if(!empty($_FILES['image_Path']['name']))
             {
+                //Deleting previous images from server
                 unlink("uploads/".$this->session->teacher_ThumbImage);
                 unlink("uploads/".$this->session->teacher_Image);
+
                 //Validating image and uploading it
                 $image_attributes = uploadPicture();
                 $imageUploadStatus = $image_attributes[0];
@@ -221,8 +226,8 @@ class Teacher extends CI_Controller
 
     }
 
-
-    public function deleteteacher()
+    //Delete Teacher
+    public function deleteTeacher()
     {
         if(!$_REQUEST)
         {
@@ -243,14 +248,4 @@ class Teacher extends CI_Controller
 
     }
 
-    public function TeacherIDExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $teacherID = $_REQUEST["q"];
-        $result = $this->Teacher_model->getTeacher_ID($teacherID);
-        echo $result;
-    }
 }

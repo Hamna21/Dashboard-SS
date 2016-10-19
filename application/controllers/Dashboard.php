@@ -87,7 +87,7 @@ class Dashboard extends CI_Controller
             redirect('/Login');
 
         }
-        if(!file_exists(APPPATH. 'views/pages/categoryView.php'))
+        if(!file_exists(APPPATH. 'views/pages/category/categoryView.php'))
         {
             show_404();
         }
@@ -110,7 +110,7 @@ class Dashboard extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/categoryView.php', $data);
+        $this->load->view('pages/category/categoryView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -122,9 +122,8 @@ class Dashboard extends CI_Controller
         if(!isset($_SESSION['user']))
         {
             redirect('/Login');
-
         }
-        if(!file_exists(APPPATH. 'views/pages/teacherView.php'))
+        if(!file_exists(APPPATH. 'views/pages/teacher/teacherView.php'))
         {
             show_404();
         }
@@ -145,7 +144,7 @@ class Dashboard extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/teacherView.php', $data);
+        $this->load->view('pages/teacher/teacherView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
@@ -158,7 +157,7 @@ class Dashboard extends CI_Controller
         {
             redirect('/Login');
         }
-        if(!file_exists(APPPATH. 'views/pages/lectureView.php'))
+        if(!file_exists(APPPATH. 'views/pages/lecture/lectureView.php'))
         {
             show_404();
         }
@@ -180,7 +179,7 @@ class Dashboard extends CI_Controller
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/lectureView.php', $data);
+        $this->load->view('pages/lecture/lectureView.php', $data);
         $this->load->view('templates/footer.php', $data);
 
     }
