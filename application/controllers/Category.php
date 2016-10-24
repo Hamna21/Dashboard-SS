@@ -214,6 +214,11 @@ class Category extends CI_Controller
             show_404();
         }
         $categoryID = $_REQUEST["q"];
+        //Delete images from server
+        $category = $this->Category_model->get_category($categoryID);
+        unlink("uploads/".$category['category_ThumbImage']);
+        unlink("uploads/".$category['category_Image']);
+
         if($this->Category_model->deleteCategory($categoryID))
         {
             $this->session->set_flashdata('success', 'category');

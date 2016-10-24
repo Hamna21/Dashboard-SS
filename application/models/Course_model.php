@@ -26,6 +26,7 @@ class Course_model extends CI_Model
         $this->db->from('Course');
         $this->db->join('Category', 'Course.category_ID= Category.category_ID');
         $this->db->join('Teacher', 'Course.teacher_ID= Teacher.teacher_ID');
+        $this->db->order_by('course_ID', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
     }

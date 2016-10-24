@@ -14,7 +14,7 @@
         </ol>
     </div>
 </div>
-    <?php echo form_open_multipart('Course/addCourse', 'class="form" id="myform"');?>
+    <?php echo form_open_multipart('Course/testerCourse', 'class="form" id="myform"');?>
 
     <div class="form-group">
         <div class="col-md-12">

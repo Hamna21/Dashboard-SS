@@ -234,6 +234,11 @@ class Teacher extends CI_Controller
             show_404();
         }
         $teacherID = $_REQUEST["q"];
+        $teacher= $this->Teacher_model->get_teacher($teacherID);
+        //Delete previous pictures from server
+        unlink("uploads/".$teacher['teacher_ThumbImage']);
+        unlink("uploads/".$teacher['teacher_Image']);
+
         if($this->Teacher_model->deleteTeacher($teacherID))
         {
             $this->session->set_flashdata('success', 'teacher');
