@@ -6,10 +6,9 @@ class Teacher extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('form', 'url', 'image'));
+        $this->load->helper(array('form', 'url', 'image', 'request'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->model('Teacher_model');
-        $this->load->model('Category_model');
     }
 
     //Add Teacher form
@@ -27,7 +26,16 @@ class Teacher extends CI_Controller
 
         $data['title'] = ('Teacher');
         $data['subtitle'] = ('Add Teacher');
-        $data['categories'] = $this->Category_model->get_categories();
+
+        //Sending request to API
+        $result = sendGetRequest('api/categories');
+        if($result->status == ("error"))
+        {
+            $data['categories'] =  ('No category found');
+        }
+        else{
+            $data['categories'] =  $result->categories;
+        }
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -59,7 +67,6 @@ class Teacher extends CI_Controller
                 $error_data = array(
                     'error'  => 'teacher',
                     'message' => 'Error in registering new Teacher',
-                    'teacherID_Error' => form_error('teacher_ID'),
                     'teacherName_Error' => form_error('teacher_Name'),
                     'teacherDesignation_Error' => form_error('teacher_Designation'),
                     'teacherDomain_Error' => form_error('teacher_Domain'),
@@ -91,20 +98,45 @@ class Teacher extends CI_Controller
                 $this->session->set_flashdata($teacher_data);
                 redirect('/Teacher/add');
             }
-            //Setting image uploaded path
-            $teacher_data['teacher_Image'] = $image_attributes[1];
-            $teacher_data['teacher_ThumbImage'] = $image_attributes[2];
 
-            if ($this->Teacher_model->insertTeacher($teacher_data))
+            //Setting image uploaded path
+            $image_Name = $image_attributes[1];
+            $teacher_data['teacher_Image'] = base_url().'/uploads/'.$image_Name;
+
+            //Sending request to API
+            $result = sendPostRequest('api/teacher/add', $teacher_data);
+
+            if($result->status == ('error in validation')) {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'teacher',
+                    'message' => 'Error in registering new Teacher',
+                    'teacherName_Error' => $error_validation->teacher_Name,
+                    'teacherDesignation_Error' => $error_validation->teacher_Designation,
+                    'teacherDomain_Error' => $error_validation->teacher_Domain,
+                    'teacherImage_Error' => $error_validation->image_Path
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($teacher_data);
+                redirect('/teacher/add');
+
+            }
+            if($result->status == ('error in db'))
+            {
+                $this->session->set_flashdata('error', 'teacher');
+                $this->session->set_flashdata('message', "Error in registering new Teacher to Database");
+                redirect('/teachers');
+            }
+            if($result->status == ('success'))
             {
                 $this->session->set_flashdata('success', 'teacher');
                 $this->session->set_flashdata('message', "New Teacher successfully added.");
                 redirect('/teachers');
             }
-            else
-            {
+            else{
                 $this->session->set_flashdata('error', 'teacher');
-                $this->session->set_flashdata('message', "Error in registering new Teacher to Database");
+                $this->session->set_flashdata('message', "Error -- Couldn't perform operation--Syntax Error");
                 redirect('/teachers');
             }
         }
@@ -124,26 +156,41 @@ class Teacher extends CI_Controller
         {
             show_404();
         }
-        //Getting teacher information by ID
-        $teacherID = $_REQUEST["q"];
-        $teacher = $this->Teacher_model->get_teacher($teacherID);
+
+        //Getting teacher information by ID - sending request
+        $result = sendGetRequest('api/teacher/?teacherID='.$_REQUEST["q"]);
+        if($result->status== ("error"))
+        {
+            show_error("Teacher not found", 500, "Error");
+        }
+
+        $teacher= $result->teacher;
         $teacher_data = array(
-            'teacher_ID' => $teacher['teacher_ID'],
-            'teacher_Name' =>  $teacher['teacher_Name'],
-            'teacher_Designation' =>  $teacher['teacher_Designation'],
-            'teacher_Domain' =>  $teacher['teacher_Domain']
+            'teacher_ID' => $teacher->teacher_ID,
+            'teacher_Name' =>  $teacher->teacher_Name,
+            'teacher_Designation' =>  $teacher->teacher_Designation,
+            'teacher_Domain' =>  $teacher->teacher_Domain
         );
 
         //Setting teacher data - Information will be displayed on form
         $this->session->set_flashdata($teacher_data);
 
         //Setting Image in user-data because required more then once!
-        $this->session->set_userdata('teacher_ThumbImage', $teacher['teacher_ThumbImage']);
-        $this->session->set_userdata('teacher_Image', $teacher['teacher_Image']);
+        $this->session->set_userdata('teacher_ThumbImage', $teacher->teacher_ThumbImage);
+        $this->session->set_userdata('teacher_Image', $teacher->teacher_Image);
 
         $data['title'] = ('Teacher');
         $data['subtitle'] = ('Edit Teacher');
-        $data['categories'] = $this->Category_model->get_categories();
+        //Sending request to API
+        $result = sendGetRequest('api/categories');
+
+        if($result->status == ("error"))
+        {
+            $data['categories'] =  ('No category found');
+        }
+        else{
+            $data['categories'] =  $result->categories;
+        }
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -157,6 +204,7 @@ class Teacher extends CI_Controller
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $teacherID = $this->session->teacher_ID;
             $teacher_data = array(
+                'teacher_ID' => $teacherID,
                 'teacher_Name' => $this->input->post('teacher_Name'),
                 'teacher_Designation' => $this->input->post('teacher_Designation'),
                 'teacher_Domain' => $this->input->post('teacher_Domain')
@@ -183,10 +231,6 @@ class Teacher extends CI_Controller
              //If new Image uploaded
             if(!empty($_FILES['image_Path']['name']))
             {
-                //Deleting previous images from server
-                unlink("uploads/".$this->session->teacher_ThumbImage);
-                unlink("uploads/".$this->session->teacher_Image);
-
                 //Validating image and uploading it
                 $image_attributes = uploadPicture();
                 $imageUploadStatus = $image_attributes[0];
@@ -195,31 +239,60 @@ class Teacher extends CI_Controller
                 if ($imageUploadStatus == 0) {
                     $error_data = array(
                         'error'  => 'teacher',
-                        'message'     => 'Error in registering new teacher',
+                        'message'     => 'Error in editing teacher',
                         'teacherName_Error' => form_error('teacher_Name'),
                         'teacherImage_Error' => $image_attributes[1]
                     );
 
                     $this->session->set_flashdata($error_data);
                     $this->session->set_flashdata($teacher_data);
-                    redirect('/Teacher/add');
+                    redirect('/Teacher/edit?q='.$teacherID);
                 }
+
+                //New image successfully uploaded on web server
+
+                //Deleting images from web server and setting path for API server
+                unlink("uploads/".$this->session->teacher_Image);
+                $teacher_data['teacher_PrevImage'] = $this->session->teacher_Image;
+                $teacher_data['teacher_PrevThumbImage'] = $this->session->teacher_ThumbImage;
+
                 //Setting image uploaded path
-                $teacher_data['teacher_Image'] = $image_attributes[1];
-                $teacher_data['teacher_ThumbImage'] = $image_attributes[2];
-                // createThumbnail($image_attributes[1]);
+                $image_Name = $image_attributes[1];
+                $teacher_data['teacher_Image'] = base_url().'/uploads/'.$image_Name;
             }
 
-            if ($this->Teacher_model->updateteacher($teacherID,$teacher_data))
+            //Sending request to API
+            $result = sendPostRequest('api/teacher/edit', $teacher_data);
+            if($result->status == ('error in validation'))
+            {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'teacher',
+                    'message'     => 'Error in editing Teacher',
+                    'teacherName_Error' => $error_validation->teacher_Name,
+                    'teacherDesignation_Error' => $error_validation->teacher_Designation,
+                    'teacherDomain_Error' => $error_validation->teacher_Domain
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($teacher_data);
+                redirect('/Teacher/edit?q='.$teacherID);
+            }
+            if($result->status == ('error in db'))
+            {
+                $this->session->set_flashdata('error', 'teacher');
+                $this->session->set_flashdata('message', "Error in editing Teacher");
+                redirect('/teachers');
+            }
+            if($result->status == ('success'))
             {
                 $this->session->set_flashdata('success', 'teacher');
                 $this->session->set_flashdata('message', "Teacher successfully edited.");
                 redirect('/teachers');
             }
-            else
-            {
+            else{
                 $this->session->set_flashdata('error', 'teacher');
-                $this->session->set_flashdata('message', "Error in editing Teacher");
+                $this->session->set_flashdata('message', "Error -- Couldn't perform operation--syntax error");
                 redirect('/teachers');
             }
         }
@@ -233,24 +306,20 @@ class Teacher extends CI_Controller
         {
             show_404();
         }
-        $teacherID = $_REQUEST["q"];
-        $teacher= $this->Teacher_model->get_teacher($teacherID);
-        //Delete previous pictures from server
-        unlink("uploads/".$teacher['teacher_ThumbImage']);
-        unlink("uploads/".$teacher['teacher_Image']);
 
-        if($this->Teacher_model->deleteTeacher($teacherID))
+        //Sending request to API
+        $result = sendGetRequest('api/teacher/delete?teacherID='.$_REQUEST["q"]);
+        if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'teacher');
             $this->session->set_flashdata('message', "Teacher successfully Deleted.");
             redirect('/teachers');
         }
         else{
-            $this->session->set_flashdata('error', 'course');
+            $this->session->set_flashdata('error', 'teacher');
             $this->session->set_flashdata('message', "Error in deleting teacher");
             redirect('/teachers');
         }
-
     }
 
 }

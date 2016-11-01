@@ -25,7 +25,7 @@ $(document).ready(function(){
                     document.getElementById("categoryName_Error").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "http://localhost:8080/Dashboard-SS/index.php/Category/categoryNameExist?q=" + categoryName, true);
+            xmlhttp.open("GET", "http://localhost:8080/Second-Screen-API-v3/Helper/categoryNameExist?q=" + categoryName, true);
             xmlhttp.send();
         }
     });

@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/teachers">Teachers</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>teachers">Teachers</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>
@@ -46,7 +46,7 @@
         <select class="form-control" required id="teacher_Domain" name="teacher_Domain"><option value="">Please select</option>
             <?php $increment = 1 ?>
             <?php foreach($categories as $category){?>
-                <option value="<?php echo $category['category_Name'];?>"><?php echo $category['category_Name'];?></option>
+                <option value="<?php echo $category->category_Name;?>"><?php echo $category->category_Name;?></option>
             <?php }?>
             <?php if(isset($_SESSION['teacherDomain_Error'])) {echo  $this->session->teacherDomain_Error;} ?>
         </select>

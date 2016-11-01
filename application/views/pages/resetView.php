@@ -22,13 +22,11 @@
     }
     ?>
 
-    <?php echo form_open('Login/loginAdmin', 'class="form-signin" id="myform"');?>
+    <?php echo form_open('http://localhost:8080/Second-Screen-API-v3/api/resetPassword', 'class="form-signin" id="myform"');?>
 
-    <h2 class="form-signin-heading">Log In</h2>
+    <h2 class="form-signin-heading">Reset Password</h2>
 
-    <label for="email" class="sr-only">Email address</label>
-    <input type="email" id="email" name ="email" class="form-control" placeholder="Email address"  autofocus required value="<?php if(isset($_SESSION['email'])) {echo  $this->session->email;} ?>" />
-    <span class="error"><p id ="emailError"><?php if(isset($_SESSION['email_Error'])) {echo  $this->session->email_Error;} ?></p> </span>
+    <input type="hidden" name="reset_hash" value="<?php echo $reset_hash?>">
 
 
     <label for="password" class="sr-only">Password</label>
@@ -36,7 +34,7 @@
     <span class="error"><p id ="passwordError"></span></p> <?php if(isset($_SESSION['password_Error'])) {echo  $this->session->password_Error;} ?>
 
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Reset</button>
     </form>
 
 </div> <!-- /container -->

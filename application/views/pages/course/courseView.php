@@ -32,7 +32,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/dashboard">Dashboard</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>dashboard">Dashboard</a>
             </li>
             <li class="active">
                 <i class="fa fa-file"></i> <?php echo $title; ?>
@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>index.php/course/add">New Course</a></div>
+<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>course/add">New Course</a></div>
 
 <div class="row">
     <div class="col-lg-12">
@@ -63,26 +63,26 @@
                 <tbody>
                 <?php foreach($courses as $course){?>
                     <tr>
-                        <td id="course_name"><?php echo $course['course_Name'];?></td>
-                        <td id="course_desc"><?php echo $course['course_Description'];?></td>
-                        <td><?php echo $course['category_Name'];?></td>
+                        <td id="course_name"><?php echo $course->course_Name;?></td>
+                        <td id="course_desc"><?php echo $course->course_Description;?></td>
+                        <td><?php echo $course->category_Name;?></td>
 
                         <td id ="course_teach">
                             <a data-toggle="modal"  data-remote="true" href="#teacherModal">
-                                <?php echo $course['teacher_Name'];?>
+                                <?php echo $course->teacher_Name;?>
                             </a>
                         </td>
                         <td id="course_thumb">
-                            <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $course['course_ThumbImage'];?>">
+                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $course->course_ThumbImage;?>">
                         </td>
                         <td id="edit-delete">
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>index.php/Course/edit?q=<?php echo $course['course_ID'];?>">
+                               href="<?php echo base_url();?>Course/edit?q=<?php echo $course->course_ID;?>">
                                Edit
                             </a>
 
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $course['course_ID'];?>" href="#deleteCourseModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $course->course_ID;?>" href="#deleteCourseModal">
                                 Delete
                             </a>
                                 <!--------------------- Delete Course Modal ----------------->
@@ -108,7 +108,7 @@
                                 $(document).on("click", ".delete-link", function () {
                                     var courseID = $(this).data('id');
                                     var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/course/delete?q=" + courseID);
+                                    link.setAttribute('href', "<?php echo base_url()?>course/delete?q=" + courseID);
                                 });
                             </script>
                                 <!--------------------- Delete Course Modal ----------------->

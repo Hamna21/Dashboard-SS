@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>">Dashboard</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>dashboard">Dashboard</a>
             </li>
             <li class="active">
                 <i class="fa fa-file"></i> <?php echo $title; ?>
@@ -15,9 +15,7 @@
     </div>
 </div>
 
-
-<div class="pull-right "><a class="btn btn-default btn-success" style="margin-left: 30px" href="<?php echo base_url();?>index.php/category/save_in_excel">Export Data</a></div>
-<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>index.php/category/add">New Category</a></div>
+<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>category/add">New Category</a></div>
 
 
 <div class="row">
@@ -37,18 +35,18 @@
                 <tbody>
                 <?php foreach($categories as $category){?>
                     <tr>
-                        <td><?php echo $category['category_Name'];?></td>
+                        <td><?php echo $category->category_Name;?></td>
                         <td>
-                            <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $category['category_ThumbImage'];?>">
+                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $category->category_ThumbImage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>index.php/Category/edit?q=<?php echo $category['category_ID'];?>">
+                               href="<?php echo base_url();?>Category/edit?q=<?php echo $category->category_ID;?>">
                                 Edit
                             </a>
 
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $category['category_ID'];?>" href="#deleteCategoryModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $category->category_ID;?>" href="#deleteCategoryModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Category Modal ----------------->
@@ -74,7 +72,7 @@
                                 $(document).on("click", ".delete-link", function () {
                                     var categoryID = $(this).data('id');
                                     var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/category/delete?q=" + categoryID);
+                                    link.setAttribute('href', "<?php echo base_url();?>category/delete?q=" + categoryID);
                                 });
                             </script>
                             <!--------------------- Delete Category Modal ----------------->

@@ -24,7 +24,7 @@ $(document).ready(function(){
                     document.getElementById("lectureName_Error").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "http://localhost:8080/Dashboard-SS/index.php/lecture/lectureNameExist?q=" + lectureName, true);
+            xmlhttp.open("GET", "http://localhost:8080/Second-Screen-API-v3/Helper/lectureNameExist?q=" + lectureName, true);
             xmlhttp.send();
         }
     });

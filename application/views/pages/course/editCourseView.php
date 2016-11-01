@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/courses">Courses</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>courses">Courses</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>
@@ -45,7 +45,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="category" name="category"><option value="<?php echo $this->session->category_ID; ?>"><?php echo $this->session->category_Name; ?></option>
             <?php foreach($categories as $category){?>
-                <option value="<?php echo $category['category_ID'];?>"><?php echo $category['category_Name'];?></option>
+                <option value="<?php echo $category->category_ID;?>"><?php echo $category->category_Name;?></option>
             <?php }?>
         </select>
     </div>
@@ -59,7 +59,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="teacher" name="teacher"><option value="<?php echo $this->session->teacher_ID; ?>"><?php echo $this->session->teacher_Name; ?></option>
             <?php foreach($teachers as $teacher){?>
-                <option value="<?php echo $teacher['teacher_ID'];?>"><?php echo $teacher['teacher_Name'];?></option>
+                <option value="<?php echo $teacher->teacher_ID;?>"><?php echo $teacher->teacher_Name;?></option>
             <?php }?>
         </select>
     </div>
@@ -71,7 +71,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $this->session->course_ThumbImage;?>">
+        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->course_ThumbImage;?>">
     </div>
 </div>
 

@@ -5,7 +5,7 @@
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url();?>index.php/dashboard">Second Screen Admin</a>
+        <a class="navbar-brand" href="<?php echo base_url();?>dashboard">Second Screen Admin</a>
     </div>
 
     <!------------------ Top Menu Items----------------->
@@ -15,7 +15,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $this->session->user?> <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="http://localhost:8080/Dashboard-SS/index.php/Login/logoutUser"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="<?php echo base_url()?>Login/logoutAdmin"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>
             </ul>
         </li>
@@ -24,11 +24,11 @@
     <!-------------Sidebar Menu Items - These collapse to the responsive navigation menu on small screens----------------->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-            <li class="<?php echo ($title == "Dashboard" ? "active" : "")?>"> <a href="<?php echo base_url();?>index.php/dashboard"><i class="fa fa-fw fa-table"></i> Dashboard</a> </li>
-            <li class="<?php echo ($title == "Courses" ? "active" : "")?>"> <a href="<?php echo base_url();?>index.php/courses"><i class="fa fa-fw fa-table"></i> Courses</a> </li>
-            <li class="<?php echo ($title == "Categories" ? "active" : "")?>"> <a href="<?php echo base_url();?>index.php/categories"><i class="fa fa-fw fa-table"></i> Categories</a> </li>
-            <li class="<?php echo ($title == "Teachers" ? "active" : "")?>"> <a href="<?php echo base_url();?>index.php/teachers"><i class="fa fa-fw fa-table"></i> Teachers</a> </li>
-            <li class="<?php echo ($title == "Lectures" ? "active" : "")?>"> <a href="<?php echo base_url();?>index.php/lectures"><i class="fa fa-fw fa-table"></i> Lectures</a> </li>
+            <li class="<?php echo ($title == "Dashboard" ? "active" : "")?>"> <a href="<?php echo base_url();?>dashboard"><i class="fa fa-fw fa-table"></i> Dashboard</a> </li>
+            <li class="<?php echo ($title == "Courses" ? "active" : "")?>"> <a href="<?php echo base_url();?>courses"><i class="fa fa-fw fa-table"></i> Courses</a> </li>
+            <li class="<?php echo ($title == "Categories" ? "active" : "")?>"> <a href="<?php echo base_url();?>categories"><i class="fa fa-fw fa-table"></i> Categories</a> </li>
+            <li class="<?php echo ($title == "Teachers" ? "active" : "")?>"> <a href="<?php echo base_url();?>teachers"><i class="fa fa-fw fa-table"></i> Teachers</a> </li>
+            <li class="<?php echo ($title == "Lectures" ? "active" : "")?>"> <a href="<?php echo base_url();?>lectures"><i class="fa fa-fw fa-table"></i> Lectures</a> </li>
         </ul>
     </div>
     <!-- /.navbar-collapse -->

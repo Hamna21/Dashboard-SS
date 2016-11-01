@@ -6,10 +6,9 @@ class Lecture extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url','request'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->model('Lecture_model');
-        $this->load->model('Course_model');
     }
 
     //Add Lecture form
@@ -29,7 +28,15 @@ class Lecture extends CI_Controller
         $data['subtitle'] = ('Add Lecture');
 
         //Storing complete information of courses
-        $data['courses'] = $this->Course_model->get_courses();
+        //Sending request to API
+        $result = sendGetRequest('api/courses');
+        if($result->status == ("error"))
+        {
+            $data['courses'] =  ('No course found');
+        }
+        else{
+            $data['courses'] =  $result->courses;
+        }
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -71,8 +78,31 @@ class Lecture extends CI_Controller
                 redirect('/Lecture/add');
             }
 
-            if ($this->Lecture_model->insertLecture($lecture_data))
-            {
+            $result = sendPostRequest('api/lecture/add', $lecture_data);
+            if($result->status == ('error in validation')) {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'lecture',
+                    'message'     => 'Error in registering new Lecture',
+                    'lectureName_Error' => $error_validation->lecture_Name,
+                    'lectureDescription_Error' => $error_validation->lecture_Description,
+                    'lectureStart_Error' => $error_validation->lecture_start,
+                    'lectureEnd_Error' => $error_validation->lecture_end,
+                    'courseID_Error' => $error_validation->course_ID
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($lecture_data);
+                redirect('/Lecture/add');
+
+
+            }
+            if($result->status == ('error in db')) {
+                $this->session->set_flashdata('error', 'lecture');
+                $this->session->set_flashdata('message', "Error in registering new Lecture to Database");
+                redirect('/lectures');
+            }
+            if($result->status == ('success')) {
                 $this->session->set_flashdata('success', 'lecture');
                 $this->session->set_flashdata('message', "New Lectures successfully added.");
                 redirect('/lectures');
@@ -80,7 +110,7 @@ class Lecture extends CI_Controller
             else
             {
                 $this->session->set_flashdata('error', 'lecture');
-                $this->session->set_flashdata('message', "Error in registering new Lecture to Database");
+                $this->session->set_flashdata('message', "Error in registering new Lecture to Database - Syntax Error");
                 redirect('/lectures');
             }
         }
@@ -102,16 +132,22 @@ class Lecture extends CI_Controller
         {
             show_404();
         }
-        //Getting lecture information by ID
-        $lectureID = $_REQUEST["q"];
-        $lecture = $this->Lecture_model->get_lecture($lectureID);
+
+        //Getting lecture information by ID - sending request
+        $result = sendGetRequest('api/lecture/?lectureID='.$_REQUEST["q"]);
+        if($result->status== ("error"))
+        {
+            show_error("Lecture not found", 500, "Error");
+        }
+
+        $lecture = $result->lecture;
         $lecture_data = array(
-            'lecture_ID' => $lecture['lecture_ID'],
-            'lecture_Name' =>  $lecture['lecture_Name'],
-            'lecture_Description' =>  $lecture['lecture_Description'],
-            'lecture_start' =>  $lecture['lecture_start'],
-            'lecture_end' =>  $lecture['lecture_end'],
-            'lecture_Domain' =>  $lecture['course_ID']
+            'lecture_ID' => $lecture->lecture_ID,
+            'lecture_Name' =>  $lecture->lecture_Name,
+            'lecture_Description' =>  $lecture->lecture_Description,
+            'lecture_start' =>  $lecture->lecture_start,
+            'lecture_end' =>  $lecture->lecture_end,
+            'lecture_Domain' =>  $lecture->course_ID
         );
 
         //Setting lecture data - Information will be displayed on form
@@ -119,7 +155,14 @@ class Lecture extends CI_Controller
 
         $data['title'] = ('Lecture');
         $data['subtitle'] = ('Edit Lecture');
-        $data['courses'] = $this->Course_model->get_courses();
+        $result = sendGetRequest('api/courses');
+        if($result->status == ("error"))
+        {
+            $data['courses'] =  ('No course found');
+        }
+        else{
+            $data['courses'] =  $result->courses;
+        }
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -133,6 +176,7 @@ class Lecture extends CI_Controller
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $lectureID = $this->session->lecture_ID;
             $lecture_data = array(
+                'lecture_ID' => $lectureID,
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
                 'lecture_start' => $this->input->post('lecture_start'),
@@ -160,8 +204,34 @@ class Lecture extends CI_Controller
                  redirect('/lecture/edit?q='.$lectureID);
              }
 
+            //Sending request to API
+            $result = sendPostRequest('api/lecture/edit', $lecture_data);
 
-            if ($this->Lecture_model->updatelecture($lectureID,$lecture_data))
+            if($result->status == ('error in validation')) {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'lecture',
+                    'message'     => 'Error in editing Lecture',
+                    'lectureName_Error' => $error_validation->lecture_Name,
+                    'lectureDescription_Error' => $error_validation->lecture_Description,
+                    'lectureStart_Error' => $error_validation->lecture_start,
+                    'lectureEnd_Error' => $error_validation->lecture_end,
+                    'courseID_Error' => $error_validation->course_ID
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($lecture_data);
+                redirect('/lecture/edit?q='.$lectureID);
+            }
+
+            if($result->status == ('error in db'))
+            {
+                $this->session->set_flashdata('error', 'Lecture');
+                $this->session->set_flashdata('message', "Error in editing Lecture");
+                redirect('/lectures');
+            }
+
+            if($result->status == ('success'))
             {
                 $this->session->set_flashdata('success', 'Lecture');
                 $this->session->set_flashdata('message', "Lecture successfully edited.");
@@ -170,7 +240,7 @@ class Lecture extends CI_Controller
             else
             {
                 $this->session->set_flashdata('error', 'Lecture');
-                $this->session->set_flashdata('message', "Error in editing Lecture");
+                $this->session->set_flashdata('message', "Error in editing Lecture-- Syntax Error");
                 redirect('/lectures');
             }
         }
@@ -184,44 +254,20 @@ class Lecture extends CI_Controller
         {
             show_404();
         }
-        $lectureID = $_REQUEST["q"];
-        if($this->Lecture_model->deleteLecture($lectureID))
+
+        //Sending request to API
+        $result = sendGetRequest('api/lecture/delete?lectureID='.$_REQUEST["q"]);
+        if($result->status== ("success"))
         {
-            $this->session->set_flashdata('success', 'Lecture');
-            $this->session->set_flashdata('message', "Lecture successfully Deleted.");
+            $this->session->set_flashdata('success', 'lecture');
+            $this->session->set_flashdata('message', "Lecture successfully deleted.");
             redirect('/lectures');
         }
         else{
-            $this->session->set_flashdata('error', 'course');
-            $this->session->set_flashdata('message', "Error in deleting Lecture");
+            $this->session->set_flashdata('error', 'lecture');
+            $this->session->set_flashdata('message', "Error in deleting lecture");
             redirect('/lectures');
         }
 
     }
-
-
-    //Checking if ID is already in DB
-    public function lectureIDExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $lectureID = $_REQUEST["q"];
-        $result = $this->Lecture_model->getLecture_ID($lectureID);
-        echo $result;
-    }
-
-    //Checking if Name is already in DB
-    public function lectureNameExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $lectureName = $_REQUEST["q"];
-        $result = $this->Lecture_model->getLecture_Name($lectureName);
-        echo $result;
-    }
-
 }

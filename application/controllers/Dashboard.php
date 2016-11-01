@@ -5,13 +5,9 @@ class Dashboard extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('form', 'url'));
-        $this->load->library(array('session', 'form_validation'));
-        $this->load->library('pagination');
-        $this->load->model('Course_model');
-        $this->load->model('Category_model');
-        $this->load->model('Teacher_model');
-        $this->load->model('Lecture_model');
+        $this->load->helper(array('form', 'url', 'request'));
+        $this->load->library(array('session', 'form_validation', 'pagination'));
+
     }
 
     //Dashboard Page
@@ -21,7 +17,6 @@ class Dashboard extends CI_Controller
         if(!isset($_SESSION['user']))
         {
             redirect('/Login');
-
         }
         if(!file_exists(APPPATH. 'views/pages/dashboardView.php'))
         {
@@ -30,11 +25,18 @@ class Dashboard extends CI_Controller
 
         $data['title'] = ('Dashboard');
         $data['subtitle'] = ('Second Screen');
+
+        //Sending request to API - Getting total count of all elements
+        $result = sendGetRequest('api/totalCount');
+        if($result->status == ("error"))
+        {
+            show_error("Error in retrieving total count",500, "Error");
+        }
         //Getting total count of all entities stored in DB
-        $data['courseTotal'] = $this->Course_model->getCourseTotal();
-        $data['categoryTotal'] = $this->Category_model->getCategoryTotal();
-        $data['teacherTotal'] = $this->Teacher_model->getTeacherTotal();
-        $data['lectureTotal'] = $this->Lecture_model->getLectureTotal();
+        $data['courseTotal'] = $result->courseTotal;
+        $data['categoryTotal'] = $result->categoryTotal;
+        $data['teacherTotal'] = $result->teacherTotal;
+        $data['lectureTotal'] = $result->lectureTotal;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -55,21 +57,31 @@ class Dashboard extends CI_Controller
         {
             show_404();
         }
-
         $data['title'] = ('Courses');
         $data['subtitle'] = ('');
 
         //-----Pagination-------//
-        $config["base_url"] = base_url() . "index.php/courses";
-        $total_row = $this->Course_model->getCourseTotal();
-        $config["total_rows"] = $total_row;
+        $config["base_url"] = base_url() . "courses";
         $config['per_page'] = 3;
-        $this->pagination->initialize($config);
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
-        $data["links"] = $this->pagination->create_links();
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page
+        );
 
-        //Getting courses info from table within limit
-        $data['courses'] = $this->Course_model->get_courses_limit($config['per_page'], $page);
+        //-----Sending request to API-----//
+        $result = sendPostRequest('api/courses/dashboard',$pagination_data);
+
+        if($result->status == ("error"))
+        {
+            show_error("Error in courses.", "500", "Unauthorized.");
+        }
+
+        $config["total_rows"] = $result->courseTotal;
+        $this->pagination->initialize($config);
+
+        $data["links"] = $this->pagination->create_links();
+        $data['courses'] = $result->courses;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -96,17 +108,26 @@ class Dashboard extends CI_Controller
         $data['subtitle'] = ('');
 
         //-----Pagination-------//
-        $config["base_url"] = base_url() . "index.php/categories";
-        $total_row = $this->Category_model->getCategoryTotal();
-        $config["total_rows"] = $total_row;
+        $config["base_url"] = base_url() . "categories";
         $config['per_page'] = 3;
-        $this->pagination->initialize($config);
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
-        $data["links"] = $this->pagination->create_links();
-        
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page
+        );
 
-        //Getting all categories within limit
-        $data['categories'] = $this->Category_model->get_categories_limit($config['per_page'], $page);
+        //-----Sending request to API-----//
+        $result = sendPostRequest('api/categories/dashboard',$pagination_data);
+        if($result->status == ("error"))
+        {
+            show_error("Error in categories.", "500", "Unauthorized.");
+        }
+
+        $config["total_rows"] = $result->categoryTotal;
+        $this->pagination->initialize($config);
+
+        $data["links"] = $this->pagination->create_links();
+        $data['categories'] = $result->categories;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -131,16 +152,26 @@ class Dashboard extends CI_Controller
         $data['subtitle'] = ('');
 
         //-----Pagination-------//
-        $config["base_url"] = base_url() . "index.php/teachers";
-        $total_row = $this->Teacher_model->getTeacherTotal();
-        $config["total_rows"] = $total_row;
+        $config["base_url"] = base_url() . "teachers";
         $config['per_page'] = 3;
-        $this->pagination->initialize($config);
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
-        $data["links"] = $this->pagination->create_links();
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page
+        );
 
-        //Getting teachers info within limit
-        $data['teachers'] = $this->Teacher_model->get_teachers_limit($config['per_page'], $page);
+        //-----Sending request to API-----//
+        $result = sendPostRequest('api/teachers/dashboard',$pagination_data);
+        if($result->status == ("error"))
+        {
+            show_error("Error in teachers.", "500", "Unauthorized.");
+        }
+
+        $config["total_rows"] = $result->teacherTotal;
+        $this->pagination->initialize($config);
+
+        $data["links"] = $this->pagination->create_links();
+        $data['teachers'] = $result->teachers;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -166,16 +197,26 @@ class Dashboard extends CI_Controller
         $data['subtitle'] = ('');
 
         //-----Pagination-------//
-        $config["base_url"] = base_url() . "index.php/lectures";
-        $total_row = $this->Lecture_model->getLectureTotal();
-        $config["total_rows"] = $total_row;
+        $config["base_url"] = base_url() . "lectures";
         $config['per_page'] = 3;
-        $this->pagination->initialize($config);
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
-        $data["links"] = $this->pagination->create_links();
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page
+        );
 
-        //Getting lectures info within limit
-        $data['lectures'] = $this->Lecture_model->get_lectures_limit($config['per_page'], $page);
+        //-----Sending request to API-----//
+        $result = sendPostRequest('api/lectures/dashboard',$pagination_data);
+        if($result->status == ("error"))
+        {
+            show_error("Error in lectures.", "500", "Unauthorized.");
+        }
+
+        $config["total_rows"] = $result->lectureTotal;
+        $this->pagination->initialize($config);
+
+        $data["links"] = $this->pagination->create_links();
+        $data['lectures'] = $result->lectures;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);

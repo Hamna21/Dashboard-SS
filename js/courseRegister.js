@@ -26,7 +26,7 @@ $(document).ready(function(){
                     document.getElementById("courseName_Error").innerHTML = xmlhttp.responseText;
                 }
             };
-            xmlhttp.open("GET", "http://localhost:8080/Dashboard-SS/index.php/Course/courseNameExist?q=" + courseName, true);
+            xmlhttp.open("GET", "http://localhost:8080/Second-Screen-API-v3/Helper/courseNameExist?q=" + courseName, true);
             xmlhttp.send();
         }
     });

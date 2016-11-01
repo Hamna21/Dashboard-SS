@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/courses">Courses</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>courses">Courses</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>
@@ -14,7 +14,7 @@
         </ol>
     </div>
 </div>
-    <?php echo form_open_multipart('Course/testerCourse', 'class="form" id="myform"');?>
+    <?php echo form_open_multipart('Course/addCourse', 'class="form" id="myform"');?>
 
     <div class="form-group">
         <div class="col-md-12">
@@ -43,7 +43,7 @@
         <div class="col-md-12">
             <select class="form-control" required id="category" name="category"><option value="">Please select</option>
                 <?php foreach($categories as $category){?>
-                    <option value="<?php echo $category['category_ID'];?>"><?php echo $category['category_Name'];?></option>
+                    <option value="<?php echo $category->category_ID;?>"><?php echo $category->category_Name;?></option>
                 <?php }?>
             </select>
             <span class="error"></span> <?php if(isset($_SESSION['categoryID_Error'])) {echo  $this->session->categoryID_Error;} ?>
@@ -59,7 +59,7 @@
         <div class="col-md-12">
             <select class="form-control" required id="teacher" name="teacher"><option value="">Please select</option>
                 <?php foreach($teachers as $teacher){?>
-                    <option value="<?php echo $teacher['teacher_ID'];?>"><?php echo $teacher['teacher_Name'];?></option>
+                    <option value="<?php echo $teacher->teacher_ID;?>"><?php echo $teacher->teacher_Name;?></option>
                 <?php }?>
             </select>
             <span class="error"></span> <?php if(isset($_SESSION['teacherID_Error'])) {echo  $this->session->teacherID_Error;} ?>

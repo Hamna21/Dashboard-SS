@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/categories">Categories</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>categories">Categories</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>

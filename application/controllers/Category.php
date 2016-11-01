@@ -5,7 +5,7 @@ class Category extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('form', 'url', 'image'));
+        $this->load->helper(array('form', 'url', 'image', 'request'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->model('Category_model');
     }
@@ -48,7 +48,7 @@ class Category extends CI_Controller
                 $this->form_validation->set_rules('image_Path', 'Image', 'required');
             }
 
-            //Reload add Category page if Validation fails
+            //Reload add Category page if Validation fails - web server validation
             if ($this->form_validation->run() == FALSE) {
                 $error_data = array(
                     'error'  => 'category',
@@ -79,21 +79,48 @@ class Category extends CI_Controller
                 $this->session->set_flashdata($category_data);
                 redirect('/Category/add');
             }
-            //Setting image uploaded path
-            $category_data['category_Image'] = $image_attributes[1];
-            $category_data['category_ThumbImage'] = $image_attributes[2];
 
-            if ($this->Category_model->insertCategory($category_data))
+            //Setting image uploaded path
+            $image_Name = $image_attributes[1];
+            $category_data['category_Image'] = base_url().'/uploads/'.$image_Name;
+
+            //Sending request to API
+            $result = sendPostRequest('api/category/add', $category_data);
+
+            if($result->status == ('error in validation')) {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'category',
+                    'message'     => 'Error in registering new Category',
+                    'categoryName_Error' => $error_validation->category_Name,
+                    'categoryImageError' => $error_validation->image_Path
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($category_data);
+                redirect('/Category/add');
+
+            }
+
+            if($result->status == ('error in db'))
+            {
+                $this->session->set_flashdata('error', 'category');
+                $this->session->set_flashdata('message', "Error in registering new Category to Database");
+                redirect('/categories');
+            }
+
+            if ($result->status == ('success'))
             {
                 $this->session->set_flashdata('success', 'category');
                 $this->session->set_flashdata('message', "New Category successfully added.");
                 redirect('/categories');
             }
-            else
-            {
+
+            else{
                 $this->session->set_flashdata('error', 'category');
-                $this->session->set_flashdata('message', "Error in registering new Category to Database");
+                $this->session->set_flashdata('message', "Error in performing action--syntax error");
                 redirect('/categories');
+
             }
         }
         //Call this if a user tries to access this method from URL
@@ -112,20 +139,25 @@ class Category extends CI_Controller
         {
             show_404();
         }
-        //Getting category information by ID
-        $categoryID = $_REQUEST["q"];
-        $category = $this->Category_model->get_category($categoryID);
+
+        //Getting category information by ID - sending request
+        $result = sendGetRequest('api/category/?categoryID='.$_REQUEST["q"]);
+        if($result->status== ("error"))
+        {
+            show_error('Category not found',500, "Error");
+        }
+
+        $category = $result->category;
         $category_data = array(
-            'category_ID' => $category['category_ID'],
-            'category_Name' =>  $category['category_Name']
+            'category_ID' => $category->category_ID,
+            'category_Name' =>  $category->category_Name
         );
 
         //Setting category data - Information will be displayed on form
         $this->session->set_flashdata($category_data);
-
         //Setting Image in user-data because needed more then once!
-        $this->session->set_userdata('category_ThumbImage', $category['category_ThumbImage']);
-        $this->session->set_userdata('category_Image', $category['category_Image']);
+        $this->session->set_userdata('category_ThumbImage', $category->category_ThumbImage);
+        $this->session->set_userdata('category_Image', $category->category_Image);
 
         $data['title'] = ('Category');
         $data['subtitle'] = ('Edit Category');
@@ -142,6 +174,7 @@ class Category extends CI_Controller
         if($this->input->server('REQUEST_METHOD') == "POST") {
             $categoryID = $this->session->category_ID;
             $category_data = array(
+                'category_ID' => $categoryID,
                 'category_Name' => $this->input->post('category_Name')
             );
 
@@ -164,9 +197,6 @@ class Category extends CI_Controller
            //If new image is uploaded
             if(!empty($_FILES['image_Path']['name']))
             {
-                //Delete images from server
-                unlink("uploads/".$this->session->category_ThumbImage);
-                unlink("uploads/".$this->session->category_Image);
                 //Validating image and uploading it
                 $image_attributes = uploadPicture();
                 $imageUploadStatus = $image_attributes[0];
@@ -175,33 +205,67 @@ class Category extends CI_Controller
                 if ($imageUploadStatus == 0) {
                     $error_data = array(
                         'error'  => 'category',
-                        'message'     => 'Error in registering new category',
+                        'message'     => 'Error in editing category',
                         'categoryName_Error' => form_error('category_Name'),
                         'categoryImage_Error' => $image_attributes[1]
                     );
 
                     $this->session->set_flashdata($error_data);
                     $this->session->set_flashdata($category_data);
-                    redirect('/category/add');
+                    redirect('/category/edit?q='.$category_data['category_ID']);
                 }
-                //Setting image uploaded path
-                $category_data['category_Image'] = $image_attributes[1];
-                $category_data['category_ThumbImage'] = $image_attributes[2];
-                // createThumbnail($image_attributes[1]);
+
+                //New image successfully uploaded on web server
+
+                //Deleting images from web server and setting path for API server
+                unlink("uploads/".$this->session->category_Image);
+                $category_data['category_PrevImage'] = $this->session->category_Image;
+                $category_data['category_PrevThumbImage'] = $this->session->category_ThumbImage;
+
+
+
+                $image_Name = $image_attributes[1];
+                $category_data['category_Image'] = base_url().'/uploads/'.$image_Name;
             }
 
-            if ($this->Category_model->updateCategory($categoryID,$category_data))
-            {
-                $this->session->set_flashdata('success', 'category');
-                $this->session->set_flashdata('message', "Category successfully edited.");
-                redirect('/categories');
+            //Sending request to API
+            $result = sendPostRequest('api/category/edit', $category_data);
+
+            if($result->status == ('error in validation')) {
+                $error_validation = $result->error_messages;
+                $error_data = array(
+                    'error'  => 'category',
+                    'message'     => 'Error in editing Category',
+                    'categoryName_Error' => $error_validation->category_Name
+                );
+
+                $this->session->set_flashdata($error_data);
+                $this->session->set_flashdata($category_data);
+                redirect('/category/edit?q='.$category_data['category_ID']);
+
             }
-            else
+
+            if($result->status == ('error in db'))
             {
                 $this->session->set_flashdata('error', 'category');
                 $this->session->set_flashdata('message', "Error in editing category");
                 redirect('/categories');
             }
+
+            if($result->status == ('success'))
+            {
+                $this->session->set_flashdata('success', 'category');
+                $this->session->set_flashdata('message', "Category successfully edited.");
+                redirect('/categories');
+            }
+
+            else
+            {
+                $this->session->set_flashdata('error', 'category');
+                $this->session->set_flashdata('message', "Error in editing category --- Syntax Error");
+                redirect('/categories');
+            }
+
         }
 
     }
@@ -213,13 +277,10 @@ class Category extends CI_Controller
         {
             show_404();
         }
-        $categoryID = $_REQUEST["q"];
-        //Delete images from server
-        $category = $this->Category_model->get_category($categoryID);
-        unlink("uploads/".$category['category_ThumbImage']);
-        unlink("uploads/".$category['category_Image']);
 
-        if($this->Category_model->deleteCategory($categoryID))
+        //Sending request to API
+        $result = sendGetRequest('api/category/delete?categoryID='.$_REQUEST["q"]);
+        if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'category');
             $this->session->set_flashdata('message', "Category successfully Deleted.");
@@ -230,19 +291,6 @@ class Category extends CI_Controller
             $this->session->set_flashdata('message', "Error in deleting Category");
             redirect('/categories');
         }
-
-    }
-
-    //Checking if Name is already in DB - AJAX Helper function
-    public function categoryNameExist()
-    {
-        if(!$_REQUEST)
-        {
-            show_404();
-        }
-        $categoryName = $_REQUEST["q"];
-        $result = $this->Category_model->getCategory_Name($categoryName);
-        echo $result;
     }
 
     //Save table Data in excel file

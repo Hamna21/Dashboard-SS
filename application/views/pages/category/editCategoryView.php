@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/categories">Categories</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>categories">Categories</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>
@@ -32,7 +32,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $this->session->category_ThumbImage;?>">
+        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->category_ThumbImage;?>">
     </div>
 </div>
 

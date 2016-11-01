@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/lectures">Lectures</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>lectures">Lectures</a>
             </li>
             <li class="active">
                 <i class="fa fa-plus"></i> <?php echo $subtitle; ?>
@@ -35,7 +35,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="course" name="course"><option value="<?php echo $this->session->lecture_Domain;?>"><?php echo $this->session->lecture_Domain;?></option>
             <?php foreach($courses as $course){?>
-                <option value="<?php echo $course['course_ID'];?>"><?php echo $course['course_Name'];?></option>
+                <option value="<?php echo $course->course_ID;?>"><?php echo $course->course_Name;?></option>
             <?php }?>
         </select>
         <?php if(isset($_SESSION['courseID_Error'])) {echo  $this->session->courseID_Error;} ?>

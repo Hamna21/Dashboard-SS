@@ -6,7 +6,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>index.php/dashboard">Dashboard</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>dashboard">Dashboard</a>
             </li>
             <li class="active">
                 <i class="fa fa-file"></i> <?php echo $title; ?>
@@ -17,7 +17,7 @@
 
 
 
-<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>index.php/teacher/add">New Teacher</a></div>
+<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>teacher/add">New Teacher</a></div>
 
 <div class="row">
     <div class="col-lg-12">
@@ -38,19 +38,19 @@
                 <tbody>
                 <?php foreach($teachers as $teacher){?>
                     <tr>
-                        <td><?php echo $teacher['teacher_Name'];?></td>
-                        <td><?php echo $teacher['teacher_Designation'];?></td>
-                        <td><?php echo $teacher['teacher_Domain'];?></td>
+                        <td><?php echo $teacher->teacher_Name;?></td>
+                        <td><?php echo $teacher->teacher_Designation;?></td>
+                        <td><?php echo $teacher->teacher_Domain;?></td>
                         <td>
-                            <img src="http://localhost:8080/Dashboard-SS/uploads/<?php echo $teacher['teacher_ThumbImage'];?>">
+                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $teacher->teacher_ThumbImage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>index.php/Teacher/edit?q=<?php echo $teacher['teacher_ID'];?>">
+                               href="<?php echo base_url();?>teacher/edit?q=<?php echo $teacher->teacher_ID;?>">
                                 Edit
                             </a>
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $teacher['teacher_ID'];?>" href="#deleteteacherModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $teacher->teacher_ID;?>" href="#deleteteacherModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Teacher Modal ----------------->
@@ -76,7 +76,7 @@
                                 $(document).on("click", ".delete-link", function () {
                                     var teacherID = $(this).data('id');
                                     var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "http://localhost:8080/Dashboard-SS/index.php/teacher/delete?q=" + teacherID);
+                                    link.setAttribute('href', "<?php echo base_url()?>teacher/delete?q=" + teacherID);
                                 });
                             </script>
                             <!--------------------- Delete teacher Modal ----------------->

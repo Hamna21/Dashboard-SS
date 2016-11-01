@@ -23,9 +23,7 @@ if ( ! function_exists('uploadPicture'))
             $status = 1;
             $data = $CI->upload->data();
             $fileName = $data['file_name'];
-            //createThumbnail($fileName);
-            $thumbnail = $data['raw_name'].'_thumb'.$data['file_ext'];
-            return array($status, $fileName, $thumbnail);
+            return array($status, $fileName);
         }
     }
 }

@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 //---------------Dashboard------------//
 $route['dashboard'] = 'Dashboard';
+$route['second-screen/resetPassword'] = 'Login/resetPassword';
 
 //---------------Courses------------//
 $route['courses'] = 'Dashboard/courses';
