@@ -141,7 +141,7 @@ class Category extends CI_Controller
         }
 
         //Getting category information by ID - sending request
-        $result = sendGetRequest('api/category/?categoryID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/category?category_id='.$_REQUEST["q"]);
         if($result->status== ("error"))
         {
             show_error('Category not found',500, "Error");
@@ -149,15 +149,15 @@ class Category extends CI_Controller
 
         $category = $result->category;
         $category_data = array(
-            'category_ID' => $category->category_ID,
-            'category_Name' =>  $category->category_Name
+            'category_ID' => $category->category_id,
+            'category_Name' =>  $category->category_name
         );
 
         //Setting category data - Information will be displayed on form
         $this->session->set_flashdata($category_data);
         //Setting Image in user-data because needed more then once!
-        $this->session->set_userdata('category_ThumbImage', $category->category_ThumbImage);
-        $this->session->set_userdata('category_Image', $category->category_Image);
+        $this->session->set_userdata('category_ThumbImage', $category->category_thumbimage);
+        $this->session->set_userdata('category_Image', $category->category_image);
 
         $data['title'] = ('Category');
         $data['subtitle'] = ('Edit Category');
@@ -279,7 +279,7 @@ class Category extends CI_Controller
         }
 
         //Sending request to API
-        $result = sendGetRequest('api/category/delete?categoryID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/category/delete?category_id='.$_REQUEST["q"]);
         if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'category');

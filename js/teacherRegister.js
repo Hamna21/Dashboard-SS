@@ -14,7 +14,7 @@ $(document).ready(function(){
     //--------------- VALIDATION  ----------------//
 
     //Call this as soon as user finishes typing teacher_Name
-    $("#teacher_Name").focusout(function(){
+    /*$("#teacher_Name").focusout(function(){
         var teacherName = $("#teacher_Name").val();
         if(teacherName)
         {
@@ -25,7 +25,7 @@ $(document).ready(function(){
             }
 
         }
-    });
+    });*/
 
     $("#teacher_Designation").focusout(function(){
         var teacherDesignation = $("#teacher_Designation").val();

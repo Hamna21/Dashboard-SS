@@ -45,7 +45,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="teacher_Domain" name="teacher_Domain"><option value="<?php echo $this->session->teacher_Domain;?>"><?php echo $this->session->teacher_Domain;?></option>
             <?php foreach($categories as $category){?>
-                <option value="<?php echo $category->category_Name;?>"><?php echo $category->category_Name;?></option>
+                <option value="<?php echo $category->category_name;?>"><?php echo $category->category_name;?></option>
             <?php }?>
             <?php if(isset($_SESSION['teacherDomain_Error'])) {echo  $this->session->teacherDomain_Error;} ?>
         </select>
@@ -58,7 +58,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->teacher_ThumbImage;?>">
+        <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $this->session->teacher_ThumbImage;?>">
     </div>
 </div>
 

@@ -63,26 +63,26 @@
                 <tbody>
                 <?php foreach($courses as $course){?>
                     <tr>
-                        <td id="course_name"><?php echo $course->course_Name;?></td>
-                        <td id="course_desc"><?php echo $course->course_Description;?></td>
-                        <td><?php echo $course->category_Name;?></td>
+                        <td id="course_name"><?php echo $course->course_name;?></td>
+                        <td id="course_desc"><?php echo $course->course_description;?></td>
+                        <td><?php echo $course->category_name;?></td>
 
                         <td id ="course_teach">
                             <a data-toggle="modal"  data-remote="true" href="#teacherModal">
-                                <?php echo $course->teacher_Name;?>
+                                <?php echo $course->teacher_name;?>
                             </a>
                         </td>
                         <td id="course_thumb">
-                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $course->course_ThumbImage;?>">
+                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $course->course_thumbimage;?>">
                         </td>
                         <td id="edit-delete">
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>Course/edit?q=<?php echo $course->course_ID;?>">
+                               href="<?php echo base_url();?>Course/edit?q=<?php echo $course->course_id;?>">
                                Edit
                             </a>
 
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $course->course_ID;?>" href="#deleteCourseModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $course->course_id;?>" href="#deleteCourseModal">
                                 Delete
                             </a>
                                 <!--------------------- Delete Course Modal ----------------->

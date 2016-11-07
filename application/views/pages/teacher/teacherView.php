@@ -38,19 +38,19 @@
                 <tbody>
                 <?php foreach($teachers as $teacher){?>
                     <tr>
-                        <td><?php echo $teacher->teacher_Name;?></td>
-                        <td><?php echo $teacher->teacher_Designation;?></td>
-                        <td><?php echo $teacher->teacher_Domain;?></td>
+                        <td><?php echo $teacher->teacher_name;?></td>
+                        <td><?php echo $teacher->teacher_designation;?></td>
+                        <td><?php echo $teacher->teacher_domain;?></td>
                         <td>
-                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $teacher->teacher_ThumbImage;?>">
+                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $teacher->teacher_thumbimage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>teacher/edit?q=<?php echo $teacher->teacher_ID;?>">
+                               href="<?php echo base_url();?>teacher/edit?q=<?php echo $teacher->teacher_id;?>">
                                 Edit
                             </a>
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $teacher->teacher_ID;?>" href="#deleteteacherModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $teacher->teacher_id;?>" href="#deleteteacherModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Teacher Modal ----------------->

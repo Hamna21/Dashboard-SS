@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-12">
         <input class="form-control" type="text" name="course_Name" id="course_Name" required readonly  value="<?php echo $this->session->course_Name; ?>" />
-        <span class="error"><p id ="courseName_Error"></span></p>  <?php if(isset($_SESSION['courseName_Error'])) {echo  $this->session->courseName_Error;} ?>
+        <!-- <span class="error"><p id ="courseName_Error"></span></p> --> <?php if(isset($_SESSION['courseName_Error'])) {echo  $this->session->courseName_Error;} ?>
     </div>
 </div>
 
@@ -45,7 +45,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="category" name="category"><option value="<?php echo $this->session->category_ID; ?>"><?php echo $this->session->category_Name; ?></option>
             <?php foreach($categories as $category){?>
-                <option value="<?php echo $category->category_ID;?>"><?php echo $category->category_Name;?></option>
+                <option value="<?php echo $category->category_id;?>"><?php echo $category->category_name;?></option>
             <?php }?>
         </select>
     </div>
@@ -59,7 +59,7 @@
     <div class="col-md-12">
         <select class="form-control" required id="teacher" name="teacher"><option value="<?php echo $this->session->teacher_ID; ?>"><?php echo $this->session->teacher_Name; ?></option>
             <?php foreach($teachers as $teacher){?>
-                <option value="<?php echo $teacher->teacher_ID;?>"><?php echo $teacher->teacher_Name;?></option>
+                <option value="<?php echo $teacher->teacher_id;?>"><?php echo $teacher->teacher_name;?></option>
             <?php }?>
         </select>
     </div>
@@ -71,7 +71,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->course_ThumbImage;?>">
+        <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $this->session->course_ThumbImage;?>">
     </div>
 </div>
 

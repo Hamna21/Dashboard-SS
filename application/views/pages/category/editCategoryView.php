@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-12">
         <input class="form-control" type="text" name="category_Name" id="category_Name" required readonly  value="<?php echo $this->session->category_Name; ?>" />
-        <span class="error"><p id ="categoryName_Error"></span></p>  <?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
+        <!-- <span class="error"><p id ="categoryName_Error"></span></p>  --> <?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->category_ThumbImage;?>">
+        <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $this->session->category_ThumbImage;?>">
     </div>
 </div>
 

@@ -57,6 +57,7 @@ class Login extends CI_Controller
                 redirect('/Login');
             }
 
+
             //Sending request to API
             $result = sendPostRequest('api/loginAdmin', $admin_data);
             if($result->status == ('error in validation'))
@@ -89,7 +90,7 @@ class Login extends CI_Controller
             if($result->status == ('success'))
             {
                 $admin = $result->admin;
-                $this->session->set_userdata('user',$admin->user_Name);
+                $this->session->set_userdata('user',$admin->admin_name);
                 redirect('/Dashboard');
             }
         }
@@ -111,12 +112,11 @@ class Login extends CI_Controller
 
 
     //-----RESET PASSWORD --- USER
-    public function resetPassword()
+    public function resetPasswordView()
     {
         if($this->input->server('REQUEST_METHOD') == "GET")
         {
             $reset_hash =  $this->input->get('reset_hash');
-
             $result = sendGetRequest('api/isValidHash?reset_hash='.$reset_hash);
 
             if($result->status == ("success"))
@@ -136,4 +136,29 @@ class Login extends CI_Controller
             }
         }
     }
+
+    public function resetPassword()
+    {
+        if($this->input->server('REQUEST_METHOD') == "POST")
+        {
+            $user_data = array(
+                'password' => $this->input->post('password'),
+                'reset_hash' => $this->input->post('reset_hash'),
+            );
+
+            //Validations check here
+
+
+            $result = sendPostRequest('api/resetPassword', $user_data);
+            if($result->status == "success")
+            {
+                show_error("Password updated successfully",500, 'Success');
+            }
+            if($result->status == "error")
+            {
+                show_error($result->error_message,500, 'Error');
+            }
+        }
+    }
+
 }

@@ -35,18 +35,18 @@
                 <tbody>
                 <?php foreach($categories as $category){?>
                     <tr>
-                        <td><?php echo $category->category_Name;?></td>
+                        <td><?php echo $category->category_name;?></td>
                         <td>
-                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $category->category_ThumbImage;?>">
+                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $category->category_thumbimage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>Category/edit?q=<?php echo $category->category_ID;?>">
+                               href="<?php echo base_url();?>Category/edit?q=<?php echo $category->category_id;?>">
                                 Edit
                             </a>
 
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $category->category_ID;?>" href="#deleteCategoryModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $category->category_id;?>" href="#deleteCategoryModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Category Modal ----------------->

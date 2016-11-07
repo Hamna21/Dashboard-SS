@@ -164,21 +164,21 @@ class Course extends CI_Controller
 
         $course = $result->course;
         $course_data = array(
-            'course_ID' => $course->course_ID,
-            'course_Name' =>  $course->course_Name,
-            'course_Description' => $course->course_Description,
-            'category_Name' => $course->category_Name,
-            'teacher_Name' => $course->teacher_Name,
-            'category_ID' => $course->category_ID,
-            'teacher_ID' => $course->teacher_ID
+            'course_ID' => $course->course_id,
+            'course_Name' =>  $course->course_name,
+            'course_Description' => $course->course_description,
+            'category_Name' => $course->category_name,
+            'teacher_Name' => $course->teacher_name,
+            'category_ID' => $course->category_id,
+            'teacher_ID' => $course->teacher_id
         );
 
         //Setting course data - Information will be displayed on form
         $this->session->set_flashdata($course_data);
 
         //Setting image in userdata because required more then once
-        $this->session->set_userdata('course_ThumbImage', $course->course_ThumbImage);
-        $this->session->set_userdata('course_Image', $course->course_Image);
+        $this->session->set_userdata('course_ThumbImage', $course->course_thumbimage);
+        $this->session->set_userdata('course_Image', $course->course_image);
 
         $data['title'] = ('Course');
         $data['subtitle'] = ('Edit Course');
@@ -317,7 +317,7 @@ class Course extends CI_Controller
         }
 
         //Sending request to API
-        $result = sendGetRequest('api/course/delete?courseID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/course/delete?course_id='.$_REQUEST["q"]);
         if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'course');

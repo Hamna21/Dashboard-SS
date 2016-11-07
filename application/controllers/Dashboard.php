@@ -7,7 +7,6 @@ class Dashboard extends CI_Controller
         parent::__construct();
         $this->load->helper(array('form', 'url', 'request'));
         $this->load->library(array('session', 'form_validation', 'pagination'));
-
     }
 
     //Dashboard Page

@@ -158,7 +158,7 @@ class Teacher extends CI_Controller
         }
 
         //Getting teacher information by ID - sending request
-        $result = sendGetRequest('api/teacher/?teacherID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/teacher/?teacher_id='.$_REQUEST["q"]);
         if($result->status== ("error"))
         {
             show_error("Teacher not found", 500, "Error");
@@ -166,18 +166,18 @@ class Teacher extends CI_Controller
 
         $teacher= $result->teacher;
         $teacher_data = array(
-            'teacher_ID' => $teacher->teacher_ID,
-            'teacher_Name' =>  $teacher->teacher_Name,
-            'teacher_Designation' =>  $teacher->teacher_Designation,
-            'teacher_Domain' =>  $teacher->teacher_Domain
+            'teacher_ID' => $teacher->teacher_id,
+            'teacher_Name' =>  $teacher->teacher_name,
+            'teacher_Designation' =>  $teacher->teacher_designation,
+            'teacher_Domain' =>  $teacher->teacher_domain
         );
 
         //Setting teacher data - Information will be displayed on form
         $this->session->set_flashdata($teacher_data);
 
         //Setting Image in user-data because required more then once!
-        $this->session->set_userdata('teacher_ThumbImage', $teacher->teacher_ThumbImage);
-        $this->session->set_userdata('teacher_Image', $teacher->teacher_Image);
+        $this->session->set_userdata('teacher_ThumbImage', $teacher->teacher_thumbimage);
+        $this->session->set_userdata('teacher_Image', $teacher->teacher_image);
 
         $data['title'] = ('Teacher');
         $data['subtitle'] = ('Edit Teacher');
@@ -308,7 +308,7 @@ class Teacher extends CI_Controller
         }
 
         //Sending request to API
-        $result = sendGetRequest('api/teacher/delete?teacherID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/teacher/delete?teacher_id='.$_REQUEST["q"]);
         if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'teacher');

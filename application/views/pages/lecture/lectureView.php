@@ -53,30 +53,30 @@
                 <tbody>
                 <?php foreach($lectures as $lecture){?>
                     <tr>
-                        <td><?php echo $lecture->lecture_Name;?></td>
-                        <td><?php echo $lecture->course_Name;?></td>
-                        <td id="lec_desc"><?php echo $lecture->lecture_Description;?></td>
+                        <td><?php echo $lecture->lecture_name;?></td>
+                        <td><?php echo $lecture->course_name;?></td>
+                        <td id="lec_desc"><?php echo $lecture->lecture_description;?></td>
                         <td id="time"><?php echo $lecture->lecture_start;?></td>
                         <td id="time"><?php echo $lecture->lecture_end;?></td>
                         <td id="quiz">
                             <a class="btn btn-primary"
-                               href="<?php echo base_url();?>lecture/add/quiz?q=<?php echo $lecture->lecture_ID;?>">
+                               href="<?php echo base_url();?>lecture/add/quiz?q=<?php echo $lecture->lecture_id;?>">
                                 Add Quiz
                             </a>
 
                             <a class="delete-link btn btn-info"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $lecture->lecture_ID;?>" href="#quizModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $lecture->lecture_id;?>" href="#quizModal">
                                 View Quiz
                             </a>
                         </td>
                         <td id="edit-delete">
                             <a class="btn btn-warning"
-                               href="<?php echo base_url();?>lecture/edit?q=<?php echo $lecture->lecture_ID;?>">
+                               href="<?php echo base_url();?>lecture/edit?q=<?php echo $lecture->lecture_id;?>">
                                 Edit
                             </a>
 
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $lecture->lecture_ID;?>" href="#deletelectureModal">
+                               data-toggle="modal" data-remote="true" data-id="<?php echo $lecture->lecture_id;?>" href="#deletelectureModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Lecture Modal ----------------->

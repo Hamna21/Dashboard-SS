@@ -22,7 +22,7 @@
     }
     ?>
 
-    <?php echo form_open('http://localhost:8080/Second-Screen-API-v3/api/resetPassword', 'class="form-signin" id="myform"');?>
+    <?php echo form_open('Login/resetPassword', 'class="form-signin" id="myform"');?>
 
     <h2 class="form-signin-heading">Reset Password</h2>
 

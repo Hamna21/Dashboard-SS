@@ -134,7 +134,7 @@ class Lecture extends CI_Controller
         }
 
         //Getting lecture information by ID - sending request
-        $result = sendGetRequest('api/lecture/?lectureID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/lecture/?lecture_id='.$_REQUEST["q"]);
         if($result->status== ("error"))
         {
             show_error("Lecture not found", 500, "Error");
@@ -142,12 +142,12 @@ class Lecture extends CI_Controller
 
         $lecture = $result->lecture;
         $lecture_data = array(
-            'lecture_ID' => $lecture->lecture_ID,
-            'lecture_Name' =>  $lecture->lecture_Name,
-            'lecture_Description' =>  $lecture->lecture_Description,
+            'lecture_ID' => $lecture->lecture_id,
+            'lecture_Name' =>  $lecture->lecture_name,
+            'lecture_Description' =>  $lecture->lecture_description,
             'lecture_start' =>  $lecture->lecture_start,
             'lecture_end' =>  $lecture->lecture_end,
-            'lecture_Domain' =>  $lecture->course_ID
+            'lecture_Domain' =>  $lecture->course_id
         );
 
         //Setting lecture data - Information will be displayed on form
@@ -256,7 +256,7 @@ class Lecture extends CI_Controller
         }
 
         //Sending request to API
-        $result = sendGetRequest('api/lecture/delete?lectureID='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/lecture/delete?lecture_id='.$_REQUEST["q"]);
         if($result->status== ("success"))
         {
             $this->session->set_flashdata('success', 'lecture');

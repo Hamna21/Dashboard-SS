@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if ( ! function_exists('setRequest')) {
     function setRequest()
     {
-        $url = 'http://localhost:8080/Second-Screen-API-v3/';
+        $url = 'http://cte.itu.edu.pk/second_screen_api/';
         $headers = array('Content-Type' => 'application/json', 'Authorization' => 'Basic RGV2ZWxvcGVyOjEyMzQ=');
         return array($url, $headers);
     }
