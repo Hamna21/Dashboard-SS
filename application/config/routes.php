@@ -57,6 +57,10 @@ $route['translate_uri_dashes'] = FALSE;
 
 //---------------Dashboard------------//
 $route['dashboard'] = 'Dashboard';
+$route['lectures'] = 'Dashboard/lectures';
+$route['courses'] = 'Dashboard/courses';
+$route['categories'] = 'Dashboard/categories';
+$route['teachers'] = 'Dashboard/teachers';
 $route['second-screen/resetPassword'] = 'Login/resetPasswordView';
 
 //---------------Courses------------//
@@ -71,7 +75,6 @@ $route['categories'] = 'Dashboard/categories';
 $route['categories/:num'] = 'Dashboard/categories';
 $route['category/add'] = 'Category/add';
 $route['category/edit'] = 'Category/edit';
-$route['category/delete'] = 'Category/deleteCategory';
 
 //---------------Teacher------------//
 $route['teachers'] = 'Dashboard/teachers';
@@ -88,4 +91,11 @@ $route['lecture/edit'] = 'Lecture/edit';
 $route['lecture/delete'] = 'Lecture/deleteLecture';
 
 //--------------QUIZ-----------------//
-$route['lecture/add/quiz'] = 'Quiz/add';
+$route['quiz/add'] = 'Quiz/addQuiz';
+$route['quiz/view'] = 'Quiz/view';
+$route['quiz/delete'] = 'Quiz/deleteQuiz';
+
+//--------------QUESTION-----------------//
+$route['question/add'] = 'Question/addQuestion';
+$route['question/edit'] = 'Question/editQuestion';
+$route['question/delete'] = 'Question/deleteQuestion';

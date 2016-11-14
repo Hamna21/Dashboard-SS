@@ -16,8 +16,12 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom CSS and JS -->
+    <link rel = "stylesheet" href = "<?php echo base_url(); ?>css/bootstrap-datetimepicker.min.css">
     <link rel = "stylesheet" href = "<?php echo base_url(); ?>css/custom.css">
+
     <script type = 'text/javascript' src = "<?php echo base_url(); ?>js/jquery.js"></script>
+    <script type = 'text/javascript' src = "<?php echo base_url(); ?>js/moment.js"></script>
+    <script type = 'text/javascript' src = "<?php echo base_url(); ?>js/bootstrap-datetimepicker.min.js"></script>
 
     <?php
     if($subtitle == "Add Course" || $subtitle == "Edit Course")

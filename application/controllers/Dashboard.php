@@ -63,6 +63,12 @@ class Dashboard extends CI_Controller
         $config["base_url"] = base_url() . "courses";
         $config['per_page'] = 3;
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
         $pagination_data = array(
             'limit' => $config['per_page'],
             'start' => $page
@@ -110,6 +116,11 @@ class Dashboard extends CI_Controller
         $config["base_url"] = base_url() . "categories";
         $config['per_page'] = 3;
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
         $pagination_data = array(
             'limit' => $config['per_page'],
             'start' => $page
@@ -154,6 +165,11 @@ class Dashboard extends CI_Controller
         $config["base_url"] = base_url() . "teachers";
         $config['per_page'] = 3;
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
         $pagination_data = array(
             'limit' => $config['per_page'],
             'start' => $page
@@ -198,7 +214,15 @@ class Dashboard extends CI_Controller
         //-----Pagination-------//
         $config["base_url"] = base_url() . "lectures";
         $config['per_page'] = 3;
+
         $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
+
         $pagination_data = array(
             'limit' => $config['per_page'],
             'start' => $page

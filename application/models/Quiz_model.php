@@ -7,5 +7,22 @@ class Quiz_model extends CI_Model
         parent::__construct();
     }
 
+    public function getQuizRegistrationRules()
+    {
+        $config = array(
+            array(
+                'field' => 'quiz_time',
+                'label' => 'Quiz Time',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'quiz_duration',
+                'label' => 'Quiz Duration',
+                'rules' => 'required'
+            )
+        );
+
+        return $config;
+    }
 
 }
