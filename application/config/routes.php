@@ -91,11 +91,18 @@ $route['lecture/edit'] = 'Lecture/edit';
 $route['lecture/delete'] = 'Lecture/deleteLecture';
 
 //--------------QUIZ-----------------//
+$route['quiz/:num'] = 'Quiz/view';
+$route['quiz'] = 'Quiz/view';
+
 $route['quiz/add'] = 'Quiz/addQuiz';
-$route['quiz/view'] = 'Quiz/view';
 $route['quiz/delete'] = 'Quiz/deleteQuiz';
 
+
 //--------------QUESTION-----------------//
+$route['questions/:num'] = 'Question/view';
+$route['questions'] = 'Question/view';
+
+
 $route['question/add'] = 'Question/addQuestion';
 $route['question/edit'] = 'Question/editQuestion';
 $route['question/delete'] = 'Question/deleteQuestion';

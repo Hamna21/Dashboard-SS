@@ -11,6 +11,11 @@ class Quiz_model extends CI_Model
     {
         $config = array(
             array(
+                'field' => 'quiz_title',
+                'label' => 'Quiz Title',
+                'rules' => 'required'
+            ),
+            array(
                 'field' => 'quiz_time',
                 'label' => 'Quiz Time',
                 'rules' => 'required'

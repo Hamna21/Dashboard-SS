@@ -94,6 +94,11 @@
                                                 <input class="form-control" type="text" name="lecture_name" id="lecture_name" required readonly value="" />
                                             </div>
 
+                                            <div class="form-group">
+                                                <label for="quiz_title">Quiz Title:</label>
+                                                <input class="form-control" type="text" name="quiz_title" id="quiz_title"  value="" />
+                                            </div>
+
                                             <!---------- QUIZ TIME ---------------->
                                             <div class="form-group">
                                                 <label for="quiz_time">Quiz Time:</label>
@@ -140,11 +145,6 @@
                                                 <input class="form-control" type="text" name="quiz_duration" id="quiz_duration" required placeholder="00:10:00" value="" />
                                             </div>
                                             <!---------- QUIZ DURATION---------------->
-
-
-
-
-
                                             <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
                                             </form>
 
@@ -170,7 +170,7 @@
 
                             <!---- VIEW QUIZ--->
                             <a class="btn btn-primary"
-                               href="<?php echo base_url();?>quiz/view?lecture=<?php echo $lecture->lecture_id;?>">
+                               href="<?php echo base_url();?>quiz?lecture=<?php echo $lecture->lecture_id;?>">
                                 View Quizzes
                             </a>
                         </td>

@@ -7,7 +7,7 @@
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>dashboard">Lectures</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>lectures">Lectures</a>
             </li>
             <li class="active">
                 <i class="fa fa-file"></i> <?php echo $title; ?>
@@ -24,7 +24,7 @@
             <table class="table table-bordered table-hover table-striped auto">
                 <thead>
                 <tr>
-                    <th>Quiz ID</th>
+                    <th>Quiz Title</th>
                     <th>Quiz Time</th>
                     <th>Questions</th>
                     <th>Edit/Delete</th>
@@ -34,18 +34,20 @@
                 <tbody>
                 <?php foreach($quizzes as $quiz){?>
                     <tr>
-                        <td><?php echo $quiz->quiz_id;?></td>
+                        <td><?php echo $quiz->quiz_title;?></td>
                         <td><?php echo $quiz->quiz_time;?></td>
+
                         <!--------------------------- QUESTIONS start----------------------->
                         <td>
                             <!--- View Question --->
                             <a class="btn btn-info"
-                               href="<?php echo base_url();?>Question/view?quiz=<?php echo $quiz->quiz_id;?>">
+                               href="<?php echo base_url();?>questions?quiz=<?php echo $quiz->quiz_id;?>">
                                 View Questions
                             </a>
 
                             <!--- ADD question -->
-                            <a class="addQuestion-link btn btn-primary" data-id="<?php echo $quiz->quiz_id;?>"
+                            <a class="addQuestion-link btn btn-primary"
+                               data-id="<?php echo $quiz->quiz_id;?>"
                                data-toggle="modal" data-remote="true"  href="#addQuestionModal">
                                 Add Question
                             </a>
@@ -128,13 +130,117 @@
                         <!----------------- QUESTIONS end----------------->
 
                         <td>
-                            <a class="btn btn-warning"
-                               href="<?php echo base_url();?>Quiz/edit?q=<?php echo $quiz->quiz_id;?>">
+                            <!--------------------- EDIT---------------->
+                            <!-- Setting quiz information to be displayed in edit form-->
+
+                            <a class="edit-link btn btn-warning"
+                               data-toggle="modal" data-remote="true"
+                               data-id="<?php echo $quiz->quiz_id;?>"
+                               data-title="<?php echo $quiz->quiz_title;?>"
+                               data-time="<?php echo $quiz->quiz_time;?>"
+                               data-duration="<?php echo $quiz->quiz_duration;?>"
+                               href="#editQuizModal">
                                 Edit
                             </a>
 
+                            <!---------EDIT MODAL------------->
+                            <div class="modal fade" id="editQuizModal" tabindex="-1" role="dialog" aria-labelledby="editQuizLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="editQuizLabel">Edit Quiz</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php echo form_open_multipart('Quiz/editQuiz','class="form" id="myform"');?>
+
+                                            <input type="hidden" name="quiz_ID" id="quiz_ID" value="">
+
+                                            <input type="hidden" name="lecture_id" id="lecture_id" value="<?php echo $lecture->lecture_id?>">
+
+                                            <div class="form-group">
+                                                <label for="quiz_title">Quiz Title:</label>
+                                                <input class="form-control" type="text" name="quiz_title" id="quiz_title"  value="" />
+                                            </div>
+
+                                            <!---------- QUIZ TIME ---------------->
+                                            <div class="form-group">
+                                                <label for="quiz_time">Quiz Time:</label>
+                                            </div>
+                                            <div class="row">
+                                                <div class='col-sm-6'>
+                                                    <div class="form-group">
+                                                        <div class='input-group date' id='datetimepicker3'>
+                                                            <input type='text' class="form-control" />
+                                                            <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                         </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    $(function () {
+                                                        $('#datetimepicker3').datetimepicker({
+                                                            format: 'LT'
+                                                        });
+                                                    });
+                                                </script>
+                                                <div class='col-sm-6'>
+                                                    <div class="form-group">
+                                                        <div class='input-group date' id='datetimepicker1'>
+                                                            <input type='text' name='quiz_time' id="quiz_time" class="form-control" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    $(function () {
+                                                        $('#datetimepicker1').datetimepicker();
+                                                    });
+                                                </script>
+                                            </div>
+                                            <!---------- QUIZ TIME ---------------->
+
+                                            <!---------- QUIZ DURATION---------------->
+                                            <div class="form-group">
+                                                <label for="quiz_duration">Quiz Duration:</label>
+                                                <input class="form-control" type="text" name="quiz_duration" id="quiz_duration" required value="" />
+                                            </div>
+                                            <!---------- QUIZ DURATION---------------->
+                                            <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Discard</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Setting quiz information in edit form-->
+
+                            <script>
+                                $(document).on("click", ".edit-link", function () {
+                                    var quiz_ID = $(this).data('id');
+                                    var quiz_title = $(this).data('title');
+                                    var quiz_time = $(this).data('time');
+                                    var quiz_duration = $(this).data('duration');
+                                    $("#quiz_ID").val(quiz_ID);
+                                    $("#quiz_title").val(quiz_title);
+                                    $("#quiz_time").val(quiz_time);
+                                    $("#quiz_duration").val(quiz_duration);
+                                });
+                            </script>
+                            <!---------EDIT MODAL------------->
+
+                            <!--------------------- DELETE----------------->
                             <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $quiz->quiz_id;?>" href="#deleteQuizModal">
+                               data-toggle="modal" data-remote="true"
+                               data-id="<?php echo $quiz->quiz_id;?>"
+                               data-lecture="<?php echo $lecture->lecture_id;?>"
+                               href="#deleteQuizModal">
                                 Delete
                             </a>
                             <!--------------------- Delete Quiz Modal ----------------->
@@ -149,7 +255,7 @@
                                             Are you sure want to delete the quiz?
                                         </div>
                                         <div class="modal-footer">
-                                            <a id = "mylink" class="btn btn-danger" href="">Yes </a>
+                                            <a id = "inner-deleteLink" class="btn btn-danger" href="">Yes </a>
                                             <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
                                         </div>
                                     </div>
@@ -158,9 +264,10 @@
 
                             <script>
                                 $(document).on("click", ".delete-link", function () {
-                                    var quizID = $(this).data('id');
-                                    var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "<?php echo base_url();?>quiz/delete?q=" + quizID);
+                                    var quiz_id = $(this).data('id');
+                                    var lecture_id = $(this).data('lecture');
+                                    var link = document.getElementById("inner-deleteLink");
+                                    link.setAttribute('href', "<?php echo base_url();?>quiz/delete?quiz_id=" + quiz_id + '&lecture_id=' +lecture_id);
                                 });
                             </script>
                             <!--------------------- Delete Quiz Modal ----------------->
@@ -174,4 +281,18 @@
     </div>
 </div>
 <!-- /.row -->
+
+<!-- Pagination -->
+<div class="row">
+    <div class="col-md-12 text-center">
+        <?php echo $links ?>
+    </div>
+</div>
+
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+</div>
+<!--wrapper -->
 
