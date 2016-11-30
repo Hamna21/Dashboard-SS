@@ -53,10 +53,16 @@ class Lecture extends CI_Controller
             $lecture_data = array(
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
-                'lecture_start' => $this->input->post('lecture_start'),
+                'lecture_date' => $this->input->post('lecture_date'),
                 'lecture_end' => $this->input->post('lecture_end'),
                 'course_ID' => $this->input->post('course')
             );
+
+            $date = new DateTime($lecture_data['lecture_date']);
+            $lecture_data['lecture_date'] = $date->format('Y-m-d H:i:s');
+
+            $time_end = new DateTime($lecture_data['lecture_end']);
+            $lecture_data['lecture_end'] = $time_end->format('H:i:s');
 
             $this->form_validation->set_data($lecture_data); //Setting Data
             $this->form_validation->set_rules($this->Lecture_model->getLectureRegistrationRules()); //Setting Rules
@@ -95,7 +101,6 @@ class Lecture extends CI_Controller
                 $this->session->set_flashdata($lecture_data);
                 redirect('/Lecture/add');
 
-
             }
             if($result->status == ('error in db')) {
                 $this->session->set_flashdata('error', 'lecture');
@@ -118,7 +123,6 @@ class Lecture extends CI_Controller
         //Call this if a user tries to access this method from URL
         show_404();
     }
-
 
     //Edit lecture form view
     public function edit()
@@ -246,7 +250,6 @@ class Lecture extends CI_Controller
         }
 
     }
-
 
     public function deleteLecture()
     {

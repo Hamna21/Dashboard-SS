@@ -68,9 +68,46 @@
                         <td><?php echo $course->category_name;?></td>
 
                         <td id ="course_teach">
-                            <a data-toggle="modal"  data-remote="true" href="#teacherModal">
+                            <a class="viewTeacher" data-toggle="modal"
+                               data-designation="<?php echo $course->teacher_designation?>"
+                               data-name="<?php echo $course->teacher_name?>"
+                               data-domain="<?php echo $course->teacher_domain?>"
+                               data-remote="true" href="#teacherModal">
                                 <?php echo $course->teacher_name;?>
                             </a>
+
+
+                            <!--- TEACHER MODAL -->
+                            <div class="modal fade" id="teacherModal" tabindex="-1" role="dialog" aria-labelledby="teacherModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="teacherModalLabel">Teacher</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <strong>Teacher Name:</strong><p id="teacher_name"></p>
+                                            <strong>Designation:</strong><p id="teacher_designation"></p>
+                                            <strong>Domain:</strong><p id="teacher_domain"></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                $(document).on("click", ".viewTeacher", function () {
+                                    var teacher_name = $(this).data('name');
+                                    var teacher_designation = $(this).data('designation');
+                                    var teacher_domain = $(this).data('domain');
+                                    document.getElementById("teacher_name").innerHTML = teacher_name;
+                                    document.getElementById("teacher_designation").innerHTML = teacher_designation;
+                                    document.getElementById("teacher_domain").innerHTML = teacher_domain;
+                                });
+                            </script>
+                            <!--- TEACHER MODAL -->
+
                         </td>
                         <td id="course_thumb">
                             <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $course->course_thumbimage;?>">

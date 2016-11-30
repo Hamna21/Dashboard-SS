@@ -61,8 +61,8 @@ class Dashboard extends CI_Controller
 
         //-----Pagination-------//
         $config["base_url"] = base_url() . "courses";
-        $config['per_page'] = 3;
-        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        $config['per_page'] = 5;
+        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 5 : 0;
 
         //If $page = -1
         if($page < 0)
@@ -114,8 +114,8 @@ class Dashboard extends CI_Controller
 
         //-----Pagination-------//
         $config["base_url"] = base_url() . "categories";
-        $config['per_page'] = 3;
-        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        $config['per_page'] = 5;
+        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 5 : 0;
         //If $page = -1
         if($page < 0)
         {
@@ -163,8 +163,8 @@ class Dashboard extends CI_Controller
 
         //-----Pagination-------//
         $config["base_url"] = base_url() . "teachers";
-        $config['per_page'] = 3;
-        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        $config['per_page'] = 5;
+        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 5 : 0;
         //If $page = -1
         if($page < 0)
         {
@@ -213,9 +213,9 @@ class Dashboard extends CI_Controller
 
         //-----Pagination-------//
         $config["base_url"] = base_url() . "lectures";
-        $config['per_page'] = 3;
+        $config['per_page'] = 5;
 
-        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 5 : 0;
 
         //If $page = -1
         if($page < 0)
@@ -240,6 +240,10 @@ class Dashboard extends CI_Controller
 
         $data["links"] = $this->pagination->create_links();
         $data['lectures'] = $result->lectures;
+
+        //Sending request to API - for all lectures - to be used in Reference
+        $result = sendGetRequest('api/lectures_reference');
+        $data['lectures_reference'] = $result->lectures;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);

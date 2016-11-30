@@ -67,7 +67,7 @@
 
                                             <div class="form-group">
                                                 <label for="question_text">Question:</label>
-                                                <input class="form-control" type="text" name="question_text" id="question_text" required  value="" />
+                                                <textarea class="form-control" type="text" name="question_text" id="question_text" maxlength="200" rows="3" required></textarea>
                                             </div>
 
                                             <div class="row">
@@ -165,42 +165,25 @@
 
                                             <!---------- QUIZ TIME ---------------->
                                             <div class="form-group">
-                                                <label for="quiz_time">Quiz Time:</label>
+                                                <label for="quiz_time">Quiz Time and Date:</label>
                                             </div>
-                                            <div class="row">
-                                                <div class='col-sm-6'>
-                                                    <div class="form-group">
-                                                        <div class='input-group date' id='datetimepicker3'>
-                                                            <input type='text' class="form-control" />
-                                                            <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-time"></span>
-                                                         </span>
-                                                        </div>
-                                                    </div>
+
+
+                                            <div class="form-group">
+                                                <div class='input-group date' id='datetimepicker1'>
+                                                    <input type='text' name='quiz_time' id="quiz_time" class="form-control" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
                                                 </div>
-                                                <script type="text/javascript">
-                                                    $(function () {
-                                                        $('#datetimepicker3').datetimepicker({
-                                                            format: 'LT'
-                                                        });
-                                                    });
-                                                </script>
-                                                <div class='col-sm-6'>
-                                                    <div class="form-group">
-                                                        <div class='input-group date' id='datetimepicker1'>
-                                                            <input type='text' name='quiz_time' id="quiz_time" class="form-control" />
-                                                            <span class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-calendar"></span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <script type="text/javascript">
-                                                    $(function () {
-                                                        $('#datetimepicker1').datetimepicker();
-                                                    });
-                                                </script>
                                             </div>
+
+                                            <script type="text/javascript">
+                                                $(function () {
+                                                    $('#datetimepicker1').datetimepicker();
+                                                });
+                                            </script>
+
                                             <!---------- QUIZ TIME ---------------->
 
                                             <!---------- QUIZ DURATION---------------->

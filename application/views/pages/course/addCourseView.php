@@ -31,7 +31,7 @@
             <label for="course_Description">Course Description</label>
         </div>
         <div class="col-md-12">
-            <textarea class="form-control" type="text" name="course_Description" id="course_Description" maxlength="100" rows="3" required><?php if(isset($_SESSION['course_Description'])) {echo  $this->session->course_Description;} ?></textarea>
+            <textarea class="form-control" type="text" name="course_Description" id="course_Description"  rows="4" required><?php if(isset($_SESSION['course_Description'])) {echo  $this->session->course_Description;} ?></textarea>
             <span class="error"></span> <?php if(isset($_SESSION['courseDescription_Error'])) {echo  $this->session->courseDescription_Error;} ?>
         </div>
     </div>
