@@ -2,12 +2,12 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?php echo $title; ?>
+            <?php echo "Questions of Quiz: ". $quiz->quiz_title; ?>
             <small> <?php echo $subtitle; ?> </small>
         </h1>
         <ol class="breadcrumb">
             <li>
-                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>lectures">Lectures</a>
+                <i class="fa fa-dashboard"></i>  <a href="<?php echo base_url();?>quiz">Quiz</a>
             </li>
             <li class="active">
                 <i class="fa fa-file"></i> <?php echo $title;?>
@@ -16,9 +16,95 @@
     </div>
 </div>
 
+
+<!--------------------- ADD QUESTION------------------------->
+<div class="pull-right">
+    <a class="addQuestion-link btn btn-primary"
+       data-id="<?php echo $quiz->quiz_id;?>"
+       data-toggle="modal" data-remote="true"  href="#addQuestionModal">
+        Add Question
+    </a>
+</div>
+
+<!--------------------- ADD QUESTION MODAL--------------------->
+<div class="modal fade" id="addQuestionModal" tabindex="-1" role="dialog" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addQuestionModalLabel">Add Question</h4>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open_multipart('Question/addQuestionfromQuestion','class="form" id="myform"');?>
+
+                <input type="hidden" name="quiz_id" id="quiz_id" value="">
+
+                <div class="form-group">
+                    <label for="question_text">Question:</label>
+                    <textarea class="form-control" type="text" name="question_text" id="question_text" maxlength="200" rows="3" required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="option_one">Option 1:</label>
+                            <input class="form-control" type="text" name="option_one" id="option_one" required  value="" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="option_two">Option 2:</label>
+                            <input class="form-control" type="text" name="option_two" id="option_two" required  value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="option_three">Option 3:</label>
+                            <input class="form-control" type="text" name="option_three" id="option_three" required  value="" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="option_four">Option 4:</label>
+                            <input class="form-control" type="text" name="option_four" id="option_four" required  value="" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="correct_option">Select correct option:</label>
+                    <select class="form-control" name ="correct_option" id="correct_option">
+                        <option value="option_one">Option One</option>
+                        <option value="option_two">Option Two</option>
+                        <option value="option_three">Option Three</option>
+                        <option value="option_four">Option Four</option>
+                    </select>
+                </div>
+
+                <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Discard</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", ".addQuestion-link", function () {
+        var quizID = $(this).data('id');
+        $("#quiz_id").val(quizID);
+    });
+</script>
+<!--------------------- ADD QUESTION------------------------->
+
 <div class="row">
     <div class="col-lg-12">
-        <h2>Question</h2>
+        <h1></h1>
 
         <div class="table-responsive" >
             <table class="table table-bordered table-hover table-striped auto">
@@ -36,7 +122,7 @@
                     <tr>
                         <td><?php echo $question->question_text;?></td>
 
-                        <!--- View Question - setting attributes -->
+                        <!------ View Question - setting attributes ----->
                         <td>
                             <a class="view-question btn btn-info"
                                data-toggle="modal" data-remote="true"
@@ -136,20 +222,20 @@
 
                                             <div class="form-group">
                                                 <label for="question_text">Question:</label>
-                                                <input class="form-control" type="text" name="question_text" id="question_text" required  value="" />
+                                                <input class="form-control" type="text" name="question_text_edit" id="question_text_edit" required  value="" />
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="option_one">Option 1:</label>
-                                                        <input class="form-control" type="text" name="option_one" id="option_one" required  value="" />
+                                                        <input class="form-control" type="text" name="option_one_edit" id="option_one_edit" required  value="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="option_two">Option 2:</label>
-                                                        <input class="form-control" type="text" name="option_two" id="option_two" required  value="" />
+                                                        <input class="form-control" type="text" name="option_two_edit" id="option_two_edit" required  value="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,21 +243,21 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="option_three">Option 3:</label>
-                                                        <input class="form-control" type="text" name="option_three" id="option_three" required  value="" />
+                                                        <input class="form-control" type="text" name="option_three_edit" id="option_three_edit" required  value="" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="option_four">Option 4:</label>
-                                                        <input class="form-control" type="text" name="option_four" id="option_four" required  value="" />
+                                                        <input class="form-control" type="text" name="option_four_edit" id="option_four_edit" required  value="" />
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="correct_option">Select correct option:</label>
-                                                <select class="form-control" name ="correct_option" id="correct_option" value="">
+                                                <select class="form-control" name ="correct_option_edit" id="correct_option_edit" value="">
                                                     <option value="option_one">Option One</option>
                                                     <option value="option_two">Option Two</option>
                                                     <option value="option_three">Option Three</option>
@@ -202,19 +288,19 @@
                                     var option4 = $(this).data('option4');
                                     var correct = $(this).data('correct');
                                     $("#question_id").val(questionID);
-                                    $("#question_text").val(questionText);
-                                    $("#option_one").val(option1);
-                                    $("#option_two").val(option2);
-                                    $("#option_three").val(option3);
-                                    $("#option_four").val(option4);
-                                    $("#correct_option").val(correct);
+                                    $("#question_text_edit").val(questionText);
+                                    $("#option_one_edit").val(option1);
+                                    $("#option_two_edit").val(option2);
+                                    $("#option_three_edit").val(option3);
+                                    $("#option_four_edit").val(option4);
+                                    $("#correct_option_edit").val(correct);
                                 });
                             </script>
                         </td>
-                        <!---- Edit Question -->
+                        <!--------- Edit Question --------->
 
 
-                        <!---- Delete Question -->
+                        <!---- Delete Question ---->
                         <td>
                             <a class="delete-question btn btn-danger"
                                data-toggle="modal" data-remote="true"
@@ -252,7 +338,7 @@
                             </script>
                             <!--------------------- Delete Question Modal ----------------->
                         </td>
-                        <!---- Delete Question -->
+                        <!---- Delete Question ---->
 
                     </tr>
                 <?php }?>

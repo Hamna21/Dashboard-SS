@@ -97,7 +97,7 @@ class Course extends CI_Controller
                 redirect('/Course/add');
             }
 
-            //Setting image and thumbnail name
+            //Setting image  name
             $image_Name = $image_attributes[1];
             $course_data['course_Image'] = base_url().'/uploads/'.$image_Name;
 
@@ -207,6 +207,7 @@ class Course extends CI_Controller
             $courseID = $this->session->course_ID;
             $course_data = array(
                 'course_ID' => $courseID,
+                'course_Name' => $this->input->post('course_Name'),
                 'course_Description' => $this->input->post('course_Description'),
                 'category_ID' => $this->input->post('category'),
                 'teacher_ID' => $this->input->post('teacher')

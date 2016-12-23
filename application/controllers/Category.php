@@ -54,7 +54,7 @@ class Category extends CI_Controller
                     'error'  => 'category',
                     'message'     => 'Error in registering new Category',
                     'categoryName_Error' => form_error('category_Name'),
-                    'categoryImageError' => form_error('image_Path')
+                    'categoryImage_Error' => form_error('image_Path')
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -92,8 +92,8 @@ class Category extends CI_Controller
                 $error_data = array(
                     'error'  => 'category',
                     'message'     => 'Error in registering new Category',
-                    'categoryName_Error' => $error_validation->category_Name,
-                    'categoryImageError' => $error_validation->image_Path
+                    'categoryName_Error' => $error_validation->categoryName_Error,
+                    'categoryImage_Error' => $error_validation->categoryImage_Error
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -175,10 +175,10 @@ class Category extends CI_Controller
             $categoryID = $this->session->category_ID;
             $category_data = array(
                 'category_ID' => $categoryID,
-                'category_Name' => $this->input->post('category_Name')
+                'category_Name' => $this->input->post('category_name_edit')
             );
 
-           /* $this->form_validation->set_data($category_data); //Setting Data
+            $this->form_validation->set_data($category_data); //Setting Data
             $this->form_validation->set_rules($this->Category_model->getCategoryEditRules()); //Setting Rules
 
             //Reloading edit category page if validation fails
@@ -192,7 +192,7 @@ class Category extends CI_Controller
                 $this->session->set_flashdata($error_data);
                 $this->session->set_flashdata($category_data);
                 redirect('/category/edit?q='.$categoryID);
-            }*/
+            }
 
            //If new image is uploaded
             if(!empty($_FILES['image_Path']['name']))
@@ -236,7 +236,7 @@ class Category extends CI_Controller
                 $error_data = array(
                     'error'  => 'category',
                     'message'     => 'Error in editing Category',
-                    'categoryName_Error' => $error_validation->category_Name
+                    'categoryName_Error' => $error_validation->categoryName_Error
                 );
 
                 $this->session->set_flashdata($error_data);

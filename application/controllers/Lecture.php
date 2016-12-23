@@ -6,7 +6,7 @@ class Lecture extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->helper(array('form', 'url','request'));
+        $this->load->helper(array('form', 'url','request', 'video'));
         $this->load->library(array('session', 'form_validation'));
         $this->load->model('Lecture_model');
     }
@@ -79,10 +79,19 @@ class Lecture extends CI_Controller
                     'courseID_Error' => form_error('course_ID')
                 );
 
+
+
                 $this->session->set_flashdata($error_data);
                 $this->session->set_flashdata($lecture_data);
                 redirect('/Lecture/add');
             }
+
+            //Either give link or upload video
+            if($_POST['lecture_video_link'])
+            {
+                $lecture_data['lecture_video_link'] = $this->input->post('lecture_video_link');
+            }
+
 
             $result = sendPostRequest('api/lecture/add', $lecture_data);
             if($result->status == ('error in validation')) {
@@ -90,11 +99,11 @@ class Lecture extends CI_Controller
                 $error_data = array(
                     'error'  => 'lecture',
                     'message'     => 'Error in registering new Lecture',
-                    'lectureName_Error' => $error_validation->lecture_Name,
-                    'lectureDescription_Error' => $error_validation->lecture_Description,
-                    'lectureStart_Error' => $error_validation->lecture_start,
-                    'lectureEnd_Error' => $error_validation->lecture_end,
-                    'courseID_Error' => $error_validation->course_ID
+                    'lectureName_Error' => $error_validation->lectureName_Error,
+                    'lectureDescription_Error' => $error_validation->lectureDescription_Error,
+                    'lectureStart_Error' => $error_validation->lectureStart_Error,
+                    'lectureEnd_Error' => $error_validation->lectureEnd_Error,
+                    'courseID_Error' => $error_validation->courseID_Error
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -138,7 +147,7 @@ class Lecture extends CI_Controller
         }
 
         //Getting lecture information by ID - sending request
-        $result = sendGetRequest('api/lecture/?lecture_id='.$_REQUEST["q"]);
+        $result = sendGetRequest('api/lecture_dashboard?lecture_id='.$_REQUEST["q"]);
         if($result->status== ("error"))
         {
             show_error("Lecture not found", 500, "Error");
@@ -149,10 +158,14 @@ class Lecture extends CI_Controller
             'lecture_ID' => $lecture->lecture_id,
             'lecture_Name' =>  $lecture->lecture_name,
             'lecture_Description' =>  $lecture->lecture_description,
+            'lecture_date' =>  $lecture->lecture_date,
             'lecture_start' =>  $lecture->lecture_start,
             'lecture_end' =>  $lecture->lecture_end,
             'lecture_Domain' =>  $lecture->course_id
         );
+
+        //Appending lecture date and starting time
+        $lecture_data['lecture_date'] = $lecture_data['lecture_date'] . " " . $lecture_data['lecture_start'];
 
         //Setting lecture data - Information will be displayed on form
         $this->session->set_flashdata($lecture_data);
@@ -183,12 +196,18 @@ class Lecture extends CI_Controller
                 'lecture_ID' => $lectureID,
                 'lecture_Name' => $this->input->post('lecture_Name'),
                 'lecture_Description' => $this->input->post('lecture_Description'),
-                'lecture_start' => $this->input->post('lecture_start'),
+                'lecture_date' => $this->input->post('lecture_date'),
                 'lecture_end' => $this->input->post('lecture_end'),
                 'course_ID' => $this->input->post('course'),
             );
 
-             $this->form_validation->set_data($lecture_data); //Setting Data
+            $date = new DateTime($lecture_data['lecture_date']);
+            $lecture_data['lecture_date'] = $date->format('Y-m-d H:i:s');
+
+            $time_end = new DateTime($lecture_data['lecture_end']);
+            $lecture_data['lecture_end'] = $time_end->format('H:i:s');
+
+            $this->form_validation->set_data($lecture_data); //Setting Data
              $this->form_validation->set_rules($this->Lecture_model->getLectureEditRules()); //Setting Rules
  
              //Reloading edit lecture page if validation fails
@@ -216,11 +235,11 @@ class Lecture extends CI_Controller
                 $error_data = array(
                     'error'  => 'lecture',
                     'message'     => 'Error in editing Lecture',
-                    'lectureName_Error' => $error_validation->lecture_Name,
-                    'lectureDescription_Error' => $error_validation->lecture_Description,
-                    'lectureStart_Error' => $error_validation->lecture_start,
-                    'lectureEnd_Error' => $error_validation->lecture_end,
-                    'courseID_Error' => $error_validation->course_ID
+                    'lectureName_Error' => $error_validation->lectureName_Error,
+                    'lectureDescription_Error' => $error_validation->lectureDescription_Error,
+                    'lectureStart_Error' => $error_validation->lectureStart_Error,
+                    'lectureEnd_Error' => $error_validation->lectureEnd_Error,
+                    'courseID_Error' => $error_validation->courseID_Error
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -273,4 +292,5 @@ class Lecture extends CI_Controller
         }
 
     }
+
 }

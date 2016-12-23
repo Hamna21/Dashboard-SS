@@ -31,6 +31,11 @@ class Question_model extends CI_Model
                 'rules' => 'required'
             ),
             array(
+                'field' => 'option_four',
+                'label' => 'Option Four',
+                'rules' => 'required'
+            ),
+            array(
                 'field' => 'correct_option',
                 'label' => 'Correct Option',
                 'rules' => 'required'

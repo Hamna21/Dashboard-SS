@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            <?php echo $title; ?>
+            <?php echo " Quizzes of Lecture: " . $lecture->lecture_name ; ?>
             <small> <?php echo $subtitle; ?> </small>
         </h1>
         <ol class="breadcrumb">
@@ -16,10 +16,90 @@
     </div>
 </div>
 
+<!------------------------- ADD QUIZ---------------------->
+<div class="pull-right ">
+    <a class="addQuiz-link btn btn-success"
+       data-id="<?php echo $lecture->lecture_id;?>"
+       data-lecture="<?php echo $lecture->lecture_name;?>"
+       data-toggle="modal" data-remote="true"  href="#addQuizModal">
+        New Quiz
+    </a>
+</div>
+
+<!------ ADD QUIZ MODAL ----->
+<div class="modal fade" id="addQuizModal" tabindex="-1" role="dialog" aria-labelledby="addQuizModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addQuizModalLabel">Add Quiz</h4>
+            </div>
+
+            <div class="modal-body">
+                <?php echo form_open_multipart('Quiz/addQuizfromQuiz','class="form" id="myform"');?>
+
+                <input type="hidden" name="lecture_id" id="lecture_id" value="">
+
+                <div class="form-group">
+                    <label for="lecture_name">Lecture Name:</label>
+                    <input class="form-control" type="text" name="lecture_name" id="lecture_name" required readonly value="" />
+                </div>
+
+                <div class="form-group">
+                    <label for="quiz_title">Quiz Title:</label>
+                    <input class="form-control" type="text" name="quiz_title" id="quiz_title"  value="" />
+                </div>
+
+                <!---------- QUIZ TIME ---------------->
+                <div class="form-group">
+                    <label for="quiz_time">Quiz Date and Time:</label>
+                </div>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' name='quiz_time' id="quiz_time" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    $(function () {
+                        $('#datetimepicker1').datetimepicker();
+                    });
+                </script>
+
+                <!---------- QUIZ TIME ---------------->
+
+                <!---------- QUIZ DURATION---------------->
+                <div class="form-group">
+                    <label for="quiz_duration">Quiz Duration:</label>
+                    <input class="form-control" type="text" name="quiz_duration" id="quiz_duration" required placeholder="00:10:00" value="" />
+                </div>
+                <!---------- QUIZ DURATION---------------->
+                <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Discard</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", ".addQuiz-link", function () {
+        var lectureID = $(this).data('id');
+        var lecture_name = $(this).data('lecture');
+        $("#lecture_id").val(lectureID);
+        $("#lecture_name").val(lecture_name);
+    });
+</script>
+<!------------------------- ADD QUIZ---------------------->
+
 <div class="row">
     <div class="col-lg-12">
-        <h1>Lecture: <?php echo $lecture->lecture_name?></h1>
-
+        <h1></h1>
         <div class="table-responsive" >
             <table class="table table-bordered table-hover table-striped auto">
                 <thead>
@@ -95,7 +175,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="option_four">Option 4:</label>
-                                                        <input class="form-control" type="text" name="option_four" id="option_four" required  value="" />
+                                                        <input class="form-control" type="text" name="option_four" id="option_four" required value="" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,11 +236,11 @@
 
                                             <input type="hidden" name="quiz_ID" id="quiz_ID" value="">
 
-                                            <input type="hidden" name="lecture_id" id="lecture_id" value="<?php echo $lecture->lecture_id?>">
+                                            <input type="hidden" name="lecture_id_edit" id="lecture_id_edit" value="<?php echo $lecture->lecture_id?>">
 
                                             <div class="form-group">
                                                 <label for="quiz_title">Quiz Title:</label>
-                                                <input class="form-control" type="text" name="quiz_title" id="quiz_title"  value="" />
+                                                <input class="form-control" type="text" name="quiz_title_edit" id="quiz_title_edit"  value="" />
                                             </div>
 
                                             <!---------- QUIZ TIME ---------------->
@@ -170,8 +250,8 @@
 
 
                                             <div class="form-group">
-                                                <div class='input-group date' id='datetimepicker1'>
-                                                    <input type='text' name='quiz_time' id="quiz_time" class="form-control" />
+                                                <div class='input-group date' id='datetimepicker8'>
+                                                    <input type='text' name='quiz_time_edit' id="quiz_time_edit" class="form-control" />
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                     </span>
@@ -180,7 +260,7 @@
 
                                             <script type="text/javascript">
                                                 $(function () {
-                                                    $('#datetimepicker1').datetimepicker();
+                                                    $('#datetimepicker8').datetimepicker();
                                                 });
                                             </script>
 
@@ -189,7 +269,7 @@
                                             <!---------- QUIZ DURATION---------------->
                                             <div class="form-group">
                                                 <label for="quiz_duration">Quiz Duration:</label>
-                                                <input class="form-control" type="text" name="quiz_duration" id="quiz_duration" required value="" />
+                                                <input class="form-control" type="text" name="quiz_duration_edit" id="quiz_duration_edit" required value="" />
                                             </div>
                                             <!---------- QUIZ DURATION---------------->
                                             <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />
@@ -211,9 +291,9 @@
                                     var quiz_time = $(this).data('time');
                                     var quiz_duration = $(this).data('duration');
                                     $("#quiz_ID").val(quiz_ID);
-                                    $("#quiz_title").val(quiz_title);
-                                    $("#quiz_time").val(quiz_time);
-                                    $("#quiz_duration").val(quiz_duration);
+                                    $("#quiz_title_edit").val(quiz_title);
+                                    $("#quiz_time_edit").val(quiz_time);
+                                    $("#quiz_duration_edit").val(quiz_duration);
                                 });
                             </script>
                             <!---------EDIT MODAL------------->

@@ -21,8 +21,8 @@
         <label for="course_Name">Course Name</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" name="course_Name" id="course_Name" required readonly  value="<?php echo $this->session->course_Name; ?>" />
-        <!-- <span class="error"><p id ="courseName_Error"></span></p> --> <?php if(isset($_SESSION['courseName_Error'])) {echo  $this->session->courseName_Error;} ?>
+        <input class="form-control" type="text" name="course_Name" id="course_Name" required value="<?php echo $this->session->course_Name; ?>" />
+        <span class="error"><p id ="courseName_Error"></span></p><?php if(isset($_SESSION['courseName_Error'])) {echo  $this->session->courseName_Error;} ?>
     </div>
 </div>
 

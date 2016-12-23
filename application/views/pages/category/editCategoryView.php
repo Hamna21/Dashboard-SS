@@ -21,8 +21,8 @@
         <label for="category_Name">Category Name</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" name="category_Name" id="category_Name" required readonly  value="<?php echo $this->session->category_Name; ?>" />
-        <!-- <span class="error"><p id ="categoryName_Error"></span></p>  --> <?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
+        <input class="form-control" type="text" name="category_name_edit" id="category_name_edit" required value="<?php echo $this->session->category_Name; ?>" />
+        <span class="error"><p id ="categoryName_Error"></span></p><?php if(isset($_SESSION['categoryName_Error'])) {echo  $this->session->categoryName_Error;} ?>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $this->session->category_ThumbImage;?>">
+        <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $this->session->category_ThumbImage;?>">
     </div>
 </div>
 
@@ -42,6 +42,7 @@
     </div>
     <div class="col-md-12">
         <input type="file"  name="image_Path" id="image_Path"/>
+        <span class="error"></span><?php if(isset($_SESSION['categoryImage_Error'])) {echo  $this->session->categoryImage_Error;} ?>
         <br>
     </div>
 </div>

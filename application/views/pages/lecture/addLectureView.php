@@ -63,7 +63,7 @@
     </div>
     <div class="col-md-12">
         <div class='input-group date' id='datetimepicker1'>
-            <input type='text' name='lecture_date' id="lecture_date" class="form-control" />
+            <input type='text' name='lecture_date' id="lecture_date" class="form-control" required />
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
@@ -85,7 +85,7 @@
     </div>
     <div class="col-md-12">
         <div class='input-group date' id='datetimepicker4'>
-            <input type='text' id="lecture_end" name="lecture_end" class="form-control" />
+            <input type='text' id="lecture_end" name="lecture_end" class="form-control" required />
             <span class="input-group-addon">
                     <span class="glyphicon glyphicon-time"></span>
             </span>
@@ -102,6 +102,19 @@
     </div>
 </div>
 <!------- LECTURE ENDING TIME--------->
+
+
+<!--------------------LECTURE VIDEO----------------------------->
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="lecture_video_link">Lecture Video:</label>
+    </div>
+    <div class="col-md-12">
+        <input class="form-control" type="text" name="lecture_video_link" id="lecture_video_link" value="" />
+        <br>
+    </div>
+</div>
+<!--------------------LECTURE VIDEO----------------------------->
 
 
 <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />

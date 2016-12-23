@@ -43,6 +43,11 @@ class Course_model extends CI_Model
     {
         $config = array(
             array(
+                'field' => 'course_Name',
+                'label' => 'Course Name',
+                'rules' => 'required|regex_match[/^[A-Za-z0-9_ -]+$/]'
+            ),
+            array(
                 'field' => 'course_Description',
                 'label' => 'Course Description',
                 'rules' => 'required'

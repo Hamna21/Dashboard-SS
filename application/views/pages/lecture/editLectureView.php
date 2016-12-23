@@ -53,26 +53,58 @@
     </div>
 </div>
 
-<div class="form-group">
-    <div class="col-md-12">
-        <label for="lecture_start"> Lecture Starting Time</label>
-    </div>
-    <div class="col-md-12">
-        <input class="form-control" type="text" name="lecture_start" id="lecture_start" required value="<?php echo $this->session->lecture_start;?>"  />
-        <span class="error"></span><p id ="lectureStart_Error"></span></p><?php if(isset($_SESSION['lectureStart_Error'])) {echo  $this->session->lectureStart_Error;} ?>
-    </div>
-</div>
 
 
+<!------- LECTURE DATE ---------->
 <div class="form-group">
     <div class="col-md-12">
-        <label for="lecture_end"> Lecture Ending Time</label>
+        <label for="lecture_date">Lecture Start Date and Time</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text" name="lecture_end" id="lecture_end" required value="<?php echo $this->session->lecture_end;?>"  />
-        <span class="error"></span><p id ="lectureEnd_Error"></span></p><?php if(isset($_SESSION['lectureEnd_Error'])) {echo  $this->session->lectureEnd_Error;} ?>
+        <div class='input-group date' id='datetimepicker1'>
+            <input type='text' name='lecture_date' id="lecture_date" class="form-control" required value="<?php echo $this->session->lecture_date;?>" placeholder="<?php echo $this->session->lecture_date;?>" />
+            <span class="error"></span><p id ="lectureStart_Error"></span></p><?php if(isset($_SESSION['lectureStart_Error'])) {echo  $this->session->lectureStart_Error;} ?>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+        </script>
     </div>
 </div>
+<!------- LECTURE DATE---------->
+
+<!------- LECTURE ENDING TIME---------->
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="lecture_start">Lecture Ending Time</label>
+    </div>
+    <div class="col-md-12">
+        <div class='input-group date' id='datetimepicker4'>
+            <input type='text' id="lecture_end" name="lecture_end" class="form-control" required value="<?php echo $this->session->lecture_end;?>" />
+            <span class="error"></span><p id ="lectureEnd_Error"></span></p><?php if(isset($_SESSION['lectureEnd_Error'])) {echo  $this->session->lectureEnd_Error;} ?>
+            <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+            </span>
+        </div>
+
+        <br>
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker4').datetimepicker({
+                    format: 'LT'
+                });
+            });
+        </script>
+    </div>
+</div>
+<!------- LECTURE ENDING TIME--------->
+
+
 
 
 <input type="submit" name="commit" value="Submit" class="btn btn-default btn-success" />

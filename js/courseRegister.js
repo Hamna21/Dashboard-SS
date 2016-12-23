@@ -18,27 +18,8 @@ $(document).ready(function(){
                 document.getElementById("courseName_Error").innerHTML = "Not a valid Course Name";
                 return;
             }
-
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                {
-                    document.getElementById("courseName_Error").innerHTML = xmlhttp.responseText;
-                }
-            };
-            xmlhttp.open("GET", "http://localhost:8080/Second-Screen-API-v3/Helper/courseNameExist?q=" + courseName, true);
-            xmlhttp.send();
         }
     });
-
-
-
-    //-------MODAL--------------//
-
-    $('#deleteProductModal').on('show.bs.modal', function (event) { // id of the modal with event
-        alert("Hamna");
-    })
-
 
 
     //------------HELPER FUNCTIONS-----------//

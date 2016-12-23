@@ -37,7 +37,7 @@
                     <tr>
                         <td><?php echo $category->category_name;?></td>
                         <td>
-                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $category->category_thumbimage;?>">
+                            <img src="http://localhost:8080/Second-Screen-API-v3/uploads/<?php echo $category->category_thumbimage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"

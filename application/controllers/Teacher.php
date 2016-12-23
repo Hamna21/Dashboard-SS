@@ -111,10 +111,10 @@ class Teacher extends CI_Controller
                 $error_data = array(
                     'error'  => 'teacher',
                     'message' => 'Error in registering new Teacher',
-                    'teacherName_Error' => $error_validation->teacher_Name,
-                    'teacherDesignation_Error' => $error_validation->teacher_Designation,
-                    'teacherDomain_Error' => $error_validation->teacher_Domain,
-                    'teacherImage_Error' => $error_validation->image_Path
+                    'teacherName_Error' => $error_validation->teacherName_Error,
+                    'teacherDesignation_Error' => $error_validation->teacherDesignation_Error,
+                    'teacherDomain_Error' => $error_validation->teacherDomain_Error,
+                    'teacherImage_Error' => $error_validation->teacherImage_Error
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -269,9 +269,9 @@ class Teacher extends CI_Controller
                 $error_data = array(
                     'error'  => 'teacher',
                     'message'     => 'Error in editing Teacher',
-                    'teacherName_Error' => $error_validation->teacher_Name,
-                    'teacherDesignation_Error' => $error_validation->teacher_Designation,
-                    'teacherDomain_Error' => $error_validation->teacher_Domain
+                    'teacherName_Error' => $error_validation->teacherName_Error,
+                    'teacherDesignation_Error' => $error_validation->teacherDesignation_Error,
+                    'teacherDomain_Error' => $error_validation->teacherDomain_Error
                 );
 
                 $this->session->set_flashdata($error_data);

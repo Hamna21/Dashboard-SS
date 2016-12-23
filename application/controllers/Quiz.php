@@ -11,39 +11,6 @@ class Quiz extends CI_Controller
         $this->load->model('Quiz_model');
     }
 
-
-    //Quiz View of a all quizzes in a lecture
-    public function view_old()
-    {
-        //Redirect to Login page if user is not logged in
-        if (!isset($_SESSION['user'])) {
-            redirect('/Login');
-        }
-        if (!file_exists(APPPATH . 'views/pages/quiz/quizView.php')) {
-            show_404();
-        }
-
-        $lecture_id = $this->input->get('lecture');
-
-        //Getting lecture name, all quizzes of that lecture and number of questions in each quiz
-        $result = sendGetRequest('api/lecture/quiz?lecture_id=' . $lecture_id);
-
-        $data['title'] = ('Quiz');
-        $data['subtitle'] = ('');
-        if ($result->status == "success") {
-            $data['quizzes'] = ($result->quizzes);
-            $data['lecture'] = ($result->lecture);
-        } else
-        {
-            show_error("No quizzes found for this lecture",500,'Error');
-
-        }
-        $this->load->view('templates/header.php', $data);
-        $this->load->view('templates/navbar.php', $data);
-        $this->load->view('pages/quiz/quizView.php', $data);
-        $this->load->view('templates/footer.php', $data);
-    }
-
     //Quiz View of a all quizzes in a lecture
     public function view()
     {
@@ -110,6 +77,7 @@ class Quiz extends CI_Controller
     }
 
     //POST direct from add quiz redirects here
+    //Request from Lecture page
     public function addQuiz()
     {
         if($this->input->server('REQUEST_METHOD') == "POST")
@@ -127,7 +95,7 @@ class Quiz extends CI_Controller
             $this->form_validation->set_data($quiz_data); //Setting Data
             $this->form_validation->set_rules($this->Quiz_model->getQuizRegistrationRules()); //Setting Rules
 
-            //Reloading add lecture page if validation fails
+            //Reloading lecture page if validation fails
             if ($this->form_validation->run() == FALSE) {
                 $error_data = array(
                     'error'  => 'quiz',
@@ -143,7 +111,7 @@ class Quiz extends CI_Controller
             if($result->status == ('error')) {
                 $error_data = array(
                     'error'  => 'quiz',
-                    'message'     => 'Error in registering new Quiz'
+                    'message' => 'Error in registering new Quiz'
                 );
 
                 $this->session->set_flashdata($error_data);
@@ -167,17 +135,75 @@ class Quiz extends CI_Controller
         }
     }
 
+    //POST direct from add quiz redirects here
+    //Request from Quiz page
+    public function addQuizfromQuiz()
+    {
+        if($this->input->server('REQUEST_METHOD') == "POST")
+        {
+            $quiz_data = array(
+                'lecture_id' => $this->input->post('lecture_id'),
+                'quiz_title' => $this->input->post('quiz_title'),
+                'quiz_time' => $this->input->post('quiz_time'),
+                'quiz_duration' => $this->input->post('quiz_duration')
+            );
+
+            $date = new DateTime($quiz_data['quiz_time']);
+            $quiz_data['quiz_time'] = $date->format('Y-m-d H:i:s');
+
+            $this->form_validation->set_data($quiz_data); //Setting Data
+            $this->form_validation->set_rules($this->Quiz_model->getQuizRegistrationRules()); //Setting Rules
+
+            //Reloading quizzes page if validation fails
+            if ($this->form_validation->run() == FALSE)
+            {
+                $error_data = array(
+                    'error'  => 'quiz',
+                    'message'     => 'Error in registering new Quiz'
+                );
+
+                $this->session->set_flashdata($error_data);
+                redirect('quiz/view?lecture='.$quiz_data['lecture_id']);
+            }
+
+            $result = sendPostRequest('api/quiz/add', $quiz_data);
+
+            if($result->status == ('error'))
+            {
+                $error_data = array(
+                    'error'  => 'quiz',
+                    'message' => 'Error in registering new Quiz'
+                );
+
+                $this->session->set_flashdata($error_data);
+                redirect('quiz/view?lecture='.$quiz_data['lecture_id']);
+            }
+
+            if($result->status == ('success')) {
+                $this->session->set_flashdata('success', 'quiz');
+                $this->session->set_flashdata('message', "New Quiz successfully added.");
+                redirect('quiz/view?lecture='.$quiz_data['lecture_id']);
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'quiz');
+                $this->session->set_flashdata('message', "Error in registering new Quiz to Database - Syntax Error");
+                redirect('quiz/view?lecture='.$quiz_data['lecture_id']);
+            }
+        }
+    }
+
     //Edit quiz request redirects here
     public function editQuiz()
     {
         if($this->input->server('REQUEST_METHOD') == "POST")
         {
-            $lecture_id = $this->input->post('lecture_id');
+            $lecture_id = $this->input->post('lecture_id_edit');
             $quiz_data = array(
                 'quiz_id' => $this->input->post('quiz_ID'),
-                'quiz_title' => $this->input->post('quiz_title'),
-                'quiz_time' => $this->input->post('quiz_time'),
-                'quiz_duration' => $this->input->post('quiz_duration')
+                'quiz_title' => $this->input->post('quiz_title_edit'),
+                'quiz_time' => $this->input->post('quiz_time_edit'),
+                'quiz_duration' => $this->input->post('quiz_duration_edit')
             );
 
             $date = new DateTime($quiz_data['quiz_time']);
@@ -197,6 +223,7 @@ class Quiz extends CI_Controller
                 redirect('quiz/view?lecture='.$lecture_id);
             }
 
+            $quiz_data['lecture_id'] = $lecture_id;
             $result = sendPostRequest('api/quiz/edit', $quiz_data);
 
             if($result->status == ('error')) {
@@ -223,7 +250,7 @@ class Quiz extends CI_Controller
         }
     }
 
-
+    //Delete quiz
     public function deleteQuiz()
     {
         if(!$_REQUEST)

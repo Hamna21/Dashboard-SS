@@ -59,8 +59,8 @@ class Lecture_model extends CI_Model
                 'rules' => 'required'
             ),
             array(
-                'field' => 'lecture_start',
-                'label' => 'Lecture Starting Time',
+                'field' => 'lecture_date',
+                'label' => 'Lecture Date',
                 'rules' => 'required'
             ),
             array(

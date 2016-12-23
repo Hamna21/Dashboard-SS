@@ -22,6 +22,7 @@ class Login extends CI_Controller
         if (!file_exists(APPPATH.'views/pages/loginView.php'))
         {
             show_404(); // Whoops, we don't have a page for that!
+
         }
 
         $data['title'] = 'Login';
@@ -111,7 +112,7 @@ class Login extends CI_Controller
     }
 
 
-    //-----RESET PASSWORD --- USER
+    //------------RESET PASSWORD ------------------------------------------------------- USER
     public function resetPasswordView()
     {
         if($this->input->server('REQUEST_METHOD') == "GET")
