@@ -49,9 +49,10 @@ class Teacher extends CI_Controller
     {
         if($this->input->server('REQUEST_METHOD')== 'POST') {
             $teacher_data = array(
-                'teacher_Name' => $this->input->post('teacher_Name'),
-                'teacher_Designation' => $this->input->post('teacher_Designation'),
-                'teacher_Domain' => $this->input->post('teacher_Domain')
+                'teacher_Name'=> $this->input->post('teacher_Name'),
+                'teacher_email'=> $this->input->post('teacher_email'),
+                'teacher_Designation'=> $this->input->post('teacher_Designation'),
+                'teacher_Domain'=> $this->input->post('teacher_Domain')
             );
 
             $this->form_validation->set_data($teacher_data); //Setting Data
@@ -68,6 +69,7 @@ class Teacher extends CI_Controller
                     'error'  => 'teacher',
                     'message' => 'Error in registering new Teacher',
                     'teacherName_Error' => form_error('teacher_Name'),
+                    'teacherEmail_Error' => form_error('teacher_email'),
                     'teacherDesignation_Error' => form_error('teacher_Designation'),
                     'teacherDomain_Error' => form_error('teacher_Domain'),
                     'teacherImage_Error' => form_error('image_Path')
@@ -89,6 +91,7 @@ class Teacher extends CI_Controller
                     'message' => 'Error in registering new Teacher',
                     'teacherID_Error' => form_error('teacher_ID'),
                     'teacherName_Error' => form_error('teacher_Name'),
+                    'teacherEmail_Error' => form_error('teacher_email'),
                     'teacherDesignation_Error' => form_error('teacher_Designation'),
                     'teacherDomain_Error' => form_error('teacher_Domain'),
                     'teacherImage_Error' => $image_attributes[1]
@@ -112,6 +115,7 @@ class Teacher extends CI_Controller
                     'error'  => 'teacher',
                     'message' => 'Error in registering new Teacher',
                     'teacherName_Error' => $error_validation->teacherName_Error,
+                    'teacherEmail_Error' => $error_validation->teacherEmail_Error,
                     'teacherDesignation_Error' => $error_validation->teacherDesignation_Error,
                     'teacherDomain_Error' => $error_validation->teacherDomain_Error,
                     'teacherImage_Error' => $error_validation->teacherImage_Error

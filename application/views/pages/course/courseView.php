@@ -1,11 +1,5 @@
 <!---------------Styling of Table--------------->
 <style type="text/css">
-    /*table {
-        white-space: nowrap;
-        overflow: hidden;
-        width: 10px;
-        height: 25px;
-    }*/
     th{
         white-space: nowrap;
     }
@@ -41,7 +35,11 @@
     </div>
 </div>
 
-<div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>course/add">New Course</a></div>
+<?php if($this->session->user_type == "admin")
+{ ?>
+   <div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url();?>course/add">New Course</a></div>
+<?php
+}?>
 
 <div class="row">
     <div class="col-lg-12">
@@ -56,7 +54,15 @@
                     <th>Category</th>
                     <th>Teacher</th>
                     <th>Course Image</th>
-                    <th>Edit/Delete</th>
+                    <?php if($this->session->user_type == "admin")
+                    {
+                        echo '<th>Edit/Delete</th>';
+                    }
+                    else
+                    {
+                        echo '<th>Comments</th>';
+                    }
+                    ?>
                 </tr>
                 </thead>
 
@@ -66,7 +72,6 @@
                         <td id="course_name"><?php echo $course->course_name;?></td>
                         <td id="course_desc"><?php echo $course->course_description;?></td>
                         <td><?php echo $course->category_name;?></td>
-
                         <td id ="course_teach">
                             <a class="viewTeacher" data-toggle="modal"
                                data-designation="<?php echo $course->teacher_designation?>"
@@ -110,46 +115,68 @@
 
                         </td>
                         <td id="course_thumb">
-                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $course->course_thumbimage;?>">
+                            <img src="<?php echo path_to_image. $course->course_thumbimage;?>">
                         </td>
-                        <td id="edit-delete">
-                            <a class="btn btn-warning"
-                               href="<?php echo base_url();?>Course/edit?q=<?php echo $course->course_id;?>">
-                               Edit
-                            </a>
 
-                            <a class="delete-link btn btn-danger"
-                               data-toggle="modal" data-remote="true" data-id="<?php echo $course->course_id;?>" href="#deleteCourseModal">
-                                Delete
-                            </a>
+                        <?php if($this->session->user_type == "admin")
+                        {?>
+                            <td id="edit-delete">
+                                <a class="btn btn-warning"
+                                   href="<?php echo base_url(); ?>Course/edit?q=<?php echo $course->course_id; ?>">
+                                    Edit
+                                </a>
+
+                                <a class="delete-link btn btn-danger"
+                                   data-toggle="modal" data-remote="true" data-id="<?php echo $course->course_id; ?>"
+                                   href="#deleteCourseModal">
+                                    Delete
+                                </a>
                                 <!--------------------- Delete Course Modal ----------------->
-                                <div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog" aria-labelledby="deleteCourseModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="deleteCourseModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="deleteCourseModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                </button>
                                                 <h4 class="modal-title" id="deleteCourseModalLabel">Confirm Delete</h4>
                                             </div>
                                             <div class="modal-body">
                                                 Are you sure want to delete the course?
                                             </div>
                                             <div class="modal-footer">
-                                                <a id = "mylink" class="btn btn-danger" href="">Yes </a>
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                                <a id="mylink" class="btn btn-danger" href="">Yes </a>
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">No
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                            <script>
-                                $(document).on("click", ".delete-link", function () {
-                                    var courseID = $(this).data('id');
-                                    var link = document.getElementById("mylink");
-                                    link.setAttribute('href', "<?php echo base_url()?>course/delete?q=" + courseID);
-                                });
-                            </script>
+                                <script>
+                                    $(document).on("click", ".delete-link", function () {
+                                        var courseID = $(this).data('id');
+                                        var link = document.getElementById("mylink");
+                                        link.setAttribute('href', "<?php echo base_url()?>course/delete?q=" + courseID);
+                                    });
+                                </script>
                                 <!--------------------- Delete Course Modal ----------------->
-                        </td>
+                            </td>
+                            <?php
+                        }
+                        else
+                        { // In case of teacher admin, show comments of course
+                            ?>
+                            <td>
+                                <a class="btn btn-default btn-success"
+                                   href="<?php echo base_url();?>course/comments?course_id=<?php echo $course->course_id;?>&course_name=<?php echo $course->course_name?>">
+                                Comments
+                            </a>
+                            </td>
+                        <?php
+                        }
+                        ?>
                     </tr>
                 <?php }?>
                 </tbody>

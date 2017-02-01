@@ -18,6 +18,11 @@ class Teacher_model extends CI_Model
                 'rules' => 'required'
             ),
             array(
+                'field' => 'teacher_email',
+                'label' => 'Teacher Email',
+                'rules' => 'trim|required|valid_email'
+            ),
+            array(
                 'field' => 'teacher_Designation',
                 'label' => 'Teacher Designation',
                 'rules' => 'required|regex_match[/^[A-Za-z_ -]+$/]'

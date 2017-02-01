@@ -40,8 +40,8 @@ class Quiz extends CI_Controller
 
         //--------Pagination--------//
         $config["base_url"] = base_url() . "quiz";
-        $config['per_page'] = 3;
-        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 3 : 0;
+        $config['per_page'] = 5;
+        $page =($this->uri->segment(2)) ? ($this->uri->segment(2) -1) * 5 : 0;
 
         //If $page = -1
         if($page < 0)

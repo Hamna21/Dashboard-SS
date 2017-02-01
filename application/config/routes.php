@@ -69,6 +69,8 @@ $route['courses/:num'] = 'Dashboard/courses';
 $route['course/add'] = 'Course/add';
 $route['course/edit'] = 'Course/edit';
 $route['course/delete'] = 'Course/deleteCourse';
+$route['course/comments'] = 'Course/course_comments';
+$route['course/comments/:num'] = 'Course/course_comments';
 
 //-------------Category-------------//
 $route['categories'] = 'Dashboard/categories';
@@ -89,6 +91,8 @@ $route['lectures/:num'] = 'Dashboard/lectures';
 $route['lecture/add'] = 'Lecture/add';
 $route['lecture/edit'] = 'Lecture/edit';
 $route['lecture/delete'] = 'Lecture/deleteLecture';
+$route['lecture/comments'] = 'Lecture/lecture_comments';
+$route['lecture/comments/:num'] = 'Lecture/lecture_comments';
 
 //--------------QUIZ-----------------//
 $route['quiz/:num'] = 'Quiz/view';
@@ -106,3 +110,9 @@ $route['questions'] = 'Question/view';
 $route['question/add'] = 'Question/addQuestion';
 $route['question/edit'] = 'Question/editQuestion';
 $route['question/delete'] = 'Question/deleteQuestion';
+
+//-----------REFERENCE---------------------
+$route['reference/:num'] = 'Lecture_Reference/view';
+$route['reference'] = 'Lecture_Reference/view';
+$route['reference/delete'] = 'Lecture_Reference/deleteReference';
+

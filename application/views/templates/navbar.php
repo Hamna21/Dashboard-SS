@@ -5,7 +5,7 @@
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo base_url();?>dashboard">Second Screen Admin</a>
+        <a class="navbar-brand" href="<?php echo base_url();?>dashboard">Second Screen Dashboard</a>
     </div>
 
     <!------------------ Top Menu Items----------------->
@@ -25,9 +25,20 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li class="<?php echo ($title == "Dashboard" ? "active" : "")?>"> <a href="<?php echo base_url();?>dashboard"><i class="fa fa-fw fa-table"></i> Dashboard</a> </li>
+            <?php if($this->session->user_type == "admin")
+            {
+                //If user_type == admin then show Category + Teacher tabs
+                //Restrict in case of teacher
+                ?>
+                <li class="<?php echo($title == "Categories" ? "active" : "") ?>"><a
+                        href="<?php echo base_url(); ?>categories"><i class="fa fa-fw fa-table"></i> Categories</a></li>
+                <li class="<?php echo($title == "Teachers" ? "active" : "") ?>"><a
+                        href="<?php echo base_url(); ?>teachers"><i class="fa fa-fw fa-table"></i> Teachers</a></li>
+                <?php
+            }
+            ?>
+
             <li class="<?php echo ($title == "Courses" ? "active" : "")?>"> <a href="<?php echo base_url();?>courses"><i class="fa fa-fw fa-table"></i> Courses</a> </li>
-            <li class="<?php echo ($title == "Categories" ? "active" : "")?>"> <a href="<?php echo base_url();?>categories"><i class="fa fa-fw fa-table"></i> Categories</a> </li>
-            <li class="<?php echo ($title == "Teachers" ? "active" : "")?>"> <a href="<?php echo base_url();?>teachers"><i class="fa fa-fw fa-table"></i> Teachers</a> </li>
             <li class="<?php echo ($title == "Lectures" ? "active" : "")?>"> <a href="<?php echo base_url();?>lectures"><i class="fa fa-fw fa-table"></i> Lectures</a> </li>
         </ul>
     </div>

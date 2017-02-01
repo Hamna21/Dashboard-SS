@@ -22,17 +22,28 @@
         <label for="teacher_Name">Teacher Name</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text"  name="teacher_Name" id="teacher_Name" required value=" <?php if(isset($_SESSION['teacher_Name'])) {echo  $this->session->teacher_Name;} ?>" />
+        <input class="form-control" type="text"  name="teacher_Name" id="teacher_Name" required value="<?php if(isset($_SESSION['teacher_Name'])) {echo  $this->session->teacher_Name;} ?>" />
         <span class="error"><p id ="teacherName_Error"></span></p><?php if(isset($_SESSION['teacherName_Error'])) {echo  $this->session->teacherName_Error;} ?>
     </div>
 </div>
 
 <div class="form-group">
     <div class="col-md-12">
+        <label for="teacher_email">Teacher Email</label>
+    </div>
+    <div class="col-md-12">
+        <input class="form-control" type="text"  name="teacher_email" id="teacher_email" required value="<?php if(isset($_SESSION['teacher_email'])) {echo  $this->session->teacher_email;} ?>" />
+        <span class="error"><p id ="teacherEmail_Error"></p><?php if(isset($_SESSION['teacherEmail_Error'])) {echo  $this->session->teacherEmail_Error;} ?></span>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-md-12">
         <label for="teacher_Designation">Teacher Designation</label>
     </div>
     <div class="col-md-12">
-        <input class="form-control" type="text"  name="teacher_Designation" id="teacher_Designation" required value=" <?php if(isset($_SESSION['teacher_Designation'])) {echo  $this->session->teacher_Designation;} ?>" />
+        <input class="form-control" type="text"  name="teacher_Designation" id="teacher_Designation" required value="<?php if(isset($_SESSION['teacher_Designation'])) {echo  $this->session->teacher_Designation;} ?>" />
         <span class="error"><p id ="teacherDesignation_Error"></span></p><?php if(isset($_SESSION['teacherDesignation_Error'])) {echo  $this->session->teacherDesignation_Error;} ?>
     </div>
 </div>

@@ -58,7 +58,7 @@
         <label for="imageUploaded">Image Uploaded:</label>
     </div>
     <div class="col-md-12">
-        <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $this->session->teacher_ThumbImage;?>">
+        <img src="<?php echo path_to_image . $this->session->teacher_ThumbImage;?>">
     </div>
 </div>
 

@@ -40,20 +40,27 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-3">
-        <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>course/add">New Course</a></div>
+<?php if($this->session->user_type == "admin")
+//If user_type == admin then show ADD BUTTONS
+//Restrict in case of teacher
+{ ?>
+    <div class="row">
+        <div class="col-lg-3">
+            <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>course/add">New Course</a></div>
+        </div>
+        <div class="col-lg-3">
+            <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>category/add">New Category</a></div>
+        </div>
+        <div class="col-lg-3">
+            <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>teacher/add">New Teacher</a></div>
+        </div>
+        <div class="col-lg-3">
+            <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>lecture/add">New Lecture</a></div>
+        </div>
     </div>
-    <div class="col-lg-3">
-        <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>category/add">New Category</a></div>
-    </div>
-    <div class="col-lg-3">
-        <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>teacher/add">New Teacher</a></div>
-    </div>
-    <div class="col-lg-3">
-        <div><a class="btn btn-default btn-success" href="<?php echo base_url();?>lecture/add">New Lecture</a></div>
-    </div>
-</div>
+<?php
+}
+?>
 
         </div>
         <!-- /.container-fluid -->

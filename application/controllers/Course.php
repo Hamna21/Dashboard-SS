@@ -7,7 +7,7 @@ class Course extends CI_Controller
     {
         parent::__construct();
         $this->load->helper(array('form', 'url', 'image', 'request'));
-        $this->load->library(array('session', 'form_validation'));
+        $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->model('Course_model');
     }
 
@@ -330,6 +330,77 @@ class Course extends CI_Controller
             $this->session->set_flashdata('message', "Error in deleting course");
             redirect('/courses');
         }
+    }
+
+    //Comments a Course
+    public function course_comments()
+    {
+        //Redirect to Login page if user is not logged in
+        if (!isset($_SESSION['user']))
+        {
+            redirect('/Login');
+        }
+        if (!file_exists(APPPATH . 'views/pages/course/commentView.php')) {
+            show_404();
+        }
+
+        //get course_id and course_name sent via GET request - if empty then use the one stored in session
+        //To maintain links for pagination using session one
+
+        if($_REQUEST)
+        {
+            $course_id = $this->input->get('course_id');
+            $course_name = $this->input->get('course_name');
+            $this->session->set_userdata('course_id',$course_id);
+            $this->session->set_userdata('course_name',$course_name);
+        }
+        else
+        {
+            $course_id = $this->session->course_id;
+            $course_name= $this->session->course_name;
+        }
+
+
+        $data['title'] = ('Comments');
+        $data['subtitle'] = ('');
+        $data['course_name'] = ($course_name);
+
+        //-----Pagination-------//
+        $config["base_url"] = base_url() . "course/comments";
+        $config['per_page'] = 2;
+        $page =($this->uri->segment(3)) ? ($this->uri->segment(3) -1) * 2 : 0;
+
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page,
+            'course_id' => $course_id
+        );
+
+
+        //Sending request to API for comments
+        $result = sendPostRequest('api/course/comments_dashboard', $pagination_data);
+
+
+        if($result->status == "error")
+        {
+            show_error("Error",500, "No comments found for this course!");
+        }
+
+        $config["total_rows"] = $result->comment_total;
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        $data['comments'] = $result->comments;
+
+        $this->load->view('templates/header.php', $data);
+        $this->load->view('templates/navbar.php', $data);
+        $this->load->view('pages/course/commentView.php', $data);
+        $this->load->view('templates/footer.php', $data);
 
     }
 

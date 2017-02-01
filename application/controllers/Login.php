@@ -80,7 +80,7 @@ class Login extends CI_Controller
             {
                 $error_data = array(
                     'error'  => 'login',
-                    'message'     => 'Invalid Email,Password',
+                    'message'     => 'Invalid Email/Password',
                     'email' => $this->input->post('email')
                 );
 
@@ -90,8 +90,14 @@ class Login extends CI_Controller
 
             if($result->status == ('success'))
             {
-                $admin = $result->admin;
-                $this->session->set_userdata('user',$admin->admin_name);
+                $user_dashboard = $result->user_dashboard;
+                $this->session->set_userdata('user',$user_dashboard->user_dashboard_name);
+                $this->session->set_userdata('user_type',$user_dashboard->user_dashboard_type);
+
+                if($this->session->user_type == "teacher")
+                {
+                    $this->session->set_userdata('teacher_id',$user_dashboard->teacher_id);
+                }
                 redirect('/Dashboard');
             }
         }
@@ -112,7 +118,7 @@ class Login extends CI_Controller
     }
 
 
-    //------------RESET PASSWORD ------------------------------------------------------- USER
+    //---------------RESET PASSWORD ------------------------------------------------------- USER
     public function resetPasswordView()
     {
         if($this->input->server('REQUEST_METHOD') == "GET")

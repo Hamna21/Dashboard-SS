@@ -74,19 +74,43 @@ class Dashboard extends CI_Controller
             'start' => $page
         );
 
-        //-----Sending request to API-----//
-        $result = sendPostRequest('api/courses/dashboard',$pagination_data);
+        //-------------Sending request to API---------------------//
 
-        if($result->status == ("error"))
+        //if user_dashboard == admin
+        if($this->session->user_type == "admin")
         {
-            show_error("Error in courses.", "500", "Unauthorized.");
+            $result = sendPostRequest('api/courses/dashboard',$pagination_data);
+
+            if($result->status == ("error"))
+            {
+                show_error("Error in courses.", "500", "Unauthorized.");
+            }
+
+            $config["total_rows"] = $result->course_total;
+            $this->pagination->initialize($config);
+
+            $data["links"] = $this->pagination->create_links();
+            $data['courses'] = $result->courses;
         }
 
-        $config["total_rows"] = $result->courseTotal;
-        $this->pagination->initialize($config);
+        //If user == teacher, getting all courses of admin teacher
+        elseif($this->session->user_type == "teacher")
+        {
+            $pagination_data['teacher_id']= $this->session->teacher_id;
 
-        $data["links"] = $this->pagination->create_links();
-        $data['courses'] = $result->courses;
+            $result = sendPostRequest('api/courses_teacher/dashboard',$pagination_data);
+            if($result->status == ("error"))
+            {
+                show_error("Error in courses.", "500", "Unauthorized.");
+            }
+
+            $config["total_rows"] = $result->course_total;
+            $this->pagination->initialize($config);
+
+            $data["links"] = $this->pagination->create_links();
+            $data['courses'] = $result->courses;
+        }
+
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -229,21 +253,45 @@ class Dashboard extends CI_Controller
         );
 
         //-----Sending request to API-----//
-        $result = sendPostRequest('api/lectures/dashboard',$pagination_data);
-        if($result->status == ("error"))
+
+        //If user_dashboard == admin
+        if($this->session->user_type == "admin")
         {
-            show_error("Error in lectures.", "500", "Unauthorized.");
+            $result = sendPostRequest('api/lectures/dashboard',$pagination_data);
+            if($result->status == ("error"))
+            {
+                show_error("Error in lectures.", "500", "Unauthorized.");
+            }
+
+            $config["total_rows"] = $result->lecture_total;
+            $this->pagination->initialize($config);
+
+            $data["links"] = $this->pagination->create_links();
+            $data['lectures'] = $result->lectures;
+
+            //Sending request to API - for all lectures - to be used in Reference
+            $result = sendGetRequest('api/lectures_reference');
+            $data['lectures_reference'] = $result->lectures;
+        }
+        elseif($this->session->user_type == "teacher")
+        {
+            $pagination_data['teacher_id'] = $this->session->teacher_id;
+
+            $result = sendPostRequest('api/lectures_teacher/dashboard',$pagination_data);
+            if($result->status == ("error"))
+            {
+                show_error("Error in lectures.", "500", "Unauthorized.");
+            }
+
+            $config["total_rows"] = $result->lecture_total;
+            $this->pagination->initialize($config);
+
+            $data["links"] = $this->pagination->create_links();
+            $data['lectures'] = $result->lectures;
         }
 
-        $config["total_rows"] = $result->lectureTotal;
-        $this->pagination->initialize($config);
 
-        $data["links"] = $this->pagination->create_links();
-        $data['lectures'] = $result->lectures;
 
-        //Sending request to API - for all lectures - to be used in Reference
-        $result = sendGetRequest('api/lectures_reference');
-        $data['lectures_reference'] = $result->lectures;
 
         $this->load->view('templates/header.php', $data);
         $this->load->view('templates/navbar.php', $data);
@@ -251,5 +299,4 @@ class Dashboard extends CI_Controller
         $this->load->view('templates/footer.php', $data);
 
     }
-
 }

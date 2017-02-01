@@ -104,6 +104,18 @@
 </div>
 <!------- LECTURE ENDING TIME--------->
 
+<!--------------------LECTURE VIDEO----------------------------->
+<div class="form-group">
+    <div class="col-md-12">
+        <label for="lecture_video_link">Lecture Video:</label>
+    </div>
+    <div class="col-md-12">
+        <input class="form-control" type="text" name="lecture_video_link" id="lecture_video_link" value="<?php echo $this->session->lecture_video;?>" />
+        <br>
+    </div>
+</div>
+<!--------------------LECTURE VIDEO----------------------------->
+
 
 
 

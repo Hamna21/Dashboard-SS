@@ -42,7 +42,8 @@
                         <td><?php echo $teacher->teacher_designation;?></td>
                         <td><?php echo $teacher->teacher_domain;?></td>
                         <td>
-                            <img src="http://cte.itu.edu.pk/second_screen_api/uploads/<?php echo $teacher->teacher_thumbimage;?>">
+
+                            <img src="<?php echo path_to_image . $teacher->teacher_thumbimage;?>">
                         </td>
                         <td>
                             <a class="btn btn-warning"

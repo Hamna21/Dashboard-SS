@@ -7,7 +7,7 @@ class Lecture extends CI_Controller
     {
         parent::__construct();
         $this->load->helper(array('form', 'url','request', 'video'));
-        $this->load->library(array('session', 'form_validation'));
+        $this->load->library(array('session', 'form_validation', 'pagination'));
         $this->load->model('Lecture_model');
     }
 
@@ -86,7 +86,7 @@ class Lecture extends CI_Controller
                 redirect('/Lecture/add');
             }
 
-            //Either give link or upload video
+            //Video Link
             if($_POST['lecture_video_link'])
             {
                 $lecture_data['lecture_video_link'] = $this->input->post('lecture_video_link');
@@ -161,8 +161,10 @@ class Lecture extends CI_Controller
             'lecture_date' =>  $lecture->lecture_date,
             'lecture_start' =>  $lecture->lecture_start,
             'lecture_end' =>  $lecture->lecture_end,
-            'lecture_Domain' =>  $lecture->course_id
+            'lecture_Domain' =>  $lecture->course_id,
+            'lecture_video' => $lecture->lecture_video
         );
+
 
         //Appending lecture date and starting time
         $lecture_data['lecture_date'] = $lecture_data['lecture_date'] . " " . $lecture_data['lecture_start'];
@@ -207,6 +209,8 @@ class Lecture extends CI_Controller
             $time_end = new DateTime($lecture_data['lecture_end']);
             $lecture_data['lecture_end'] = $time_end->format('H:i:s');
 
+
+
             $this->form_validation->set_data($lecture_data); //Setting Data
              $this->form_validation->set_rules($this->Lecture_model->getLectureEditRules()); //Setting Rules
  
@@ -226,6 +230,12 @@ class Lecture extends CI_Controller
                  $this->session->set_flashdata($lecture_data);
                  redirect('/lecture/edit?q='.$lectureID);
              }
+
+            //Video Link
+            if($_POST['lecture_video_link'])
+            {
+                $lecture_data['lecture_video_link'] = $this->input->post('lecture_video_link');
+            }
 
             //Sending request to API
             $result = sendPostRequest('api/lecture/edit', $lecture_data);
@@ -293,4 +303,88 @@ class Lecture extends CI_Controller
 
     }
 
+    //All comments of a lecture by users
+    public function lecture_comments()
+    {
+        //Redirect to Login page if user is not logged in
+        if (!isset($_SESSION['user'])) {
+            redirect('/Login');
+        }
+        if (!file_exists(APPPATH . 'views/pages/lecture/commentView.php')) {
+            show_404();
+        }
+
+        if($_REQUEST)
+        {
+            $lecture_id = $this->input->get('lecture_id');
+            $lecture_name = $this->input->get('lecture_name');
+            $this->session->set_userdata('lecture_id', $lecture_id);
+            $this->session->set_userdata('lecture_name', $lecture_name);
+        }
+        else
+        {
+            $lecture_id = $this->session->lecture_id;
+            $lecture_name = $this->session->lecture_name;
+        }
+        $data['title'] = ('Comments');
+        $data['subtitle'] = ('');
+        $data['lecture_name'] = $lecture_name;
+
+
+        //-----Pagination-------//
+        $config["base_url"] = base_url() . "lecture/comments";
+        $config['per_page'] = 2;
+        $page =($this->uri->segment(3)) ? ($this->uri->segment(3) -1) * 2 : 0;
+
+        //If $page = -1
+        if($page < 0)
+        {
+            $page = 0;
+        }
+        $pagination_data = array(
+            'limit' => $config['per_page'],
+            'start' => $page,
+            'lecture_id' => $lecture_id
+        );
+
+
+        //Sending request to API for comments
+        $result = sendPostRequest('api/lecture/comments_dashboard', $pagination_data);
+
+
+        if($result->status == "error")
+        {
+            show_error("Error",500, "No comments found for this lecture!");
+        }
+
+        $config["total_rows"] = $result->comment_total;
+        $this->pagination->initialize($config);
+        $data["links"] = $this->pagination->create_links();
+
+        $data['comments'] = $result->comments;
+
+        $this->load->view('templates/header.php', $data);
+        $this->load->view('templates/navbar.php', $data);
+        $this->load->view('pages/lecture/commentView.php', $data);
+        $this->load->view('templates/footer.php', $data);
+
+    }
+
+    //Total duration of a lecture in minutes - to be used in adding lecture reference
+    public function minuteCalculator()
+    {
+        $lecture_start = $this->input->get('lecture_start');
+        $lecture_end = $this->input->get('lecture_end');
+        $date1 = new DateTime($lecture_start);
+        $date2 = new DateTime($lecture_end);
+
+        $interval = $date2->diff($date1);
+
+        $hourTominute = ($interval->h)*60;
+        $secondTominute = ($interval->s)*60*60;
+        $minute = ($interval->i);
+
+        $totalMinutes = $hourTominute + $minute + $secondTominute;
+        echo $totalMinutes;
+    }
 }
