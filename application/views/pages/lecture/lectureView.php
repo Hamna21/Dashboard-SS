@@ -1,27 +1,86 @@
 <!---------------Page Heading--------------->
-
 <style type="text/css">
     th{
         white-space: nowrap;
     }
+    #course {
+        width: 130px;
+    }
     #edit-delete {
-        width: 170px;
+        width: 180px;
     }
     #quiz {
-        width: 140px;
+        width: 180px;
     }
     #ref {
-        width: 140px;
+        width: 160px;
     }
     #date-helper {
         height: 30px;
         position: relative;
         border: 2px solid #cdcdcd;
         border-color: rgba(0,0,0,.14);
-        background-color: AliceBlue ;   ;
+        background-color: AliceBlue;
         font-size: 14px;
     }
+    #onSubmit{
+        background:white;
+        width : 80%;
+        height : 80%;
+        position: absolute;
+        z-index: 5;
+        opacity: 0.8;
+        /*transform: translate(2px, -2px);*/
+    }
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
 
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .closebtn {
+        margin-right: 15px;
+        color: darkgreen;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .closebtn:hover {
+        color: black;
+    }
+    #myProgress {
+        width: 100%;
+        background-color: grey;
+    }
+    #myBar {
+        width: 1%;
+        height: 30px;
+        background-color: green;
+        text-align: center;
+    }
 </style>
 <div class="row">
     <div class="col-lg-12">
@@ -39,11 +98,32 @@
     </div>
 </div>
 
+
+<!--Display loader when video starts uploading-->
+<div style="display:none;" id="onSubmit">
+    <div id="loader"></div>
+</div>
+
+
+<!------Success Alert message when video upload successfully--->
+<div style="display:none;" id="alert-success" class="alert alert-success">
+    <span class="closebtn">&times;</span>
+    <strong>Success!</strong> Video uploaded successfully.
+</div>
+
+<!------Warning when video didn't upload--->
+<div style="display:none;" id="alert-warning" class="alert alert-warning">
+    <span class="closebtn">&times;</span>
+    <strong>Warning!</strong> Error in uploading video.
+</div>
+
+
 <?php if($this->session->user_type == "admin") { ?>
     <div class="pull-right "><a class="btn btn-default btn-success" href="<?php echo base_url(); ?>lecture/add">New Lecture</a></div>
     <?php
 }
 ?>
+
 
 <div class="row">
     <div class="col-lg-12">
@@ -66,6 +146,7 @@
                     {
                         echo '<th>Quiz</th>';
                         echo '<th>Reference</th>';
+                        echo '<th>Lecture Video</th>';
                         echo '<th>Edit/Delete</th> ';
                     }
                     ?>
@@ -74,17 +155,19 @@
                 </thead>
 
                 <tbody>
-                <?php foreach($lectures as $lecture){?>
+                <?php foreach($lectures as $lecture)
+                {?>
                     <tr>
                         <td><?php echo $lecture->lecture_name;?></td>
-                        <td><?php echo $lecture->course_name;?></td>
+                        <td id="course"><?php echo $lecture->course_name;?></td>
                         <td><?php echo $lecture->lecture_date;?></td>
-                        <td id="time"><?php echo $lecture->lecture_start;?></td>
-                        <td id="time"><?php echo $lecture->lecture_end;?></td>
+                        <td><?php echo $lecture->lecture_start;?></td>
+                        <td><?php echo $lecture->lecture_end;?></td>
 
-                        <?php if($this->session->user_type == "admin") {
+                        <?php if($this->session->user_type == "admin")
+                        {
                             ?>
-                            <!-------------------------------- QUIZ start-------------------------------->
+                            <!------------------- QUIZ start-------------->
                             <td id="quiz">
                                 <!---- ADD QUIZ--->
                                 <a class="addQuiz-link btn btn-primary"
@@ -182,7 +265,7 @@
                                     View
                                 </a>
                             </td>
-                            <!-------------------------------- QUIZ end-------------------------------->
+                            <!------------------- QUIZ end----------------->
 
                             <!---------------------REFERENCE START---------------------->
                             <td id="ref">
@@ -373,9 +456,54 @@
                                     View
                                 </a>
                             </td>
-                            <!---------------------REFERENCE END---------------------->
+                            <!---------------------REFERENCE END------------------------>
 
-                            <!---------------------EDIT/DELETE---------------------->
+                            <!---------------------LECTURE VIDEO------------------------>
+                            <td>
+                                <a class="add-video btn btn-info"
+                                   data-toggle="modal" data-remote="true" data-id="<?php echo $lecture->lecture_id; ?>"
+                                   href="#addVideoModal">
+                                    Add Video
+                                </a>
+                                <!--------------------- Add Video Modal ----------------->
+                                <div class="modal fade" id="addVideoModal" tabindex="-1" role="dialog" aria-labelledby="addVideoModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="addVideoModalLabel">Video Upload</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="upload" action="" method="POST" enctype="multipart/form-data">
+                                                    <input type="hidden" id="lecture_video">
+                                                    <label for="videoToUpload">Select video to upload:</label>
+                                                    <input type="file"  name="video_path" id="video_path" required />
+                                                    <br>
+                                                    <button type="button" id="btn_upload" class="btn btn-success">Upload</button>
+
+                                                </form>
+
+                                                <!-----Progress Bar---->
+                                                <div style="display:none;" id="progress-bar" class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+
+                                                <div style="display:none;" id="myProgress">
+                                                    <div id="myBar"></div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Exit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <!---------------------LECTURE VIDEO------------------------>
+
+                            <!---------------------EDIT/DELETE-------------------------->
                             <td id="edit-delete">
                                 <a class="btn btn-warning"
                                    href="<?php echo base_url(); ?>lecture/edit?q=<?php echo $lecture->lecture_id; ?>">
@@ -420,9 +548,9 @@
                                 <!--------------------- Delete lecture Modal ----------------->
 
                             </td>
-                            <!---------------------EDIT/DELETE---------------------->
+                            <!---------------------EDIT/DELETE-------------------------->
                             <?php
-                        }
+                        } //If ending
                         else
                         {
                             //If admin = teacher, show comments of lecture
@@ -434,13 +562,103 @@
                          <?php
                         }?>
                     </tr>
-                <?php }?>
+                <?php //For loop ending
+                }?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <!-- /.row -->
+
+<!-------------Uploading Video JS-------------------------->
+<script>
+    $(document).ready(function(){
+        //Alert message close button
+        $('.closebtn').click(function(e){
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function(){ div.style.display = "none"; }, 600);
+        });
+
+        //Setting lecture id on click of add video button
+        $('.add-video').click(function(e){
+            var lecture_id = $(this).data('id');
+            $("#lecture_video").val(lecture_id);
+        });
+
+        //Uploading video
+        $('#btn_upload').click(function(e){
+            var videoSelect = document.getElementById('video_path');
+            var uploadButton = document.getElementById("btn_upload");
+            var progress_bar = document.getElementById("progress-bar");
+            var videoProgress = document.getElementById("myProgress");
+            var bar = document.getElementById("myBar");
+
+            if(videoSelect.checkValidity() == true)
+            {
+                var lecture_id = document.getElementById('lecture_video').value;
+                document.getElementById("onSubmit").style.display = "block";
+                uploadButton.innerHTML = 'Uploading...';
+
+                var video = videoSelect.files[0];
+                var data = new FormData();
+                data.append('video_path', video);
+
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8080/Second-Screen-API-v3/Helper/videoUpload?lecture_id='+lecture_id, true);
+
+                //Upload progress
+                xhr.upload.addEventListener("progress", function(evt){
+                   // document.getElementById("progress-bar").style.display = "block";
+                    document.getElementById("myProgress").style.display = "block";
+                    if (evt.lengthComputable)
+                    {
+                        var percentComplete = parseInt((evt.loaded / evt.total) * 100);
+                        //progress_bar.innerHTML =percentComplete + "%";
+                        //progress_bar.style.width = percentComplete + "%";
+                        bar.innerHTML =percentComplete + "%";
+                        bar.style.width = percentComplete + "%";
+                    }
+                }, false);
+
+                // When the request has completed (either in success or failure).
+                xhr.upload.addEventListener('loadend', function(e) {
+                    uploadButton.innerHTML = 'Uploaded...';
+                    bar.innerHTML = "Processing Video....";
+
+                });
+
+
+                // the transfer has completed and the server closed the connection.
+                xhr.onreadystatechange = function()
+                {
+                   //Hiding the loader and modal after video upload process
+                    document.getElementById("onSubmit").style.display = "none";
+                    uploadButton.innerHTML = 'Upload';
+                    videoSelect.value= "";
+                    $("#addVideoModal .close").click();
+
+                    if (xhr.status == 200)
+                    {
+                        document.getElementById("alert-success").style.display = "block";
+                    }
+                    else
+                    {
+                        document.getElementById("alert-warning").style.display = "block";
+                    }
+                };
+
+
+
+                //Send the Data.
+                xhr.send(data);
+            }
+        });
+    });
+</script>
+
 <!-- Pagination -->
 <div class="row">
     <div class="col-md-12 text-center">
